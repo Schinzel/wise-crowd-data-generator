@@ -1,0 +1,5 @@
+Have a look at the files README.md and TASK.md in the directory /Users/schinzel/code/wise-crowd-data-generator
+
+Do not change any files without asking me first.
+
+I want help developing TASK.md. It is not done. I just want feedback on its current state. TASK.md is to be used by an AI agent to code the solution

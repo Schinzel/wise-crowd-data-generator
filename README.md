@@ -1,6 +1,5 @@
 # Kotlin multi-module template V3
-The purpose of this project is to serve as a starting point for a new 
-Kotlin project that leverages AI-assisted development.
+The purpose of this project is generate mocked data for WiseCrowd
 
 AIs must read and adhere to the code standards. 
 Read the document below and follow the links in the document.
