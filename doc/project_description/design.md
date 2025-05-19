@@ -16,12 +16,14 @@ flowchart TD
     PSG[Price Series Generator]
     UG[User Generator]
     TG[Transaction Generator]
+    UHG[User Holdings Generator]
     
     %% Output files
     AD[asset_data.txt]
     PS[price_series.txt]
     U[users.txt]
     T[transactions.txt]
+    UH[user_holdings.txt]
     
     %% Relationships
     AC --> AG
@@ -36,6 +38,8 @@ flowchart TD
     U --> TG
     C --> TG
     TG --> T
+    T --> UHG
+    UHG --> UH
 ```
 
 ## Swedish/Nordic Market Trend Dataset (1990-2025)
@@ -177,6 +181,22 @@ flowchart TD
   - amount of money
   - currency
 
+### Transactions Data Generator
+- Input:
+  - price series
+  - users
+- Parameters:
+  - start date
+  - end date
+- Output:
+  - transaction_id
+  - user_id
+  - asset_id
+  - transaction type (buy or sell)
+  - amount of money
+  - currency
+  - date-time
+
 ### User Holdings Generator
 - Input:
   - transactions
@@ -185,3 +205,22 @@ flowchart TD
   - asset_id
   - amount of money
   - currency
+
+## Output Files
+
+### Transactions File (transactions.txt)
+This file contains all user transactions with assets including purchases and sales.
+
+### User Holdings File (user_holdings.txt)
+This file represents the current holdings of each user after all transactions have been processed.
+While not one of the primary output files, it can be derived from the transactions data.
+
+## Data Flow
+The complete data generation process follows these steps:
+
+1. Market trends, asset classes, currencies, investor profiles, and activity levels serve as foundational data
+2. The Asset Generator creates a pool of investment assets based on asset classes
+3. The Price Series Generator uses market trends to create historical price data for each asset
+4. The User Generator creates investor profiles with different risk tolerances and activity levels
+5. The Transaction Generator simulates buy/sell decisions for each user based on their profile and market conditions
+6. Finally, the User Holdings Generator calculates the final portfolio for each user based on all transactions
