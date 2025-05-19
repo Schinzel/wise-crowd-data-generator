@@ -13,6 +13,7 @@ flowchart TD
     
     %% Generators
     AG[Asset Generator]
+    AN[Asset Namer]
     PSG[Price Series Generator]
     UG[User Generator]
     TG[Transaction Generator]
@@ -29,7 +30,8 @@ flowchart TD
     AC --> AG
     MT --> PSG
     AG --> AD
-    AG --> PSG
+    AN --> AD
+    AD --> PSG
     PSG --> PS
     IP --> UG
     AL --> UG
@@ -97,18 +99,19 @@ flowchart TD
   - asset_class_id
   - name
 
-### Asset Center
-- Types:
+### Asset Namer
+- Input:
   - asset class id
-- Examples:
-  1. Equities: Nordea, SEB, Telia, Handelsbanken, Skandinaviska Enskilda, Europe, Ocland, Asia, US
-  2. Bonds: Government, Corporate, Startup, Foreign, Real Estate
-  3. Asset types:
+- Examples/Naming Components:
+  1. Providers: Swedbank, SEB, Nordea, Handelsbanken, Länsförsäkringar
+  2. Regions: Sweden, Nordic, Europe, Global, Asia, US
+  3. Sectors: Tech, Health, Finance, Energy, Real Estate
+  4. Fund types:
      - For equity: Index, Active, Dividend, Growth, Value
      - For bonds: Government, Corporate, High-Yield, Short-Term
-     - For alternative: Hedge Fund, Private Equity, Infrastructure
+     - For mixed: Balanced, Strategic, Defensive, Opportunity
 
-*This creates more accurate fund names like "SEB Nordic Sector Active" or "Nordea European Corporate Bond"*
+*This creates more accurate fund names like "SEB Nordic Tech Active" or "Nordea European Corporate Bond"*
 
 ### Investor Profiles
 
