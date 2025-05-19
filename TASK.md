@@ -30,9 +30,6 @@ So that I can develop the WiseCrowd platform using data of different sizes and c
 * by generating large data sets we can test the performance for different scenarios  
 * we can derive asset allocation indices and verify that these are as we expect
 
-# Design
-The file [Design](design.pdf) contains a diagram of the data generator.
-
 # Resulting files
 The result of running the code be the a set of text files:
 - asset_data.txt
