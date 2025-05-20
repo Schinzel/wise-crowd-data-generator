@@ -34,6 +34,13 @@
             <!-- Basic utilities. Most commonly less verbose versions of
             common code snippets -->
             <groupId>io.schinzel</groupId>
+            <artifactId>basic-utils</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <!-- Basic utilities. Most commonly less verbose versions of
+            common code snippets -->
+            <groupId>io.schinzel</groupId>
             <artifactId>basic-utils-kotlin</artifactId>
             <version>0.9.5</version>
         </dependency>

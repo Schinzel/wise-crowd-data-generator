@@ -50,6 +50,18 @@ inner class UnitOfWork {
     }
 }
 ```
+or
+
+```kotlin
+@Nested
+inner class UnitOfWork {
+    @Test
+    fun `state under test _ expected behavior`{
+        [...]
+    }   
+}
+```
+
 
 ## Interface Testing
 Every public interface or abstract class defining a significant unit of behavior must have a comprehensive contract test suite that rigorously verifies adherence to its documented purpose and constraints, independent of any specific implementation.
