@@ -91,11 +91,12 @@ Use defensive programming:
 - Objects that are stored in the database - suffix with Dbo
 - Data access classes or objects - suffix with Dao
 
-## Documentation
+## In Code Documentation
 - All classes, interfaces, files and so on start with "The purpose of this [class/interface/...] is to [...]"
   - This helps create a concise explanation of what a class does
   - It forces an explanation of why, rather than what
 - One line of code = (roughly) one line of documentation
+- Write comments above the line, not after the line
 - Document so that when you return to the documentation six months from now that you are happy with yourself
 - Documentation outside the code should be to the point and maintainable
 - We use US English
