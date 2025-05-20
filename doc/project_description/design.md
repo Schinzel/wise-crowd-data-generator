@@ -83,10 +83,6 @@ flowchart TD
 | 7  | REITs | Real estate investment trusts | Medium | 3 |
 | 8  | Crypto | Digital currencies, a higher risk exposure | Very High | 1 |
 
-## Delimiters
-- Column delimiter: ";"
-- Row delimiter: "\\n"
-
 ## System Components
 
 ### Asset Generator

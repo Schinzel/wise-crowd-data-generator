@@ -44,12 +44,52 @@ This directory will be created when the project runs.
 
 
 # Current Implementation Status (to be completed by AI)
+Task 0 done - Created FileNameEnum to store output file names in one place
 
 # Tasks
 
-## Task 1 - Delimiters
-Implement a file that holds the row and column delimiters.
+## Task 0 - File names in an enum
+The names of the resulting files should be in an enum so that they are
+in one place. The enum should be in the data_generator package. 
+
 ### Task Summary (to be completed by AI)
+- **Changes Made**: Created a new enum class `FileNameEnum` in the `com.wisecrowd.data_generator` package to store all output file names in one centralized location.
+
+- **Files Created**: 
+  - `/src/main/kotlin/com/wisecrowd/data_generator/FileNameEnum.kt`
+
+- **Implementation Details**:
+  - Implemented an enum with four entries corresponding to the required output files: ASSET_DATA, USERS, PRICE_SERIES, and TRANSACTIONS
+  - Each enum constant has a `fileName` property with the corresponding file name string (e.g., "asset_data.txt")
+  - Added proper documentation including the purpose of the enum and the Claude signature as required by the code standards
+  - Used clear naming conventions according to the project's code standards
+
+- **Verification**: Successfully built and tested the project to ensure the changes didn't break any existing functionality.
+
+
+## Task 1 - File Data Save
+Based on IDataSaver implement a FileDataSaver. 
+- The FileDataSaver should:
+  - Save data to the specified file path
+  - Use "\n" as row delimiter (stored as a constant)
+  - Use "\t" as column delimiter (stored as a constant)
+  - Use "###" as string qualifier (stored as a constant)
+  - Include a constructor parameter for the file path
+  - Create the output directory if it doesn't exist
+  - Create a header row based on the column names in the prepare() method
+  - Use defensive programming principles (validate inputs, handle exceptions properly)
+  - Close file resources properly in the complete() method
+
+### Acceptance Criteria
+1. FileDataSaver correctly writes data to files with proper delimiters
+2. All errors during the save process are captured and available via getErrors()
+3. The class includes proper resource management (files are closed after use)
+4. Unit tests cover normal operation and error cases
+5. Code follows the project's code standards
+6. The implementation can handle all data types defined in DataTypeEnum
+
+### Task Summary (to be completed by AI)
+
 
 ## Task 2 - MarketTrend data
 Generate a class that holds the market trend data. Create the class MarketTrend that holds
