@@ -5,11 +5,11 @@ This is a code standard to be followed by AIs such as Claude, Gemini, ChatGPT an
 ## Identification
 - If creating a class or function, add as last line in the header:
   ```kotlin
-  Written by [Model] with [version of Code Standard]
+  Written by [Model]
   ```
   For example:
   ```kotlin
-  Written by Claude 3.7 with Code Standard 1.2
+  Written by Claude 3.7
   ```
 
 ## General Guidelines

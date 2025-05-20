@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets
  * The purpose of this class is to save data to a text file in a delimited format
  * with proper handling of different data types and robust error management.
  *
- * Written by Claude 3.7 with Code Standard 1.0
+ * Written by Claude 3.7
  */
 class FileDataSaver(private val filePath: String) : IDataSaver {
 
