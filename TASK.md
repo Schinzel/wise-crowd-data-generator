@@ -44,8 +44,9 @@ This directory will be created when the project runs.
 
 
 # Current Implementation Status (to be completed by AI)
-Task 0 done - Created FileNameEnum to store output file names in one place
-Task 1 done - Created FileDataSaver to save data to text files with proper formatting and error handling
+- Task 0 done - Created FileNameEnum to store output file names in one place
+- Task 1 done - Created FileDataSaver to save data to text files with proper formatting and error handling
+- Task 2 done - Created MarketTrend and MarketTrendCollection classes to manage market trend data
 
 # Tasks
 
@@ -133,6 +134,33 @@ Generate a class that holds the market trend data. Create the class MarketTrend 
 a row of data. The class that holds the rows is called MarketTrendCollection. 
 
 ### Task Summary (to be completed by AI)
+- **Changes Made**: Implemented MarketTrend and MarketTrendCollection classes to represent and manage market trend data.
+
+- **Files Created**: 
+  - `/src/main/kotlin/com/wisecrowd/data_generator/market_trend/MarketTrend.kt`
+  - `/src/main/kotlin/com/wisecrowd/data_generator/market_trend/MarketTrendCollection.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/market_trend/MarketTrendTest.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/market_trend/MarketTrendCollectionTest.kt`
+
+- **Implementation Details**:
+  - **MarketTrend class**: 
+    - Implemented as a data class to represent a single market trend with startDate, endDate, trendType, strength, and description
+    - Added validation in the init block to ensure end date is not before start date, strength is within a reasonable range, and trend type is not empty
+
+  - **MarketTrendCollection class**:
+    - Implemented methods to add, retrieve, and filter market trends
+    - Created methods to filter trends by date (getTrendsOnDate) and date range (getTrendsInRange)
+    - Added a companion object with a static createDefaultCollection() method that creates the predefined Swedish/Nordic market trends from 1990-2025 as specified in the design document
+
+- **Testing**:
+  - Created comprehensive tests for both classes
+  - Tested validation rules for MarketTrend
+  - Tested collection operations and filtering capabilities for MarketTrendCollection
+  - Verified that the default collection contains the expected number of trends and that specific historical events are correctly represented
+
+- **Verification**: Successfully built and tested the implementation, with all tests passing.
+
+- **Future Considerations**: The MarketTrendCollection will be used by the Price Series Generator to create historical price data for assets based on market trends.
 
 ## Task 3 - Asset class data
 Generate a class that holds the asset class data. Create the class AssetClass that holds
