@@ -47,6 +47,7 @@ This directory will be created when the project runs.
 - Task 0 done - Created FileNameEnum to store output file names in one place
 - Task 1 done - Created FileDataSaver to save data to text files with proper formatting and error handling
 - Task 2 done - Created MarketTrend and MarketTrendCollection classes to manage market trend data
+- Task 3 done - Created AssetClass and AssetClassCollection classes to manage asset class data
 
 # Tasks
 
@@ -167,6 +168,35 @@ Generate a class that holds the asset class data. Create the class AssetClass th
 a row of data. AssetClassCollection holds the rows. 
 
 ### Task Summary (to be completed by AI)
+- **Changes Made**: Implemented AssetClass and AssetClassCollection classes to represent and manage asset class data.
+
+- **Files Created**: 
+  - `/src/main/kotlin/com/wisecrowd/data_generator/asset_class/AssetClass.kt`
+  - `/src/main/kotlin/com/wisecrowd/data_generator/asset_class/AssetClassCollection.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/asset_class/AssetClassTest.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/asset_class/AssetClassCollectionTest.kt`
+
+- **Implementation Details**:
+  - **AssetClass class**: 
+    - Implemented as a data class to represent a single asset class with id, name, description, volatilityLevel, and prevalencePercentage
+    - Added validation in the init block to ensure positive ID, non-empty name/description/volatilityLevel, and prevalence percentage within 0-100 range
+
+  - **AssetClassCollection class**:
+    - Implemented methods to add, retrieve, and filter asset classes
+    - Created getById method that throws IllegalArgumentException if asset class not found (fail-fast approach)
+    - Added filtering methods: getByVolatilityLevel (case-insensitive) and getByPrevalenceRange with proper validation
+    - Added a companion object with createDefaultCollection() method that creates the predefined asset classes from the design document (8 asset classes including Nordic stocks, Government bonds, Corporate bonds, etc.)
+
+- **Testing**:
+  - Created comprehensive tests for both classes following code standards
+  - Used proper test naming convention with method_condition_expectedResult format
+  - Separated logic from assertions (extracted values before assertThat calls)
+  - Tested validation rules, collection operations, filtering capabilities, and edge cases
+  - Verified that the default collection contains the expected asset classes with correct properties
+
+- **Verification**: Successfully built and tested the implementation with all 74 tests passing.
+
+- **Future Considerations**: The AssetClassCollection will be used by the Asset Generator to create investment assets based on asset classes and their prevalence percentages.
 
 ## Task 4 - Currencies
 Generate a class that holds the currency data. Create the class Currency that holds
