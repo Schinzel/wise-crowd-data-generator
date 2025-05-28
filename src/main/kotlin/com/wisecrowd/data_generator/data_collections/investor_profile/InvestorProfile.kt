@@ -7,9 +7,16 @@ package com.wisecrowd.data_generator.data_collections.investor_profile
  * Written by Claude Sonnet 4
  */
 data class InvestorProfile(
+    /** Unique identifier for the investor profile */
     val id: Int,
+    
+    /** Name of the investor profile */
     val name: String,
+    
+    /** Description of the investment strategy */
     val description: String,
+    
+    /** Distribution percentage in the market (0-100) */
     val distributionPercentage: Double
 ) {
     init {

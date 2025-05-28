@@ -23,29 +23,12 @@ data class AssetClass(
     val prevalencePercentage: Int
 ) {
     init {
-        // Validate that ID is positive
-        require(id > 0) { 
-            "Asset class ID ($id) must be positive" 
-        }
-        
-        // Validate that name is not empty
-        require(name.isNotBlank()) { 
-            "Asset class name cannot be empty" 
-        }
-        
-        // Validate that description is not empty
-        require(description.isNotBlank()) { 
-            "Asset class description cannot be empty" 
-        }
-        
-        // Validate that volatility level is not empty
-        require(volatilityLevel.isNotBlank()) { 
-            "Volatility level cannot be empty" 
-        }
-        
-        // Validate prevalence percentage is within valid range
-        require(prevalencePercentage in 0..100) { 
-            "Prevalence percentage ($prevalencePercentage) must be between 0 and 100" 
+        require(id > 0) { "Asset class ID must be positive, but was: $id" }
+        require(name.isNotBlank()) { "Asset class name cannot be blank" }
+        require(description.isNotBlank()) { "Asset class description cannot be blank" }
+        require(volatilityLevel.isNotBlank()) { "Volatility level cannot be blank" }
+        require(prevalencePercentage in 0..100) {
+            "Prevalence percentage must be between 0 and 100, but was: $prevalencePercentage"
         }
     }
 }

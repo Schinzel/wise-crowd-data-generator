@@ -147,7 +147,7 @@ class AssetClassTest {
             )
         }
             .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Asset class name cannot be empty")
+            .hasMessageContaining("Asset class name cannot be blank")
     }
     
     @Test
@@ -163,7 +163,7 @@ class AssetClassTest {
             )
         }
             .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Asset class name cannot be empty")
+            .hasMessageContaining("Asset class name cannot be blank")
     }
     
     @Test
@@ -179,7 +179,7 @@ class AssetClassTest {
             )
         }
             .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Asset class description cannot be empty")
+            .hasMessageContaining("Asset class description cannot be blank")
     }
     
     @Test
@@ -195,7 +195,7 @@ class AssetClassTest {
             )
         }
             .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Asset class description cannot be empty")
+            .hasMessageContaining("Asset class description cannot be blank")
     }
     
     @Test
@@ -211,7 +211,7 @@ class AssetClassTest {
             )
         }
             .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Volatility level cannot be empty")
+            .hasMessageContaining("Volatility level cannot be blank")
     }
     
     @Test
@@ -227,7 +227,7 @@ class AssetClassTest {
             )
         }
             .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Volatility level cannot be empty")
+            .hasMessageContaining("Volatility level cannot be blank")
     }
     
     @Test

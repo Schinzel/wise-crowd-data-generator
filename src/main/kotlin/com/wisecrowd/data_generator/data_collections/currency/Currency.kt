@@ -7,10 +7,19 @@ package com.wisecrowd.data_generator.data_collections.currency
  * Written by Claude Sonnet 4
  */
 data class Currency(
+    /** Unique identifier for the currency */
     val id: Int,
+    
+    /** ISO currency code (e.g., SEK, EUR, USD) */
     val code: String,
+    
+    /** Full name of the currency */
     val name: String,
+    
+    /** Distribution percentage in the market (0-100) */
     val distributionPercentage: Double,
+    
+    /** Conversion rate to SEK */
     val conversionToSek: Double
 ) {
     init {
