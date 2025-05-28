@@ -51,6 +51,7 @@ This directory will be created when the project runs.
 - Task 4 done 2025-05-28 - Moved asset_class and market_trend packages to data_collections package
 - Task 5 done 2025-05-28 - Created Currency and CurrencyCollection classes to manage currency data
 - Task 6 done 2025-05-28 - Created InvestorProfile and InvestorProfileCollection classes to manage investor profile data
+- Task 7 done 2025-05-28 - Created ActivityLevel and ActivityLevelCollection classes to manage activity level data
 
 # Tasks
 
@@ -305,3 +306,32 @@ Generate a class that holds the activity level data. Create the class ActivityLe
 a row of data. ActivityLevelCollection holds the rows.
 
 ### Task Summary (to be completed by AI)
+- **Changes Made**: Implemented ActivityLevel and ActivityLevelCollection classes to represent and manage activity level data.
+
+- **Files Created**: 
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/activity_level/ActivityLevel.kt`
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/activity_level/ActivityLevelCollection.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/activity_level/ActivityLevelTest.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/activity_level/ActivityLevelCollectionTest.kt`
+
+- **Implementation Details**:
+  - **ActivityLevel class**: 
+    - Implemented as a data class to represent a single activity level with id, name, description, and distributionPercentage
+    - Added validation in the init block to ensure positive ID, non-empty name/description, and distribution percentage within 0-100 range
+    - Used named arguments in constructor calls for better code readability
+
+  - **ActivityLevelCollection class**:
+    - Implemented methods to add, retrieve, and filter activity levels
+    - Created getById and getByName methods that throw IllegalArgumentException when level not found (following defensive programming principles)
+    - Added getByDistributionRange method with proper validation for percentage ranges
+    - Added a companion object with createDefaultCollection() method that creates the predefined activity levels from the design document (5 levels: Inactive 20%, Low 35%, Moderate 25%, Active 8%, Hyperactive 2%)
+
+- **Testing**:
+  - Created comprehensive tests for both classes following the project's testing standards
+  - Used one assertThat per test function and minimal logic in assertions as required
+  - Tested validation rules, collection operations, filtering capabilities, and edge cases
+  - Verified that the default collection contains the expected activity levels with correct properties
+
+- **Verification**: Successfully built and tested the implementation with all 212 tests passing, including 45 new tests for the activity level classes.
+
+- **Future Considerations**: The ActivityLevelCollection will be used by the User Generator to create users with different trading frequencies and activity patterns.
