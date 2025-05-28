@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator.asset_class
+package com.wisecrowd.data_generator.data_collections.asset_class
 
 /**
  * The purpose of this class is to manage a collection of asset classes and

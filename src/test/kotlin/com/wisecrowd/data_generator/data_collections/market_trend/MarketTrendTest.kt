@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator.market_trend
+package com.wisecrowd.data_generator.data_collections.market_trend
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

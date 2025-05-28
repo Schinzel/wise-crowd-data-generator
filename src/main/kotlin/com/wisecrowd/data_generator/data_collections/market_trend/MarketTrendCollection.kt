@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator.market_trend
+package com.wisecrowd.data_generator.data_collections.market_trend
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

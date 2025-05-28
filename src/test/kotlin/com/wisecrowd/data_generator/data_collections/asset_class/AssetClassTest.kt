@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator.asset_class
+package com.wisecrowd.data_generator.data_collections.asset_class
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy

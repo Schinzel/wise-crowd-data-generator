@@ -17,7 +17,7 @@ The purpose of this document is to describe the problem and the solution to an A
     * Include major changes made and files affected  
     * Document key decisions and their rationale  
     * Highlight any items that might affect future tasks  
-  * Fill out *Current Implementation Status (to be completed by AI)* and add which tasks have been completed. Simply add a row with *Task X done YYYY-MM-DD*.   
+  * Fill out *Current Implementation Status (to be completed by AI)* and add which tasks have been completed. Simply add a row with *Task X done - YYYY-MM-DD*.   
 * Let me know when you've completed a task so I can verify it before moving to the next one
 
 # User story
@@ -48,6 +48,7 @@ This directory will be created when the project runs.
 - Task 1 done - Created FileDataSaver to save data to text files with proper formatting and error handling
 - Task 2 done - Created MarketTrend and MarketTrendCollection classes to manage market trend data
 - Task 3 done - Created AssetClass and AssetClassCollection classes to manage asset class data
+- Task 4 done 2025-05-28 - Moved asset_class and market_trend packages to data_collections package
 
 # Tasks
 
@@ -138,10 +139,10 @@ a row of data. The class that holds the rows is called MarketTrendCollection.
 - **Changes Made**: Implemented MarketTrend and MarketTrendCollection classes to represent and manage market trend data.
 
 - **Files Created**: 
-  - `/src/main/kotlin/com/wisecrowd/data_generator/market_trend/MarketTrend.kt`
-  - `/src/main/kotlin/com/wisecrowd/data_generator/market_trend/MarketTrendCollection.kt`
-  - `/src/test/kotlin/com/wisecrowd/data_generator/market_trend/MarketTrendTest.kt`
-  - `/src/test/kotlin/com/wisecrowd/data_generator/market_trend/MarketTrendCollectionTest.kt`
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/market_trend/MarketTrend.kt`
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/market_trend/MarketTrendCollection.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/market_trend/MarketTrendTest.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/market_trend/MarketTrendCollectionTest.kt`
 
 - **Implementation Details**:
   - **MarketTrend class**: 
@@ -171,10 +172,10 @@ a row of data. AssetClassCollection holds the rows.
 - **Changes Made**: Implemented AssetClass and AssetClassCollection classes to represent and manage asset class data.
 
 - **Files Created**: 
-  - `/src/main/kotlin/com/wisecrowd/data_generator/asset_class/AssetClass.kt`
-  - `/src/main/kotlin/com/wisecrowd/data_generator/asset_class/AssetClassCollection.kt`
-  - `/src/test/kotlin/com/wisecrowd/data_generator/asset_class/AssetClassTest.kt`
-  - `/src/test/kotlin/com/wisecrowd/data_generator/asset_class/AssetClassCollectionTest.kt`
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/asset_class/AssetClass.kt`
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/asset_class/AssetClassCollection.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/asset_class/AssetClassTest.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/asset_class/AssetClassCollectionTest.kt`
 
 - **Implementation Details**:
   - **AssetClass class**: 
@@ -207,6 +208,24 @@ E.g. instead of `data_generator/asset_class` we will have
 - Update file paths in `Task Summary (to be completed by AI)` for task 2 and 3.
 
 ### Task Summary (to be completed by AI)
+- **Changes Made**: Successfully moved the `asset_class` and `market_trend` packages to a new `data_collections` package structure to better organize data classes.
+
+- **Files Moved**:
+  - From: `/src/main/kotlin/com/wisecrowd/data_generator/asset_class/` 
+  - To: `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/asset_class/`
+  - From: `/src/main/kotlin/com/wisecrowd/data_generator/market_trend/`
+  - To: `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/market_trend/`
+  - Also moved corresponding test files from `/src/test/kotlin/com/wisecrowd/data_generator/` to `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/`
+
+- **Implementation Details**:
+  - Updated package declarations in all moved files to reflect new package structure
+  - Maintained all existing functionality and tests unchanged
+  - Updated file paths in Task Summary sections for Task 2 and Task 3 to reflect new locations
+  - Verified build and all tests still pass (74 tests successful)
+
+- **Verification**: Successfully built and tested the project to ensure the package restructuring didn't break any existing functionality.
+
+- **Future Considerations**: All future data collection classes should be placed under the `data_collections` package to maintain organization consistency.
 
 
 ## Task 5 - Currencies
