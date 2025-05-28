@@ -62,10 +62,6 @@ inner class UnitOfWork {
 }
 ```
 
-
-## Interface Testing
-Every public interface or abstract class defining a significant unit of behavior must have a comprehensive contract test suite that rigorously verifies adherence to its documented purpose and constraints, independent of any specific implementation.
-
 ## AssertJ Usage
 
 ### Overview
@@ -140,4 +136,16 @@ assertThatThrownBy {
   .hasMessageContaining("specific message")
 ```
 
-For more examples and advanced usage, refer to the [AssertJ documentation](https://assertj.github.io/doc/).
+## Minimal assertion logic
+In the asserts there should be minimal logic. The only thing that should be able to fail 
+in a test is the test. So all logic outside of the assert. 
+
+That is, I want 
+```kotlin
+val expectedDate = LocalDate.of(2020, 3, 1)
+assertThat(marketTrend.startDate).isEqualTo(expectedDate)
+```
+and not
+```kotlin
+assertThat(marketTrend.startDate).isEqualTo(LocalDate.of(2020, 3, 1))
+```
