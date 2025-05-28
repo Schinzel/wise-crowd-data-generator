@@ -25,7 +25,6 @@ This document describes the technology stack used in the application. It serves 
 
 ### Build Tool
 - **Maven** - For dependency management and build processes
-  - Multi-module project structure
 
 ### Version Control
 - **Git**
