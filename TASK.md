@@ -13,9 +13,9 @@ The purpose of this document is to describe the problem and the solution to an A
     * mvn clean install \-DskipTests  
     * mvn test  
   * Fill out the *Task Summary (to be completed by AI)* for the task you just completed  
+    * Be concise and to the point
     * Include major changes made and files affected  
     * Document key decisions and their rationale  
-    * Note any challenges encountered and how they were resolved  
     * Highlight any items that might affect future tasks  
   * Fill out *Current Implementation Status (to be completed by AI)* and add which tasks have been completed. Simply add a row with *Task X done*.   
 * Let me know when you've completed a task so I can verify it before moving to the next one
@@ -198,19 +198,30 @@ a row of data. AssetClassCollection holds the rows.
 
 - **Future Considerations**: The AssetClassCollection will be used by the Asset Generator to create investment assets based on asset classes and their prevalence percentages.
 
-## Task 4 - Currencies
+## Task 4 - Move classes
+I want all data classes gathered in one package. 
+Move the packages `asset_class` and `market_trend` to a new package `data_collections`.
+E.g. instead of `data_generator/asset_class` we will have
+`data_generator/data_collections/asset_class`
+- Move corresponding test classes
+- Update file paths in `Task Summary (to be completed by AI)` for task 2 and 3.
+
+### Task Summary (to be completed by AI)
+
+
+## Task 5 - Currencies
 Generate a class that holds the currency data. Create the class Currency that holds
 a row of data. CurrencyCollection holds the rows.
 
 ### Task Summary (to be completed by AI)
 
-## Task 5 - Investor Profiles
+## Task 6 - Investor Profiles
 Generate a class that holds the investor profile data. Create the class InvestorProfile that holds
 a row of data. InvestorProfileCollection holds the rows.
 
 ### Task Summary (to be completed by AI)
 
-## Task 6 - Activity Levels
+## Task 7 - Activity Levels
 Generate a class that holds the activity level data. Create the class ActivityLevel that holds
 a row of data. ActivityLevelCollection holds the rows.
 
