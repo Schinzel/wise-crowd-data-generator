@@ -74,6 +74,7 @@ Favor immutability for better code predictability:
 ### Defensive Programming
 Use defensive programming:
 - Fail fast: Detect problems early, as close to the source as possible
+- Prefer exceptions over nulls: Functions should throw exceptions rather than return null/optional types when data isn't found
 - Validate inputs: Never assume arguments or data are valid — check them
 - Check assumptions: If your code assumes a condition is true (e.g., a dependency is initialized), make that assumption explicit and enforced
 - Handle edge cases: Nulls, empty lists, timeouts, division by zero, etc.

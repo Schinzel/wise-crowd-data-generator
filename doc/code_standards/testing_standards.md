@@ -3,7 +3,7 @@
 ## General Testing Principles
 - Extensive unit tests
 - A unit test function should test only one thing
-- One assert per unit test function
+- One assertThat per unit test function
 - Use AssertJ for assertions instead of JUnit's built-in assertions
   - AssertJ provides more readable and descriptive test failures
   - See examples in the AssertJ Usage section below
@@ -33,6 +33,13 @@ If longer descriptions or non-ASCII characters are needed:
 `unit of work _ state under test _ expected behavior`
 ```
 
+If the unit of work tested is the constructor, write that explicitly.
+For example:
+```
+`constructor _ valid asset class _ creates object with correct id`
+```
+
+
 ## Nested Test Classes
 With JUnit 5, you can use nested classes to organize tests. If you have many tests for one unit-of-work, you can group them in a nested class:
 
@@ -40,13 +47,13 @@ With JUnit 5, you can use nested classes to organize tests. If you have many tes
 @Nested
 inner class UnitOfWork {
     @Test
-    fun stateUnderTest1_ExpectedBehavior1{
-        [...]
+    fun stateUnderTest1_ExpectedBehavior1(){
+        //...
     }
     
     @Test
-    fun stateUnderTest2_ExpectedBehavior2{
-        [...]
+    fun stateUnderTest2_ExpectedBehavior2(){
+        //...
     }
 }
 ```
@@ -56,8 +63,8 @@ or
 @Nested
 inner class UnitOfWork {
     @Test
-    fun `state under test _ expected behavior`{
-        [...]
+    fun `state under test _ expected behavior`(){
+        //...
     }   
 }
 ```
@@ -149,3 +156,14 @@ and not
 ```kotlin
 assertThat(marketTrend.startDate).isEqualTo(LocalDate.of(2020, 3, 1))
 ```
+
+That is, I want
+```kotlin
+val name = nordicStocks?.name
+assertThat(name).isEqualTo("Nordic stocks")
+```
+and not
+```kotlin
+assertThat(nordicStocks?.name).isEqualTo("Nordic stocks")
+```
+
