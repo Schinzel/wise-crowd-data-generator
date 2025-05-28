@@ -17,7 +17,7 @@ The purpose of this document is to describe the problem and the solution to an A
     * Include major changes made and files affected  
     * Document key decisions and their rationale  
     * Highlight any items that might affect future tasks  
-  * Fill out *Current Implementation Status (to be completed by AI)* and add which tasks have been completed. Simply add a row with *Task X done*.   
+  * Fill out *Current Implementation Status (to be completed by AI)* and add which tasks have been completed. Simply add a row with *Task X done YYYY-MM-DD*.   
 * Let me know when you've completed a task so I can verify it before moving to the next one
 
 # User story
