@@ -50,6 +50,7 @@ This directory will be created when the project runs.
 - Task 3 done - Created AssetClass and AssetClassCollection classes to manage asset class data
 - Task 4 done 2025-05-28 - Moved asset_class and market_trend packages to data_collections package
 - Task 5 done 2025-05-28 - Created Currency and CurrencyCollection classes to manage currency data
+- Task 6 done 2025-05-28 - Created InvestorProfile and InvestorProfileCollection classes to manage investor profile data
 
 # Tasks
 
@@ -268,6 +269,36 @@ Generate a class that holds the investor profile data. Create the class Investor
 a row of data. InvestorProfileCollection holds the rows.
 
 ### Task Summary (to be completed by AI)
+- **Changes Made**: Implemented InvestorProfile and InvestorProfileCollection classes to represent and manage investor profile data.
+
+- **Files Created**: 
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/investor_profile/InvestorProfile.kt`
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/investor_profile/InvestorProfileCollection.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/investor_profile/InvestorProfileTest.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/investor_profile/InvestorProfileCollectionTest.kt`
+
+- **Implementation Details**:
+  - **InvestorProfile class**: 
+    - Implemented as a data class to represent a single investor profile with id, name, description, and distributionPercentage
+    - Added validation in the init block to ensure positive ID, non-empty name/description, and distribution percentage within 0-100 range
+    - Used named arguments in constructor calls for better code readability
+
+  - **InvestorProfileCollection class**:
+    - Implemented methods to add, retrieve, and filter investor profiles
+    - Created getById and getByName methods that throw IllegalArgumentException when profile not found (following defensive programming principles)
+    - Added getByDistributionRange method with proper validation for percentage ranges
+    - Added a companion object with createDefaultCollection() method that creates the predefined investor profiles from the design document (5 profiles: Conservative 25%, Balanced 40%, Aggressive 20%, Income 10%, Trend 5%)
+
+- **Testing**:
+  - Created comprehensive tests for both classes following the project's testing standards
+  - Used one assertThat per test function and minimal logic in assertions as required
+  - Tested validation rules, collection operations, filtering capabilities, and edge cases
+  - Verified that the default collection contains the expected investor profiles with correct properties
+  - Fixed one test that initially failed due to incorrect range expectations
+
+- **Verification**: Successfully built and tested the implementation with all 167 tests passing, including 45 new tests for the investor profile classes.
+
+- **Future Considerations**: The InvestorProfileCollection will be used by the User Generator to create users with different investment strategies and risk tolerances.
 
 ## Task 7 - Activity Levels
 Generate a class that holds the activity level data. Create the class ActivityLevel that holds
