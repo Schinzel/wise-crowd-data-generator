@@ -49,6 +49,7 @@ This directory will be created when the project runs.
 - Task 2 done - Created MarketTrend and MarketTrendCollection classes to manage market trend data
 - Task 3 done - Created AssetClass and AssetClassCollection classes to manage asset class data
 - Task 4 done 2025-05-28 - Moved asset_class and market_trend packages to data_collections package
+- Task 5 done 2025-05-28 - Created Currency and CurrencyCollection classes to manage currency data
 
 # Tasks
 
@@ -233,6 +234,34 @@ Generate a class that holds the currency data. Create the class Currency that ho
 a row of data. CurrencyCollection holds the rows.
 
 ### Task Summary (to be completed by AI)
+- **Changes Made**: Implemented Currency and CurrencyCollection classes to represent and manage currency data.
+
+- **Files Created**: 
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/currency/Currency.kt`
+  - `/src/main/kotlin/com/wisecrowd/data_generator/data_collections/currency/CurrencyCollection.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/currency/CurrencyTest.kt`
+  - `/src/test/kotlin/com/wisecrowd/data_generator/data_collections/currency/CurrencyCollectionTest.kt`
+
+- **Implementation Details**:
+  - **Currency class**: 
+    - Implemented as a data class to represent a single currency with id, code, name, distributionPercentage, and conversionToSek
+    - Added validation in the init block to ensure positive ID, non-empty code/name, distribution percentage within 0-100 range, and positive conversion rate to SEK
+
+  - **CurrencyCollection class**:
+    - Implemented methods to add, retrieve, and filter currencies
+    - Created getById and getByCode methods that throw IllegalArgumentException when currency not found (following defensive programming and fail-fast principles)
+    - Added getByDistributionRange method with proper validation for percentage ranges
+    - Added a companion object with createDefaultCollection() method that creates the predefined currencies from the design document (8 currencies including SEK, EUR, USD, NOK, DKK, GBP, JPY, CHF)
+
+- **Testing**:
+  - Created comprehensive tests for both classes following the project's testing standards
+  - Used one assertThat per test function and minimal logic in assertions as required
+  - Tested validation rules, collection operations, filtering capabilities, and edge cases
+  - Verified that the default collection contains the expected currencies with correct properties
+
+- **Verification**: Successfully built and tested the implementation with all 122 tests passing, including 48 new tests for the currency classes.
+
+- **Future Considerations**: The CurrencyCollection will be used by the Transaction Generator to handle different currency types and conversions in financial transactions.
 
 ## Task 6 - Investor Profiles
 Generate a class that holds the investor profile data. Create the class InvestorProfile that holds
