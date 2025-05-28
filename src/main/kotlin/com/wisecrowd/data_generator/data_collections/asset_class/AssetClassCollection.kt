@@ -66,9 +66,9 @@ class AssetClassCollection {
      * @param volatilityLevel The volatility level to filter by
      * @return List of asset classes with the specified volatility level
      */
-    fun getByVolatilityLevel(volatilityLevel: String): List<AssetClass> {
+    fun getByVolatilityLevel(volatilityLevel: VolatilityLevelEnum): List<AssetClass> {
         return assetClasses.filter { 
-            it.volatilityLevel.equals(volatilityLevel, ignoreCase = true) 
+            it.volatilityLevel == volatilityLevel 
         }
     }
     
@@ -106,56 +106,56 @@ class AssetClassCollection {
                     id = 1,
                     name = "Nordic stocks",
                     description = "Public company shares from Nordic high-growth markets",
-                    volatilityLevel = "Very High",
+                    volatilityLevel = VolatilityLevelEnum.VERY_HIGH,
                     prevalencePercentage = 33
                 ),
                 AssetClass(
                     id = 2,
                     name = "Government bond",
                     description = "Fixed income security issued by sovereign governments",
-                    volatilityLevel = "Low",
+                    volatilityLevel = VolatilityLevelEnum.LOW,
                     prevalencePercentage = 21
                 ),
                 AssetClass(
                     id = 3,
                     name = "Corporate Bond",
                     description = "Fixed income security issued by private companies",
-                    volatilityLevel = "Low-Medium",
+                    volatilityLevel = VolatilityLevelEnum.LOW,
                     prevalencePercentage = 13
                 ),
                 AssetClass(
                     id = 4,
                     name = "Medium-Risk Fund",
                     description = "Diversified fund with both stocks and bonds",
-                    volatilityLevel = "Medium",
+                    volatilityLevel = VolatilityLevelEnum.MEDIUM,
                     prevalencePercentage = 20
                 ),
                 AssetClass(
                     id = 5,
                     name = "Large-Cap Equity",
                     description = "Shares in large to established foreign companies",
-                    volatilityLevel = "Medium-High",
+                    volatilityLevel = VolatilityLevelEnum.HIGH,
                     prevalencePercentage = 25
                 ),
                 AssetClass(
                     id = 6,
                     name = "Gold / Precious Metals",
                     description = "Physical commodity or related securities",
-                    volatilityLevel = "High",
+                    volatilityLevel = VolatilityLevelEnum.HIGH,
                     prevalencePercentage = 5
                 ),
                 AssetClass(
                     id = 7,
                     name = "REITs",
                     description = "Real estate investment trusts",
-                    volatilityLevel = "Medium",
+                    volatilityLevel = VolatilityLevelEnum.MEDIUM,
                     prevalencePercentage = 3
                 ),
                 AssetClass(
                     id = 8,
                     name = "Crypto",
                     description = "Digital currencies, a higher risk exposure",
-                    volatilityLevel = "Very High",
+                    volatilityLevel = VolatilityLevelEnum.VERY_HIGH,
                     prevalencePercentage = 1
                 )
             ))

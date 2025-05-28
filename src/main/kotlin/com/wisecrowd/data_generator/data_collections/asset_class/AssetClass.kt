@@ -16,8 +16,8 @@ data class AssetClass(
     /** Description of the asset class */
     val description: String,
     
-    /** Volatility level (Low, Low-Medium, Medium, Medium-High, High, Very High) */
-    val volatilityLevel: String,
+    /** Volatility level (Low, Medium, High, Very High) */
+    val volatilityLevel: VolatilityLevelEnum,
     
     /** Prevalence percentage in the market (0-100) */
     val prevalencePercentage: Int
@@ -26,7 +26,6 @@ data class AssetClass(
         require(id > 0) { "Asset class ID must be positive, but was: $id" }
         require(name.isNotBlank()) { "Asset class name cannot be blank" }
         require(description.isNotBlank()) { "Asset class description cannot be blank" }
-        require(volatilityLevel.isNotBlank()) { "Volatility level cannot be blank" }
         require(prevalencePercentage in 0..100) {
             "Prevalence percentage must be between 0 and 100, but was: $prevalencePercentage"
         }

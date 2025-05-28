@@ -18,14 +18,14 @@ class AssetClassCollectionTest {
             id = 1,
             name = "Nordic stocks",
             description = "Public company shares from Nordic high-growth markets",
-            volatilityLevel = "Very High",
+            volatilityLevel = VolatilityLevelEnum.VERY_HIGH,
             prevalencePercentage = 33
         )
         assetClass2 = AssetClass(
             id = 2,
             name = "Government bond",
             description = "Fixed income security issued by sovereign governments",
-            volatilityLevel = "Low",
+            volatilityLevel = VolatilityLevelEnum.LOW,
             prevalencePercentage = 21
         )
     }
@@ -133,32 +133,40 @@ class AssetClassCollectionTest {
         collection.add(assetClass2) // Low
         
         // Act
-        val result = collection.getByVolatilityLevel("Low")
+        val result = collection.getByVolatilityLevel(VolatilityLevelEnum.LOW)
         
         // Assert
         assertThat(result).containsExactly(assetClass2)
     }
     
     @Test
-    fun `getByVolatilityLevel _ existing level ignore case _ returns matching asset classes`() {
+    fun `getByVolatilityLevel _ existing level _ returns multiple matching asset classes`() {
         // Arrange
+        val additionalLowVolatilityAsset = AssetClass(
+            id = 3,
+            name = "Another Low Risk Asset",
+            description = "Another low risk asset",
+            volatilityLevel = VolatilityLevelEnum.LOW,
+            prevalencePercentage = 10
+        )
         collection.add(assetClass1) // Very High
         collection.add(assetClass2) // Low
+        collection.add(additionalLowVolatilityAsset) // Low
         
         // Act
-        val result = collection.getByVolatilityLevel("low")
+        val result = collection.getByVolatilityLevel(VolatilityLevelEnum.LOW)
         
         // Assert
-        assertThat(result).containsExactly(assetClass2)
+        assertThat(result).containsExactlyInAnyOrder(assetClass2, additionalLowVolatilityAsset)
     }
     
     @Test
-    fun `getByVolatilityLevel _ non existing level _ returns empty list`() {
+    fun `getByVolatilityLevel _ level with no assets _ returns empty list`() {
         // Arrange
         collection.add(assetClass1)
         
         // Act
-        val result = collection.getByVolatilityLevel("NonExistent")
+        val result = collection.getByVolatilityLevel(VolatilityLevelEnum.HIGH)
         
         // Assert
         assertThat(result).isEmpty()
@@ -280,7 +288,7 @@ class AssetClassCollectionTest {
     fun `createDefaultCollection _ very high volatility assets _ returns correct count`() {
         // Act
         val result = AssetClassCollection.createDefaultCollection()
-        val veryHighVolatilityAssets = result.getByVolatilityLevel("Very High")
+        val veryHighVolatilityAssets = result.getByVolatilityLevel(VolatilityLevelEnum.VERY_HIGH)
         val count = veryHighVolatilityAssets.size
         
         // Assert

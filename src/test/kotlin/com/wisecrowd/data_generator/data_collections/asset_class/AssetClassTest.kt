@@ -12,7 +12,7 @@ class AssetClassTest {
         val id = 1
         val name = "Nordic stocks"
         val description = "Public company shares from Nordic high-growth markets"
-        val volatilityLevel = "Very High"
+        val volatilityLevel = VolatilityLevelEnum.VERY_HIGH
         val prevalencePercentage = 33
         
         // Act
@@ -38,7 +38,7 @@ class AssetClassTest {
             id = 1,
             name = name,
             description = "Test Description",
-            volatilityLevel = "Very High",
+            volatilityLevel = VolatilityLevelEnum.VERY_HIGH,
             prevalencePercentage = 33
         )
         
@@ -56,7 +56,7 @@ class AssetClassTest {
             id = 1,
             name = "Nordic stocks",
             description = description,
-            volatilityLevel = "Very High",
+            volatilityLevel = VolatilityLevelEnum.VERY_HIGH,
             prevalencePercentage = 33
         )
         
@@ -67,7 +67,7 @@ class AssetClassTest {
     @Test
     fun `constructor _ valid asset class _ creates object with correct volatility level`() {
         // Arrange
-        val volatilityLevel = "Very High"
+        val volatilityLevel = VolatilityLevelEnum.VERY_HIGH
         
         // Act
         val assetClass = AssetClass(
@@ -92,7 +92,7 @@ class AssetClassTest {
             id = 1,
             name = "Nordic stocks",
             description = "Test Description",
-            volatilityLevel = "Very High",
+            volatilityLevel = VolatilityLevelEnum.VERY_HIGH,
             prevalencePercentage = prevalencePercentage
         )
         
@@ -108,7 +108,7 @@ class AssetClassTest {
                 id = -1,
                 name = "Test Asset",
                 description = "Test Description",
-                volatilityLevel = "Low",
+                volatilityLevel = VolatilityLevelEnum.LOW,
                 prevalencePercentage = 10
             )
         }
@@ -125,7 +125,7 @@ class AssetClassTest {
                 id = 0,
                 name = "Test Asset",
                 description = "Test Description",
-                volatilityLevel = "Low",
+                volatilityLevel = VolatilityLevelEnum.LOW,
                 prevalencePercentage = 10
             )
         }
@@ -142,7 +142,7 @@ class AssetClassTest {
                 id = 1,
                 name = "",
                 description = "Test Description",
-                volatilityLevel = "Low",
+                volatilityLevel = VolatilityLevelEnum.LOW,
                 prevalencePercentage = 10
             )
         }
@@ -158,7 +158,7 @@ class AssetClassTest {
                 id = 1,
                 name = "   ",
                 description = "Test Description",
-                volatilityLevel = "Low",
+                volatilityLevel = VolatilityLevelEnum.LOW,
                 prevalencePercentage = 10
             )
         }
@@ -174,7 +174,7 @@ class AssetClassTest {
                 id = 1,
                 name = "Test Asset",
                 description = "",
-                volatilityLevel = "Low",
+                volatilityLevel = VolatilityLevelEnum.LOW,
                 prevalencePercentage = 10
             )
         }
@@ -190,7 +190,7 @@ class AssetClassTest {
                 id = 1,
                 name = "Test Asset",
                 description = "   ",
-                volatilityLevel = "Low",
+                volatilityLevel = VolatilityLevelEnum.LOW,
                 prevalencePercentage = 10
             )
         }
@@ -198,37 +198,6 @@ class AssetClassTest {
             .hasMessageContaining("Asset class description cannot be blank")
     }
     
-    @Test
-    fun `constructor _ empty volatility level _ throws IllegalArgumentException`() {
-        // Act & Assert
-        assertThatThrownBy {
-            AssetClass(
-                id = 1,
-                name = "Test Asset",
-                description = "Test Description",
-                volatilityLevel = "",
-                prevalencePercentage = 10
-            )
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Volatility level cannot be blank")
-    }
-    
-    @Test
-    fun `constructor _ blank volatility level _ throws IllegalArgumentException`() {
-        // Act & Assert
-        assertThatThrownBy {
-            AssetClass(
-                id = 1,
-                name = "Test Asset",
-                description = "Test Description",
-                volatilityLevel = "   ",
-                prevalencePercentage = 10
-            )
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
-            .hasMessageContaining("Volatility level cannot be blank")
-    }
     
     @Test
     fun `constructor _ negative prevalence percentage _ throws IllegalArgumentException`() {
@@ -238,7 +207,7 @@ class AssetClassTest {
                 id = 1,
                 name = "Test Asset",
                 description = "Test Description",
-                volatilityLevel = "Low",
+                volatilityLevel = VolatilityLevelEnum.LOW,
                 prevalencePercentage = -1
             )
         }
@@ -255,7 +224,7 @@ class AssetClassTest {
                 id = 1,
                 name = "Test Asset",
                 description = "Test Description",
-                volatilityLevel = "Low",
+                volatilityLevel = VolatilityLevelEnum.LOW,
                 prevalencePercentage = 101
             )
         }
@@ -271,7 +240,7 @@ class AssetClassTest {
             id = 1,
             name = "Test Asset",
             description = "Test Description",
-            volatilityLevel = "Low",
+            volatilityLevel = VolatilityLevelEnum.LOW,
             prevalencePercentage = 0
         )
         
@@ -286,7 +255,7 @@ class AssetClassTest {
             id = 1,
             name = "Test Asset",
             description = "Test Description",
-            volatilityLevel = "High",
+            volatilityLevel = VolatilityLevelEnum.HIGH,
             prevalencePercentage = 100
         )
         
