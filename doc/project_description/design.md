@@ -5,26 +5,26 @@
 ```mermaid
 flowchart TD
     %% Data Collections
-    MT[MarketTrend Collection] 
-    AC[AssetClass Collection]
-    C[Currency Collection]
-    IP[InvestorProfile Collection]
-    AL[ActivityLevel Collection]
+    MT[MarketTrend Collection]:::collection
+    AC[AssetClass Collection]:::collection
+    C[Currency Collection]:::collection
+    IP[InvestorProfile Collection]:::collection
+    AL[ActivityLevel Collection]:::collection
     
     %% Generators
-    AG[Asset Generator]
-    AN[Asset Namer]
-    PSG[Price Series Generator]
-    UG[User Generator]
-    TG[Transaction Generator]
-    UHG[User Holdings Generator]
+    AG[Asset Generator]:::generator
+    AN[Asset Namer]:::generator
+    PSG[Price Series Generator]:::generator
+    UG[User Generator]:::generator
+    TG[Transaction Generator]:::generator
+    UHG[User Holdings Generator]:::generator
     
     %% Output files
-    AD[asset_data.txt]
-    PS[price_series.txt]
-    U[users.txt]
-    T[transactions.txt]
-    UH[user_holdings.txt]
+    AD[asset_data.txt]:::outputFile
+    PS[price_series.txt]:::outputFile
+    U[users.txt]:::outputFile
+    T[transactions.txt]:::outputFile
+    UH[user_holdings.txt]:::outputFile
     
     %% Relationships
     AC --> AG
@@ -42,6 +42,11 @@ flowchart TD
     TG --> T
     T --> UHG
     UHG --> UH
+    
+    %% Styling
+    classDef collection fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#000
+    classDef generator fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    classDef outputFile fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
 ```
 
 ## Swedish/Nordic Market Trend Dataset (1990-2025)
