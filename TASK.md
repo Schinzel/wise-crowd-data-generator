@@ -40,6 +40,11 @@ The system uses a DataGenerationService to orchestrate the interaction between I
 - DataGenerationService: Coordinates the generate-and-save workflow
 This ensures single responsibility and testability.
 
+## Package Structure
+All data generators must be placed in the `data_generators` package:
+- `com.wisecrowd.data_generator.data_generators` for generator implementations
+- Follow the existing pattern established with `data_collections` package
+
 # Resulting files
 The result of running the code be the a set of text files:
 - asset_data.txt
