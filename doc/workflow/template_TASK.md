@@ -32,11 +32,19 @@ Business values
 
 # Solution Architecture
 
+# Phases
+Divide the project or story into distinct phases. For example:
+- Phase A - Create a generic file writer
+- Phase B - Create data collections
+- Phase C - Create data generators
+
+
 # Current Implementation Status (to be completed by AI)
 
 # Tasks
+The task name is `[phase][task number]`, for example A3 for task 3 in phase A.
 
-## Task 1
+## Task A1
 
 ### Description
 
@@ -46,7 +54,7 @@ Business values
 
 ### Task Summary (to be completed by AI)
 
-## Task N
+## Task AN
 
 ### Description
 
