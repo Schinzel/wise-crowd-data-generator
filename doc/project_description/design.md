@@ -217,7 +217,6 @@ This file contains all user transactions with assets including purchases and sal
 
 ### User Holdings File (user_holdings.txt)
 This file represents the current holdings of each user after all transactions have been processed.
-While not one of the primary output files, it can be derived from the transactions data.
 
 ## Data Flow
 The complete data generation process follows these steps:

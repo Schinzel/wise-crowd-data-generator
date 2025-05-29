@@ -33,13 +33,112 @@ So that I can develop the WiseCrowd platform using data of different sizes and c
 # Solution Architecture
 The system generates mocked data files for the WiseCrowd platform. Foundation components (data collections, file saver) are complete. Next phase focuses on implementing data generators that use these components to create realistic datasets.
 
+## Component Integration Pattern
+The system uses a DataGenerationService to orchestrate the interaction between IDataGenerator and IDataSaver:
+- IDataGenerator: Handles data generation logic
+- IDataSaver: Handles file output operations  
+- DataGenerationService: Coordinates the generate-and-save workflow
+This ensures single responsibility and testability.
+
+# Resulting files
+The result of running the code be the a set of text files:
+- asset_data.txt
+- users.txt
+- price_series.txt
+- transactions.txt
+- user_holdings.txt
+
 # Current Implementation Status (to be completed by AI)
 Phase 1 Complete - Foundation built with data collections and file saving capabilities. Ready for Phase 2: Data Generators implementation.
 
 # Tasks
 
-## Task 8 - Asset Generator
-Create AssetDataGenerator that implements IDataGenerator to generate asset data using AssetClassCollection.
+## Task 8 - Update FileNameEnum
+Update the existing FileNameEnum to include user_holdings.txt file name.
+
+### Description
+Add the missing USER_HOLDINGS entry to FileNameEnum to support the complete set of 5 output files as specified in design.md.
+
+### Deliverables
+- Updated FileNameEnum with USER_HOLDINGS entry
+- Updated unit tests to cover the new enum entry
+
+### Acceptance Criteria
+1. Add USER_HOLDINGS("user_holdings.txt") to FileNameEnum
+2. Maintain existing entries unchanged
+3. Update corresponding unit tests
+4. Verify all tests still pass
+5. Code follows project standards
+
+### Task Summary (to be completed by AI)
+
+## Task 9 - IDataGenerator Interface
+Create the IDataGenerator interface that all data generators will implement.
+
+### Description
+Define the contract for all data generators following the same patterns as IDataSaver with prepare, generate, and complete phases.
+
+### Deliverables
+- IDataGenerator interface
+- Proper documentation and examples
+- Integration with existing patterns
+
+### Acceptance Criteria
+1. Follows the same pattern as IDataSaver (prepare, generate items, complete)
+2. Includes proper error handling mechanisms
+3. Provides clear method contracts and documentation
+4. Follows project code standards
+5. Designed for use with FileDataSaver
+
+### Task Summary (to be completed by AI)
+
+## Task 10 - Data Generation Service
+Create DataGenerationService that orchestrates IDataGenerator and IDataSaver to test the complete workflow.
+
+### Description
+Implement the orchestration service that combines data generation and file saving, allowing us to test the entire design with actual asset data generation.
+
+### Deliverables
+- DataGenerationService class
+- Integration tests with AssetDataGenerator and FileDataSaver
+- Working asset_data.txt generation
+
+### Acceptance Criteria
+1. Takes IDataGenerator and IDataSaver as constructor parameters
+2. Orchestrates the complete generate-and-save workflow (prepare → generate items → save items → complete)
+3. Handles errors from both generator and saver components
+4. Includes comprehensive unit tests and integration tests
+5. Successfully generates asset_data.txt file with realistic data
+6. Code follows project standards
+
+### Task Summary (to be completed by AI)
+
+## Task 11 - Asset Namer
+Create AssetNamer utility that generates realistic asset names based on AssetClass.
+
+### Description
+Implement a utility that takes an AssetClass instance and returns realistic Swedish/Nordic asset names following the naming principles in design.md.
+
+### Deliverables
+- AssetNamer class
+- Comprehensive unit tests
+- Integration with AssetClass
+
+### Acceptance Criteria
+1. Takes AssetClass as input and returns realistic asset name
+2. Uses naming components from design.md:
+   - Providers: Swedbank, SEB, Nordea, Handelsbanken, Länsförsäkringar
+   - Regions: Sweden, Nordic, Europe, Global, Asia, US
+   - Sectors: Tech, Health, Finance, Energy, Real Estate
+   - Fund types based on asset class (Index/Active for equity, Government/Corporate for bonds, etc.)
+3. Generates names like "SEB Nordic Tech Active" or "Nordea European Corporate Bond"
+4. Includes comprehensive unit tests covering all asset classes
+5. Code follows project standards
+
+### Task Summary (to be completed by AI)
+
+## Task 12 - Asset Generator
+Create AssetDataGenerator that implements IDataGenerator to generate asset data using AssetClassCollection and AssetNamer.
 
 ### Description
 Implement a generator that creates realistic asset data based on asset classes and their prevalence percentages.
@@ -47,18 +146,19 @@ Implement a generator that creates realistic asset data based on asset classes a
 ### Deliverables
 - AssetDataGenerator class
 - Comprehensive unit tests
-- Integration with existing data collections
+- Integration with existing data collections and AssetNamer
 
 ### Acceptance Criteria
-1. Generates assets distributed according to asset class prevalence percentages
-2. Creates realistic asset names, descriptions, and properties
-3. Follows defensive programming principles
-4. Includes comprehensive unit tests
-5. Code follows project standards
+1. Implements IDataGenerator interface
+2. Generates assets distributed according to asset class prevalence percentages
+3. Uses AssetNamer to create realistic asset names
+4. Follows defensive programming principles
+5. Includes comprehensive unit tests
+6. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
-## Task 9 - User Generator
+## Task 13 - User Generator
 Create UserDataGenerator that implements IDataGenerator to generate user data using InvestorProfileCollection and ActivityLevelCollection.
 
 ### Description
@@ -70,15 +170,16 @@ Implement a generator that creates realistic user data with proper distribution 
 - Integration with existing data collections
 
 ### Acceptance Criteria
-1. Generates users distributed according to investor profile and activity level percentages
-2. Creates realistic user demographics and preferences
-3. Follows defensive programming principles
-4. Includes comprehensive unit tests
-5. Code follows project standards
+1. Implements IDataGenerator interface
+2. Generates users distributed according to investor profile and activity level percentages
+3. Creates realistic user demographics and preferences
+4. Follows defensive programming principles
+5. Includes comprehensive unit tests
+6. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
-## Task 10 - Price Series Generator
+## Task 14 - Price Series Generator
 Create PriceSeriesDataGenerator that implements IDataGenerator to generate historical price data using MarketTrendCollection.
 
 ### Description
@@ -90,15 +191,16 @@ Implement a generator that creates realistic price series data influenced by mar
 - Integration with market trends and asset data
 
 ### Acceptance Criteria
-1. Generates price series that reflect market trends and asset volatility
-2. Creates realistic price movements and historical patterns
-3. Follows defensive programming principles
-4. Includes comprehensive unit tests
-5. Code follows project standards
+1. Implements IDataGenerator interface
+2. Generates price series that reflect market trends and asset volatility
+3. Creates realistic price movements and historical patterns
+4. Follows defensive programming principles
+5. Includes comprehensive unit tests
+6. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
-## Task 11 - Transaction Generator
+## Task 15 - Transaction Generator
 Create TransactionDataGenerator that implements IDataGenerator to generate transaction data using CurrencyCollection and user/asset data.
 
 ### Description
@@ -110,10 +212,34 @@ Implement a generator that creates realistic transaction data with proper curren
 - Integration with currencies, users, and assets
 
 ### Acceptance Criteria
-1. Generates transactions distributed according to currency and user activity patterns
-2. Creates realistic transaction amounts, dates, and types
-3. Follows defensive programming principles
-4. Includes comprehensive unit tests
-5. Code follows project standards
+1. Implements IDataGenerator interface
+2. Generates transactions distributed according to currency and user activity patterns
+3. Creates realistic transaction amounts, dates, and types
+4. Follows defensive programming principles
+5. Includes comprehensive unit tests
+6. Code follows project standards
+
+### Task Summary (to be completed by AI)
+
+## Task 16 - User Holdings Generator
+Create UserHoldingsDataGenerator that implements IDataGenerator to generate user holdings data from transaction history.
+
+### Description
+Implement a generator that calculates current user portfolio positions by processing all transactions and computing net holdings for each user-asset combination.
+
+### Deliverables
+- UserHoldingsDataGenerator class
+- Comprehensive unit tests
+- Integration with transaction data
+
+### Acceptance Criteria
+1. Implements IDataGenerator interface
+2. Takes transaction data as input and calculates net positions
+3. Aggregates buy/sell transactions to determine current holdings
+4. Handles multiple currencies properly
+5. Generates realistic user_holdings.txt output
+6. Follows defensive programming principles
+7. Includes comprehensive unit tests
+8. Code follows project standards
 
 ### Task Summary (to be completed by AI)
