@@ -77,7 +77,47 @@ Add the missing USER_HOLDINGS entry to FileNameEnum to support the complete set 
 
 ### Task Summary (to be completed by AI)
 
-## Task 9 - IDataGenerator Interface
+## Task 9 - Weighted Random Selector
+Create a centralized WeightedRandomSelector utility to handle randomized distribution across all collections.
+
+### Description
+Implement a reusable utility that handles weighted random selection for asset classes, investor profiles, activity levels, currencies, and other distribution-based collections. This eliminates code duplication and provides consistent randomization logic.
+
+### Design
+```kotlin
+interface IWeightedRandomSelector<T> {
+    fun getRandomItem(): T
+}
+
+class WeightedRandomSelector<T>(
+    private val items: List<WeightedItem<T>>,
+    private val random: Random = Random.Default
+) : IWeightedRandomSelector<T>
+
+data class WeightedItem<T>(
+    val item: T,
+    val weight: Double  // Can be percentage like 25.0 or raw weight
+)
+```
+
+### Deliverables
+- IWeightedRandomSelector interface
+- WeightedRandomSelector implementation
+- WeightedItem data class
+- Comprehensive unit tests
+
+### Acceptance Criteria
+1. Takes list of weighted items and returns random selection based on weights
+2. Supports both percentage weights (25.0) and raw weights
+3. Injectable Random instance for deterministic testing
+4. Handles edge cases (empty lists, zero weights, etc.)
+5. Follows defensive programming principles
+6. Includes comprehensive unit tests covering all scenarios
+7. Code follows project standards
+
+### Task Summary (to be completed by AI)
+
+## Task 10 - IDataGenerator Interface
 Create the IDataGenerator interface that all data generators will implement.
 
 ### Description
@@ -97,7 +137,7 @@ Define the contract for all data generators following the same patterns as IData
 
 ### Task Summary (to be completed by AI)
 
-## Task 10 - Data Generation Service
+## Task 11 - Data Generation Service
 Create DataGenerationService that orchestrates IDataGenerator and IDataSaver to test the complete workflow.
 
 ### Description
@@ -118,7 +158,7 @@ Implement the orchestration service that combines data generation and file savin
 
 ### Task Summary (to be completed by AI)
 
-## Task 11 - Asset Namer
+## Task 12 - Asset Namer
 Create AssetNamer utility that generates realistic asset names based on AssetClass.
 
 ### Description
@@ -142,7 +182,7 @@ Implement a utility that takes an AssetClass instance and returns realistic Swed
 
 ### Task Summary (to be completed by AI)
 
-## Task 12 - Asset Generator
+## Task 13 - Asset Generator
 Create AssetDataGenerator that implements IDataGenerator to generate asset data using AssetClassCollection and AssetNamer.
 
 ### Description
@@ -163,7 +203,7 @@ Implement a generator that creates realistic asset data based on asset classes a
 
 ### Task Summary (to be completed by AI)
 
-## Task 13 - User Generator
+## Task 14 - User Generator
 Create UserDataGenerator that implements IDataGenerator to generate user data using InvestorProfileCollection and ActivityLevelCollection.
 
 ### Description
@@ -184,7 +224,7 @@ Implement a generator that creates realistic user data with proper distribution 
 
 ### Task Summary (to be completed by AI)
 
-## Task 14 - Price Series Generator
+## Task 15 - Price Series Generator
 Create PriceSeriesDataGenerator that implements IDataGenerator to generate historical price data using MarketTrendCollection.
 
 ### Description
@@ -205,7 +245,7 @@ Implement a generator that creates realistic price series data influenced by mar
 
 ### Task Summary (to be completed by AI)
 
-## Task 15 - Transaction Generator
+## Task 16 - Transaction Generator
 Create TransactionDataGenerator that implements IDataGenerator to generate transaction data using CurrencyCollection and user/asset data.
 
 ### Description
@@ -226,7 +266,7 @@ Implement a generator that creates realistic transaction data with proper curren
 
 ### Task Summary (to be completed by AI)
 
-## Task 16 - User Holdings Generator
+## Task 17 - User Holdings Generator
 Create UserHoldingsDataGenerator that implements IDataGenerator to generate user holdings data from transaction history.
 
 ### Description
