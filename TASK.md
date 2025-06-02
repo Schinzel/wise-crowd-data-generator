@@ -282,7 +282,7 @@ Implement a generator that creates realistic price series data influenced by mar
 ### Task Summary (to be completed by AI)
 
 ## Task 16 - Transaction Generator
-Create TransactionDataGenerator that implements IDataGenerator to generate transaction data using CurrencyCollection and user/asset data.
+Create TransactionDataGenerator that implements IDataGenerator to generate transaction data using price series, users, and CurrencyCollection.
 
 ### Description
 Implement a generator that creates realistic transaction data with proper currency distribution and user activity patterns.
