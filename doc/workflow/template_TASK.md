@@ -6,7 +6,7 @@ The purpose of this document is to describe the problem and the solution to an A
 
 * Implement one task at a time
 * Follow the code standard. Read the file README.md in the project root and follow its links to understand the project, the stack, code standard and how testing is to be done.
-* Explain your approach for each task
+* All tasks must follow project standards, use defensive programming principles, and include comprehensive unit tests unless explicitly stated otherwise.
 * When you are done with a task
   * run below commands to verify that things still work
     * mvn clean install \-DskipTests

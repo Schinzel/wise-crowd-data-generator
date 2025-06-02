@@ -7,6 +7,7 @@ The purpose of this document is to describe the problem and the solution to an A
 
 * Implement one task at a time
 * Follow the code standard. Read the file README.md in the project root and follow its links to understand the project, the stack, code standard and how testing is to be done.
+* All tasks must follow project standards, use defensive programming principles, and include comprehensive unit tests unless explicitly stated otherwise.
 * Explain your approach for each task
 * When you are done with a task
   * run below commands to verify that things still work
@@ -73,7 +74,6 @@ Add the missing USER_HOLDINGS entry to FileNameEnum to support the complete set 
 2. Maintain existing entries unchanged
 3. Update corresponding unit tests
 4. Verify all tests still pass
-5. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
@@ -107,9 +107,6 @@ Implement a data collection that represents the Nordic countries where bank cust
    - getByDistribution() method for weighted selection
    - getByCountryCode() method for lookup
 5. Predefined Nordic countries data matching design.md table
-6. Comprehensive unit tests covering all methods and edge cases
-7. Follows defensive programming principles (validation, error handling)
-8. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
@@ -147,9 +144,6 @@ data class WeightedItem<T>(
 2. Supports both percentage weights (25.0) and raw weights
 3. Injectable Random instance for deterministic testing
 4. Handles edge cases (empty lists, zero weights, etc.)
-5. Follows defensive programming principles
-6. Includes comprehensive unit tests covering all scenarios
-7. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
@@ -168,8 +162,7 @@ Define the contract for all data generators following the same patterns as IData
 1. Follows the same pattern as IDataSaver (prepare, generate items, complete)
 2. Includes proper error handling mechanisms
 3. Provides clear method contracts and documentation
-4. Follows project code standards
-5. Designed for use with FileDataSaver
+4. Designed for use with FileDataSaver
 
 ### Task Summary (to be completed by AI)
 
@@ -190,7 +183,6 @@ Implement the orchestration service that combines data generation and file savin
 3. Handles errors from both generator and saver components
 4. Includes comprehensive unit tests with mock IDataGenerator implementations
 5. Includes integration tests with FileDataSaver
-6. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
@@ -213,8 +205,6 @@ Implement a utility that takes an AssetClass instance and returns realistic Swed
    - Sectors: Tech, Health, Finance, Energy, Real Estate
    - Fund types based on asset class (Index/Active for equity, Government/Corporate for bonds, etc.)
 3. Generates names like "SEB Nordic Tech Active" or "Nordea European Corporate Bond"
-4. Includes comprehensive unit tests covering all asset classes
-5. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
@@ -233,9 +223,6 @@ Implement a generator that creates realistic asset data based on asset classes a
 1. Implements IDataGenerator interface
 2. Generates assets distributed according to asset class prevalence percentages
 3. Uses AssetNamer to create realistic asset names
-4. Follows defensive programming principles
-5. Includes comprehensive unit tests
-6. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
@@ -277,9 +264,6 @@ Implement a generator that creates realistic user data with proper distribution 
 3. Implements customer lifecycle logic with join/departure dates and status tracking
 4. Handles customerJoinDistribution and customerDepartureRate parameters
 5. Creates realistic user demographics with proper date ranges
-6. Follows defensive programming principles
-7. Includes comprehensive unit tests covering all lifecycle scenarios
-8. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
@@ -299,9 +283,6 @@ Implement a generator that creates realistic price series data influenced by mar
 2. Generates price series that reflect market trends and asset volatility
 3. Uses Asset Generator output to determine which assets need price data
 4. Creates realistic price movements and historical patterns based on MarketTrendCollection
-5. Follows defensive programming principles
-6. Includes comprehensive unit tests
-7. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
@@ -327,9 +308,6 @@ Implement a generator that creates realistic transaction data with proper curren
 3. Handles departed customer sell-off logic using customer_status and departure_date
 4. Creates realistic transaction amounts, dates, and types based on price series
 5. Processes both ACTIVE and DEPARTED customer scenarios
-6. Follows defensive programming principles
-7. Includes comprehensive unit tests covering all customer lifecycle scenarios
-8. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
@@ -350,8 +328,5 @@ Implement a generator that calculates current user portfolio positions by proces
 3. Aggregates buy/sell transactions to determine current holdings
 4. Handles multiple currencies properly
 5. Generates realistic user_holdings.txt output
-6. Follows defensive programming principles
-7. Includes comprehensive unit tests
-8. Code follows project standards
 
 ### Task Summary (to be completed by AI)
