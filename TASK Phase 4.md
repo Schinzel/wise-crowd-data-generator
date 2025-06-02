@@ -1,4 +1,4 @@
-# WiseCrowd Data Generator - Phase 3: Data Generators
+# WiseCrowd Data Generator - Phase 4: User Pipeline
 
 # The purpose
 The purpose of this document is to describe the problem and the solution to an AI that then can do the changes. 
