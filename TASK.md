@@ -77,6 +77,42 @@ Add the missing USER_HOLDINGS entry to FileNameEnum to support the complete set 
 
 ### Task Summary (to be completed by AI)
 
+## Task 8.5 - Customer Countries Collection
+Create CustomerCountriesCollection to support realistic Nordic customer distribution for banking simulation.
+
+### Description
+Implement a data collection that represents the Nordic countries where bank customers are located. This provides realistic customer demographics for the Swedish bank simulation, following the same patterns as other collection classes.
+
+### Collection Data (from design.md)
+| ID | Name | Country Code | Description | Distribution (%) |
+|----|------|-------------|-------------|------------------|
+| 1  | Sweden | SE | Home market with largest customer base | 60 |
+| 2  | Norway | NO | Oil wealth economy with active investors | 15 |
+| 3  | Denmark | DK | Strong financial sector and banking ties | 12 |
+| 4  | Finland | FI | Tech-savvy market with Nordic connections | 8 |
+| 5  | Iceland | IS | Small but wealthy per capita customer base | 5 |
+
+### Deliverables
+- CustomerCountry data class
+- CustomerCountriesCollection class with predefined Nordic data
+- Comprehensive unit tests
+- Integration with existing collection patterns
+
+### Acceptance Criteria
+1. Follow existing collection patterns (similar to CurrencyCollection and ActivityLevelCollection)
+2. Place in `data_collections/customer_country/` package
+3. CustomerCountry data class with id, name, countryCode, description, distributionPercentage
+4. CustomerCountriesCollection with filtering and lookup methods:
+   - getAll() method
+   - getByDistribution() method for weighted selection
+   - getByCountryCode() method for lookup
+5. Predefined Nordic countries data matching design.md table
+6. Comprehensive unit tests covering all methods and edge cases
+7. Follows defensive programming principles (validation, error handling)
+8. Code follows project standards
+
+### Task Summary (to be completed by AI)
+
 ## Task 9 - Weighted Random Selector
 Create a centralized WeightedRandomSelector utility to handle randomized distribution across all collections.
 
