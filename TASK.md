@@ -181,15 +181,15 @@ Implement the orchestration service that combines data generation and file savin
 
 ### Deliverables
 - DataGenerationService class
-- Integration tests with AssetDataGenerator and FileDataSaver
-- Working asset_data.txt generation
+- Unit tests with mock IDataGenerator implementations
+- Integration tests with FileDataSaver
 
 ### Acceptance Criteria
 1. Takes IDataGenerator and IDataSaver as constructor parameters
 2. Orchestrates the complete generate-and-save workflow (prepare → generate items → save items → complete)
 3. Handles errors from both generator and saver components
-4. Includes comprehensive unit tests and integration tests
-5. Successfully generates asset_data.txt file with realistic data
+4. Includes comprehensive unit tests with mock IDataGenerator implementations
+5. Includes integration tests with FileDataSaver
 6. Code follows project standards
 
 ### Task Summary (to be completed by AI)
