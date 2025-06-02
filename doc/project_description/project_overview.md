@@ -14,6 +14,8 @@ The result of running the code be the files:
 - users.txt
 - price_series.txt
 - transactions.txt
+- user_holdings.txt
+
 These files can be used by the WiseCrowd platform to generate asset allocation indices.
 
 By changing parameters we can get very large data sets to test performance. 
