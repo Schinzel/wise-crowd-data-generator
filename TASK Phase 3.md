@@ -154,7 +154,7 @@ Implement a utility that takes an AssetClass instance and returns realistic Swed
 
 ### Task Summary (to be completed by AI)
 
-## Task 14 - Asset Generator
+## Task 14 - Asset Generator → `asset_data.txt`
 Create AssetDataGenerator that implements IDataGenerator to generate asset data.
 
 ### Description
@@ -175,7 +175,7 @@ Implement a generator that creates realistic asset data based on asset classes a
 
 ### Task Summary (to be completed by AI)
 
-## Task 15 - User Generator
+## Task 15 - User Generator → `users.txt`
 Create UserDataGenerator that implements IDataGenerator to generate user data.
 
 ### Description
@@ -220,7 +220,7 @@ Implement a generator that creates realistic user data with proper distribution 
 
 ### Task Summary (to be completed by AI)
 
-## Task 16 - Price Series Generator
+## Task 16 - Price Series Generator → `price_series.txt`
 Create PriceSeriesDataGenerator that implements IDataGenerator to generate historical price data.
 
 ### Description
@@ -242,7 +242,7 @@ Implement a generator that creates realistic price series data influenced by mar
 
 ### Task Summary (to be completed by AI)
 
-## Task 17 - Transaction Generator
+## Task 17 - Transaction Generator → `transactions.txt`
 Create TransactionDataGenerator that implements IDataGenerator to generate transaction data.
 
 ### Description
@@ -271,7 +271,7 @@ Implement a generator that creates realistic transaction data with proper curren
 
 ### Task Summary (to be completed by AI)
 
-## Task 18 - User Holdings Generator
+## Task 18 - User Holdings Generator → `user_holdings.txt`
 Create UserHoldingsDataGenerator that implements IDataGenerator to generate user holdings data.
 
 ### Description
