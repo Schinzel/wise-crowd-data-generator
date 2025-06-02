@@ -59,7 +59,7 @@ Phase 1 Complete - Foundation built with data collections and file saving capabi
 
 # Tasks
 
-## Task 8 - Update FileNameEnum
+## Phase 2 - Task 1 - Update FileNameEnum
 Update the existing FileNameEnum to include user_holdings.txt file name.
 
 ### Description
@@ -77,7 +77,7 @@ Add the missing USER_HOLDINGS entry to FileNameEnum to support the complete set 
 
 ### Task Summary (to be completed by AI)
 
-## Task 9 - Customer Countries Collection
+## Phase 2 - Task 2 - Customer Countries Collection
 Create CustomerCountriesCollection to support realistic Nordic customer distribution for banking simulation.
 
 ### Description
