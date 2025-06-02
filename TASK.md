@@ -95,7 +95,6 @@ Implement a data collection that represents the Nordic countries where bank cust
 ### Deliverables
 - CustomerCountry data class
 - CustomerCountriesCollection class with predefined Nordic data
-- Comprehensive unit tests
 - Integration with existing collection patterns
 
 ### Acceptance Criteria
@@ -137,7 +136,6 @@ data class WeightedItem<T>(
 - IWeightedRandomSelector interface
 - WeightedRandomSelector implementation
 - WeightedItem data class
-- Comprehensive unit tests
 
 ### Acceptance Criteria
 1. Takes list of weighted items and returns random selection based on weights
@@ -194,7 +192,6 @@ Implement a utility that takes an AssetClass instance and returns realistic Swed
 
 ### Deliverables
 - AssetNamer class
-- Comprehensive unit tests
 - Integration with AssetClass
 
 ### Acceptance Criteria
@@ -220,7 +217,6 @@ Implement a generator that creates realistic asset data based on asset classes a
 
 ### Deliverables
 - AssetDataGenerator class
-- Comprehensive unit tests
 - Integration with existing data collections and AssetNamer
 
 ### Acceptance Criteria
@@ -264,7 +260,6 @@ Implement a generator that creates realistic user data with proper distribution 
 
 ### Deliverables
 - UserDataGenerator class
-- Comprehensive unit tests
 - Integration with existing data collections
 
 ### Acceptance Criteria
@@ -288,7 +283,6 @@ Implement a generator that creates realistic price series data influenced by mar
 
 ### Deliverables
 - PriceSeriesDataGenerator class
-- Comprehensive unit tests
 - Integration with MarketTrendCollection and Asset Generator output
 
 ### Acceptance Criteria
@@ -317,7 +311,6 @@ Implement a generator that creates realistic transaction data with proper curren
 
 ### Deliverables
 - TransactionDataGenerator class
-- Comprehensive unit tests
 - Integration with price series, users, and currencies
 
 ### Acceptance Criteria
@@ -340,7 +333,6 @@ Implement a generator that calculates current user portfolio positions by proces
 
 ### Deliverables
 - UserHoldingsDataGenerator class
-- Comprehensive unit tests
 - Integration with transaction data
 
 ### Acceptance Criteria
