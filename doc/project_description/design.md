@@ -10,6 +10,7 @@ flowchart TD
     C[Currency Collection]:::collection
     IP[InvestorProfile Collection]:::collection
     AL[ActivityLevel Collection]:::collection
+    CC[CustomerCountries Collection]:::collection
     
     %% Generators
     AG[Asset Generator]:::generator
@@ -35,6 +36,7 @@ flowchart TD
     PSG --> PS
     IP --> UG
     AL --> UG
+    CC --> UG
     UG --> U
     PS --> TG
     U --> TG
@@ -87,6 +89,16 @@ flowchart TD
 | 6  | Gold / Precious Metals | Physical commodity or related securities | High | 5 |
 | 7  | REITs | Real estate investment trusts | Medium | 3 |
 | 8  | Crypto | Digital currencies, a higher risk exposure | Very High | 1 |
+
+## Customer Countries
+
+| ID | Name | Country Code | Description | Distribution (%) |
+|----|------|-------------|-------------|------------------|
+| 1  | Sweden | SE | Home market with largest customer base | 60 |
+| 2  | Norway | NO | Oil wealth economy with active investors | 15 |
+| 3  | Denmark | DK | Strong financial sector and banking ties | 12 |
+| 4  | Finland | FI | Tech-savvy market with Nordic connections | 8 |
+| 5  | Iceland | IS | Small but wealthy per capita customer base | 5 |
 
 ## System Components
 
@@ -162,13 +174,25 @@ flowchart TD
 - Input:
   - Investor profiles
   - Activity levels
+  - Customer countries
 - Parameters:
   - Number of users
+  - customerJoinDistribution (e.g., 30% join after simulation start date)
+  - customerDepartureRate (e.g., 20% leave before simulation end date)
+  - simulationStartDate and simulationEndDate for determining join/departure date ranges
 - Output:
   - user_id
-  - Investor profile id
-  - Activity level id
-  - Randomly from in the world (countries)
+  - investor_profile_id
+  - activity_level_id
+  - country_id
+  - join_date (when customer became active)
+  - departure_date (when customer left, null if still active)
+  - customer_status (ACTIVE, DEPARTED)
+- Customer Lifecycle Logic:
+  - 30% of users have join_date after simulationStartDate (spread across entire simulation range)
+  - 20% of users have departure_date before simulationEndDate with customer_status = DEPARTED
+  - Remaining users start at simulationStartDate and remain ACTIVE throughout
+  - Departed customers trigger instant sell-off transactions in Transaction Generator
 
 ### Transactions Data Generator
 - Input:
