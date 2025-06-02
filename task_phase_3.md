@@ -1,61 +1,6 @@
-# WiseCrowd Data Generator - Phase 3: Asset Pipeline
-
-# The purpose
-The purpose of this document is to describe the problem and the solution to an AI that then can do the changes. 
-
-# Instructions
-
-* Implement one task at a time
-* Follow the code standard. Read the file README.md in the project root and follow its links to understand the project, the stack, code standard and how testing is to be done.
-* All tasks must follow project standards, use defensive programming principles, and include comprehensive unit tests unless explicitly stated otherwise.
-* Explain your approach for each task
-* When you are done with a task
-  * run below commands to verify that things still work
-    * mvn clean install \-DskipTests
-    * mvn test
-  * Fill out the *Task Summary (to be completed by AI)* for the task you just completed
-    * Be concise and to the point
-    * Include major changes made and files affected
-    * Document key decisions and their rationale
-    * Highlight any items that might affect future tasks
-  * Fill out *Current Implementation Status (to be completed by AI)* and add which tasks have been completed. Simply add a row with *Task X done - YYYY-MM-DD*.
-* Let me know when you've completed a task so I can verify it before moving to the next one
-
-# User story
-
-As a developer   
-I want a tool that can generate mocked data   
-So that I can develop the WiseCrowd platform using data of different sizes and configurations 
-
-# Business values
-* by generating large data sets we can test the performance for different scenarios  
-* we can derive asset allocation indices and verify that these are as we expect
-
-# Solution Architecture
-The system generates mocked data files for the WiseCrowd platform. Foundation components (data collections, file saver) are complete. Next phase focuses on implementing data generators that use these components to create realistic datasets.
-
-## Component Integration Pattern
-The system uses a DataGenerationService to orchestrate the interaction between IDataGenerator and IDataSaver:
-- IDataGenerator: Handles data generation logic
-- IDataSaver: Handles file output operations  
-- DataGenerationService: Coordinates the generate-and-save workflow
-This ensures single responsibility and testability.
-
-## Package Structure
-All data generators must be placed in the `data_generators` package:
-- `com.wisecrowd.data_generator.data_generators` for generator implementations
-- Follow the existing pattern established with `data_collections` package
-
-# Resulting files
-The result of running the code be the a set of text files:
-- asset_data.txt
-- users.txt
-- price_series.txt
-- transactions.txt
-- user_holdings.txt
+# Phase 3 - Asset pipeline
 
 # Current Implementation Status (to be completed by AI)
-Phase 1 Complete - Foundation built with data collections and file saving capabilities. Ready for Phase 2: Data Generators implementation.
 
 # Tasks
 ## Phase 3 - Task 1 - Weighted Random Selector
