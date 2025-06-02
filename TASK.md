@@ -308,20 +308,27 @@ Implement a generator that creates realistic price series data influenced by mar
 Create TransactionDataGenerator that implements IDataGenerator to generate transaction data using price series, users, and CurrencyCollection.
 
 ### Description
-Implement a generator that creates realistic transaction data with proper currency distribution and user activity patterns.
+Implement a generator that creates realistic transaction data with proper currency distribution and user activity patterns. Includes special handling for departed customers who trigger instant sell-off transactions.
+
+### Customer Lifecycle Integration
+- Process users with DEPARTED status to generate sell-off transactions
+- Departed customers sell all holdings on their departure_date
+- Regular ACTIVE customers follow normal activity patterns based on their activity_level
 
 ### Deliverables
 - TransactionDataGenerator class
 - Comprehensive unit tests
-- Integration with currencies, users, and assets
+- Integration with price series, users, and currencies
 
 ### Acceptance Criteria
 1. Implements IDataGenerator interface
 2. Generates transactions distributed according to currency and user activity patterns
-3. Creates realistic transaction amounts, dates, and types
-4. Follows defensive programming principles
-5. Includes comprehensive unit tests
-6. Code follows project standards
+3. Handles departed customer sell-off logic using customer_status and departure_date
+4. Creates realistic transaction amounts, dates, and types based on price series
+5. Processes both ACTIVE and DEPARTED customer scenarios
+6. Follows defensive programming principles
+7. Includes comprehensive unit tests covering all customer lifecycle scenarios
+8. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
