@@ -240,10 +240,31 @@ Implement a generator that creates realistic asset data based on asset classes a
 ### Task Summary (to be completed by AI)
 
 ## Task 14 - User Generator
-Create UserDataGenerator that implements IDataGenerator to generate user data using InvestorProfileCollection and ActivityLevelCollection.
+Create UserDataGenerator that implements IDataGenerator to generate user data using InvestorProfileCollection, ActivityLevelCollection, and CustomerCountriesCollection.
 
 ### Description
-Implement a generator that creates realistic user data with proper distribution of investor profiles and activity levels.
+Implement a generator that creates realistic user data with proper distribution of investor profiles, activity levels, and customer countries. Includes customer lifecycle management with join/departure dates and customer status tracking.
+
+### Parameters
+- Number of users
+- customerJoinDistribution (e.g., 30% join after simulation start date)
+- customerDepartureRate (e.g., 20% leave before simulation end date)
+- simulationStartDate and simulationEndDate for determining join/departure date ranges
+
+### Output
+- user_id
+- investor_profile_id
+- activity_level_id
+- country_id
+- join_date (when customer became active)
+- departure_date (when customer left, null if still active)
+- customer_status (ACTIVE, DEPARTED)
+
+### Customer Lifecycle Logic
+- 30% of users have join_date after simulationStartDate (spread across entire simulation range)
+- 20% of users have departure_date before simulationEndDate with customer_status = DEPARTED
+- Remaining users start at simulationStartDate and remain ACTIVE throughout
+- Departed customers trigger instant sell-off transactions in Transaction Generator
 
 ### Deliverables
 - UserDataGenerator class
@@ -252,11 +273,13 @@ Implement a generator that creates realistic user data with proper distribution 
 
 ### Acceptance Criteria
 1. Implements IDataGenerator interface
-2. Generates users distributed according to investor profile and activity level percentages
-3. Creates realistic user demographics and preferences
-4. Follows defensive programming principles
-5. Includes comprehensive unit tests
-6. Code follows project standards
+2. Generates users distributed according to investor profile, activity level, and customer country percentages
+3. Implements customer lifecycle logic with join/departure dates and status tracking
+4. Handles customerJoinDistribution and customerDepartureRate parameters
+5. Creates realistic user demographics with proper date ranges
+6. Follows defensive programming principles
+7. Includes comprehensive unit tests covering all lifecycle scenarios
+8. Code follows project standards
 
 ### Task Summary (to be completed by AI)
 
