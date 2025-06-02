@@ -209,10 +209,14 @@ Implement a utility that takes an AssetClass instance and returns realistic Swed
 ### Task Summary (to be completed by AI)
 
 ## Task 13 - Asset Generator
-Create AssetDataGenerator that implements IDataGenerator to generate asset data using AssetClassCollection and AssetNamer.
+Create AssetDataGenerator that implements IDataGenerator to generate asset data.
 
 ### Description
 Implement a generator that creates realistic asset data based on asset classes and their prevalence percentages.
+
+### Uses
+- AssetClassCollection
+- AssetNamer
 
 ### Deliverables
 - AssetDataGenerator class
