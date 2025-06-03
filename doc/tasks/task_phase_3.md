@@ -2,6 +2,7 @@
 
 # Current Implementation Status (to be completed by AI)
 - Task 1 done - 2025-06-03
+- Task 2 done - 2025-06-03
 
 # Tasks
 ## Phase 3 - Task 1 - Weighted Random Selector
@@ -69,26 +70,79 @@ data class WeightedItem<T>(
 Create the IDataGenerator interface that all data generators will implement.
 
 ### Description
-Define the contract for all data generators following the same patterns as IDataSaver with prepare, generate, and complete phases.
+Define the contract for all data generators using an iterator pattern with hasNext() and getNext() methods. This provides a pull-based approach where consumers control the flow of data generation.
+
+### Design
+```kotlin
+interface IDataGenerator<T> {
+    fun hasNext(): Boolean
+    fun getNext(): T
+}
+```
 
 ### Deliverables
-- IDataGenerator interface
+- IDataGenerator interface with generic type parameter
 - Proper documentation and examples
-- Integration with existing patterns
+- Integration with DataGenerationService pattern
 
 ### Acceptance Criteria
-1. Follows the same pattern as IDataSaver (prepare, generate items, complete)
-2. Includes proper error handling mechanisms
-3. Provides clear method contracts and documentation
-4. Designed for use with FileDataSaver
+1. Uses iterator pattern with hasNext() and getNext() methods
+2. Generic interface supporting different data types (Asset, PriceSeries, etc.)
+3. Pull-based approach allowing consumer to control generation flow
+4. Includes proper error handling mechanisms (getNext() can throw exceptions)
+5. Provides clear method contracts and documentation
+6. Designed for use with DataGenerationService and IDataSaver
 
 ### Task Summary (to be completed by AI)
+**Completed 2025-06-03** ✅
+
+**Major Changes Made:**
+- Created `IDataGenerator<T>` interface using iterator pattern with `hasNext()` and `getNext()` methods
+- Implemented comprehensive contract testing framework `IDataGeneratorContractTest<T>` for interface compliance
+- Created `TestStringDataGenerator` as concrete implementation for testing purposes
+- Added extensive unit tests covering all edge cases and behaviors
+
+**Files Created:**
+- `src/main/kotlin/com/wisecrowd/data_generator/data_generators/IDataGenerator.kt`
+- `src/test/kotlin/com/wisecrowd/data_generator/data_generators/IDataGeneratorContractTest.kt`
+- `src/test/kotlin/com/wisecrowd/data_generator/data_generators/TestStringDataGenerator.kt`
+- `src/test/kotlin/com/wisecrowd/data_generator/data_generators/TestStringDataGeneratorTest.kt`
+
+**Key Decisions:**
+- Used iterator pattern (`hasNext()`/`getNext()`) instead of lifecycle methods for better control flow
+- Made interface generic `IDataGenerator<T>` to support different data types
+- Implemented contract testing to ensure all future implementations follow the same behavior
+- Added comprehensive error handling with `NoSuchElementException` for consistency with Iterator pattern
+
+**Impact on Future Tasks:**
+- All data generators (Asset, PriceSeries, etc.) can now implement this clean interface
+- Contract testing ensures consistent behavior across all implementations
+- Pull-based iteration enables better memory management and consumer control
+- Ready for integration with DataGenerationService in next task
 
 ## Phase 3 - Task 3 - Data Generation Service
 Create DataGenerationService that orchestrates IDataGenerator and IDataSaver to test the complete workflow.
 
 ### Description
-Implement the orchestration service that combines data generation and file saving, allowing us to test the entire design with actual asset data generation.
+Implement the orchestration service that combines data generation and file saving using the iterator pattern. The service pulls data from IDataGenerator and pushes it to IDataSaver.
+
+### Design Pattern
+```kotlin
+class DataGenerationService<T>(
+    private val generator: IDataGenerator<T>,
+    private val saver: IDataSaver
+) {
+    fun generateAndSave(columnData: List<ColumnData>, itemConverter: (T) -> List<String>) {
+        saver.prepare(columnData)
+        while (generator.hasNext()) {
+            val item = generator.getNext()
+            val stringData = itemConverter(item)
+            saver.saveItem(stringData)
+        }
+        saver.complete()
+    }
+}
+```
 
 ### Deliverables
 - DataGenerationService class
@@ -97,10 +151,11 @@ Implement the orchestration service that combines data generation and file savin
 
 ### Acceptance Criteria
 1. Takes IDataGenerator and IDataSaver as constructor parameters
-2. Orchestrates the complete generate-and-save workflow (prepare → generate items → save items → complete)
-3. Handles errors from both generator and saver components
-4. Includes comprehensive unit tests with mock IDataGenerator implementations
-5. Includes integration tests with FileDataSaver
+2. Orchestrates the complete generate-and-save workflow using iterator pattern
+3. Uses converter function to transform generated objects to string lists for saving
+4. Handles errors from both generator and saver components
+5. Includes comprehensive unit tests with mock IDataGenerator implementations
+6. Includes integration tests with FileDataSaver
 
 ### Task Summary (to be completed by AI)
 
