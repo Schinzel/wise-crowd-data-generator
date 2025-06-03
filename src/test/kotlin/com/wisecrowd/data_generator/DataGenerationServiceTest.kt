@@ -175,8 +175,8 @@ class DataGenerationServiceTest {
             methodCallOrder.add("prepare")
         }
         
-        override fun saveItem(data: List<String>) {
-            savedItems.add(data)
+        override fun saveItem(data: List<Any>) {
+            savedItems.add(data.map { it.toString() })
             methodCallOrder.add("saveItem")
         }
         

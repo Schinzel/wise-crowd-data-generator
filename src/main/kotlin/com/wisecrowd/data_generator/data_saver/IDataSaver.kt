@@ -15,7 +15,7 @@ interface IDataSaver {
     fun prepare(columnData: List<ColumnData>)
 
     /**
-     * Save a single data item as a list of string values.
+     * Save a single data item as a list of values.
      *
      * IMPORTANT: This method should NOT throw exceptions. If an error occurs during saving,
      * the implementation should:
@@ -25,9 +25,9 @@ interface IDataSaver {
      *
      * This ensures that a failure in one row does not prevent other rows from being saved.
      *
-     * @param data the data values as strings
+     * @param data the data values as Any type (String, Int, Double, Boolean, etc.)
      */
-    fun saveItem(data: List<String>)
+    fun saveItem(data: List<Any>)
 
     /**
      * Get all errors that occurred during the saving process

@@ -1,6 +1,5 @@
 package com.wisecrowd.data_generator.data_saver
 
-import io.schinzel.basicutils.FunnyChars
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.io.TempDir
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
-import java.time.LocalDate
-import java.time.LocalDateTime
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FileDataSaverTest {
@@ -126,6 +123,22 @@ class FileDataSaverTest {
         }
 
         @Test
+        fun `mixed data types _ writes with proper formatting`() {
+            // Arrange
+            val data = listOf(1, "John Doe", 30)  // Mix of Integer and String types
+            
+            // Act
+            fileDataSaver.saveItem(data)
+            fileDataSaver.complete()
+            
+            // Assert
+            val fileContent = Files.readString(Path.of(testFilePath))
+            val expectedContent = "id${columnDelimiter}name${columnDelimiter}age${rowDelimiter}" +
+                    "1${columnDelimiter}${stringQualifier}John Doe${stringQualifier}${columnDelimiter}30${rowDelimiter}"
+            assertThat(fileContent).isEqualTo(expectedContent)
+        }
+
+        @Test
         fun `data size doesn't match column count _ adds error`() {
             // Arrange
             val invalidData = listOf("1", "John Doe") // Missing age
@@ -195,11 +208,11 @@ class FileDataSaverTest {
             
             val data = listOf(
                 "Sample Text",
-                "123",
-                "123.45",
+                123,
+                123.45,
                 "2025-05-20",
                 "2025-05-20T14:30:00",
-                "true",
+                true,
                 "abc-123"
             )
             

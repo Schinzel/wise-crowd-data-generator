@@ -90,7 +90,7 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
         }
     }
 
-    override fun saveItem(data: List<String>) {
+    override fun saveItem(data: List<Any>) {
         // Check if prepare() was called before trying to save data
         if (writer == null) {
             // Add an error if the writer wasn't initialized
@@ -158,17 +158,17 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
      * Formats a value based on its data type.
      * Strings are wrapped with qualifiers, other types are passed through.
      *
-     * @param value the string representation of the value
+     * @param value the value of any type (String, Int, Double, Boolean, etc.)
      * @param dataType the type of data as defined in DataTypeEnum
      * @return formatted value as a string
      */
-    private fun formatValue(value: String, dataType: DataTypeEnum): String {
+    private fun formatValue(value: Any, dataType: DataTypeEnum): String {
         // Apply different formatting based on the data type
         return when (dataType) {
             // Add qualifiers around string values to handle special characters
             DataTypeEnum.STRING -> "$STRING_QUALIFIER$value$STRING_QUALIFIER"
             // Other types don't need qualifiers
-            else -> value
+            else -> value.toString()
         }
     }
 }
