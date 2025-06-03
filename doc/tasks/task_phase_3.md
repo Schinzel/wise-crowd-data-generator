@@ -1,6 +1,7 @@
 # Phase 3 - Asset pipeline
 
 # Current Implementation Status (to be completed by AI)
+- Task 1 done - 2025-06-03
 
 # Tasks
 ## Phase 3 - Task 1 - Weighted Random Selector
@@ -38,6 +39,31 @@ data class WeightedItem<T>(
 4. Handles edge cases (empty lists, zero weights, etc.)
 
 ### Task Summary (to be completed by AI)
+**Completed 2025-06-03** ✅
+
+**Major Changes Made:**
+- Created `IWeightedRandomSelector<T>` interface in `/utils/` package
+- Implemented `WeightedRandomSelector<T>` class with binary search algorithm for O(log n) performance
+- Created `WeightedItem<T>` data class using `percent: Double` (changed from `weight` to be more precise)
+- Added comprehensive unit tests for both classes with edge case coverage
+
+**Files Created:**
+- `src/main/kotlin/com/wisecrowd/data_generator/utils/IWeightedRandomSelector.kt`
+- `src/main/kotlin/com/wisecrowd/data_generator/utils/WeightedRandomSelector.kt`
+- `src/main/kotlin/com/wisecrowd/data_generator/utils/WeightedItem.kt`
+- `src/test/kotlin/com/wisecrowd/data_generator/utils/WeightedItemTest.kt`
+- `src/test/kotlin/com/wisecrowd/data_generator/utils/WeightedRandomSelectorTest.kt`
+
+**Key Decisions:**
+- Used `percent: Double` instead of `weight: Double` for clarity (represents percentage like 25.0 for 25%)
+- Implemented binary search for efficient O(log n) item selection
+- Added defensive programming with comprehensive input validation
+- Injectable Random instance enables deterministic testing
+
+**Impact on Future Tasks:**
+- This utility can now be used by all data generators requiring weighted random selection
+- Eliminates code duplication across asset classes, investor profiles, activity levels, etc.
+- Provides consistent randomization behavior throughout the system
 
 ## Phase 3 - Task 2 - IDataGenerator Interface
 Create the IDataGenerator interface that all data generators will implement.
