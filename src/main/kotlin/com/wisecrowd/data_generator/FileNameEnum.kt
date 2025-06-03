@@ -17,5 +17,8 @@ enum class FileNameEnum(val fileName: String) {
     PRICE_SERIES("price_series.txt"),
     
     /** Transactions data file containing user transactions */
-    TRANSACTIONS("transactions.txt")
+    TRANSACTIONS("transactions.txt"),
+    
+    /** User holdings data file containing user asset holdings */
+    USER_HOLDINGS("user_holdings.txt")
 }
