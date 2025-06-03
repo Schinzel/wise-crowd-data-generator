@@ -104,45 +104,11 @@ class CurrencyCollectionTest {
     }
 
     @Test
-    fun getByDistributionRange_validRange_returnsMatchingCurrencies() {
+    fun getByDistributionRange_validRange_returnsFilteredResults() {
         val currencies = collection.getByDistributionRange(15.0, 65.0)
         
         assertThat(currencies).hasSize(2)
-    }
-
-    @Test
-    fun getByDistributionRange_validRange_containsSekCurrency() {
-        val currencies = collection.getByDistributionRange(15.0, 65.0)
-        
-        assertThat(currencies).contains(sekCurrency)
-    }
-
-    @Test
-    fun getByDistributionRange_validRange_containsEurCurrency() {
-        val currencies = collection.getByDistributionRange(15.0, 65.0)
-        
-        assertThat(currencies).contains(eurCurrency)
-    }
-
-    @Test
-    fun getByDistributionRange_negativeMinPercentage_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistributionRange(-1.0, 50.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-    }
-
-    @Test
-    fun getByDistributionRange_maxPercentageAbove100_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistributionRange(0.0, 101.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-    }
-
-    @Test
-    fun getByDistributionRange_minGreaterThanMax_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistributionRange(60.0, 50.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
+        assertThat(currencies).containsExactlyInAnyOrder(sekCurrency, eurCurrency)
     }
 
     @Test

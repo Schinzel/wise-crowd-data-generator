@@ -13,6 +13,7 @@
 - Ensure edge cases are covered (null values, empty collections, boundary conditions)
 - Be careful to test only what you intend to test — in other words, test as little as possible
   - For example: if you want to test an API method, move the logic to a separate function or class, so the logic can be tested without involving the web server
+- Single point of truth for testing - Each behavior should be tested in exactly one place
 - Unit test classes do not have to declare "The purpose of this class..."
 
 ## Naming Conventions

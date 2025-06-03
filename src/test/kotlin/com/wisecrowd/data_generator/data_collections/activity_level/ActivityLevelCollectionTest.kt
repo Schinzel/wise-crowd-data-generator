@@ -124,45 +124,11 @@ class ActivityLevelCollectionTest {
     }
 
     @Test
-    fun getByDistributionRange_validRange_returnsMatchingLevels() {
+    fun getByDistributionRange_validRange_returnsFilteredResults() {
         val levels = collection.getByDistributionRange(20.0, 35.0)
         
         assertThat(levels).hasSize(3)
-    }
-
-    @Test
-    fun getByDistributionRange_validRange_containsInactiveLevel() {
-        val levels = collection.getByDistributionRange(20.0, 35.0)
-        
-        assertThat(levels).contains(inactiveLevel)
-    }
-
-    @Test
-    fun getByDistributionRange_validRange_containsLowLevel() {
-        val levels = collection.getByDistributionRange(20.0, 35.0)
-        
-        assertThat(levels).contains(lowLevel)
-    }
-
-    @Test
-    fun getByDistributionRange_negativeMinPercentage_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistributionRange(-1.0, 50.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-    }
-
-    @Test
-    fun getByDistributionRange_maxPercentageAbove100_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistributionRange(0.0, 101.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-    }
-
-    @Test
-    fun getByDistributionRange_minGreaterThanMax_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistributionRange(60.0, 50.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
+        assertThat(levels).containsExactlyInAnyOrder(inactiveLevel, lowLevel, moderateLevel)
     }
 
     @Test

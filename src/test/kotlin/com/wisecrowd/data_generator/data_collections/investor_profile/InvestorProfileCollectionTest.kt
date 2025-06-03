@@ -124,45 +124,11 @@ class InvestorProfileCollectionTest {
     }
 
     @Test
-    fun getByDistributionRange_validRange_returnsMatchingProfiles() {
+    fun getByDistributionRange_validRange_returnsFilteredResults() {
         val profiles = collection.getByDistributionRange(25.0, 45.0)
         
         assertThat(profiles).hasSize(2)
-    }
-
-    @Test
-    fun getByDistributionRange_validRange_containsConservativeProfile() {
-        val profiles = collection.getByDistributionRange(25.0, 45.0)
-        
-        assertThat(profiles).contains(conservativeProfile)
-    }
-
-    @Test
-    fun getByDistributionRange_validRange_containsBalancedProfile() {
-        val profiles = collection.getByDistributionRange(25.0, 45.0)
-        
-        assertThat(profiles).contains(balancedProfile)
-    }
-
-    @Test
-    fun getByDistributionRange_negativeMinPercentage_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistributionRange(-1.0, 50.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-    }
-
-    @Test
-    fun getByDistributionRange_maxPercentageAbove100_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistributionRange(0.0, 101.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-    }
-
-    @Test
-    fun getByDistributionRange_minGreaterThanMax_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistributionRange(60.0, 50.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
+        assertThat(profiles).containsExactlyInAnyOrder(conservativeProfile, balancedProfile)
     }
 
     @Test

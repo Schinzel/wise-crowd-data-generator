@@ -97,7 +97,7 @@ class CustomerCountriesCollectionTest {
     }
 
     @Test
-    fun getByDistribution_validRange_returnsCountriesInRange() {
+    fun getByDistribution_validRange_returnsFilteredResults() {
         collection.addCountry(sweden)    // 60.0%
         collection.addCountry(norway)    // 15.0%
         collection.addCountry(denmark)   // 12.0%
@@ -105,43 +105,7 @@ class CustomerCountriesCollectionTest {
         val result = collection.getByDistribution(10.0, 20.0)
         
         assertThat(result).hasSize(2)
-        assertThat(result).contains(norway, denmark)
-    }
-
-    @Test
-    fun getByDistribution_exactBoundaries_includesCountriesAtBoundaries() {
-        collection.addCountry(sweden)    // 60.0%
-        collection.addCountry(norway)    // 15.0%
-        collection.addCountry(denmark)   // 12.0%
-        
-        val result = collection.getByDistribution(12.0, 15.0)
-        
-        assertThat(result).hasSize(2)
-        assertThat(result).contains(norway, denmark)
-    }
-
-    @Test
-    fun getByDistribution_negativeMinPercentage_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistribution(-1.0, 50.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-          .hasMessageContaining("Min percentage must be between 0 and 100")
-    }
-
-    @Test
-    fun getByDistribution_maxPercentageAbove100_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistribution(0.0, 101.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-          .hasMessageContaining("Max percentage must be between 0 and 100")
-    }
-
-    @Test
-    fun getByDistribution_minGreaterThanMax_throwsException() {
-        assertThatThrownBy {
-            collection.getByDistribution(60.0, 50.0)
-        }.isInstanceOf(IllegalArgumentException::class.java)
-          .hasMessageContaining("Min percentage (60.0) must be less than or equal to max percentage (50.0)")
+        assertThat(result).containsExactlyInAnyOrder(norway, denmark)
     }
 
     @Test

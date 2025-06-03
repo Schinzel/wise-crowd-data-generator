@@ -1,5 +1,7 @@
 package com.wisecrowd.data_generator.data_collections.currency
 
+import com.wisecrowd.data_generator.data_collections.utils.DistributionUtils
+
 /**
  * The purpose of this class is to manage a collection of currencies,
  * providing methods to add, retrieve, and filter currency data.
@@ -26,17 +28,9 @@ class CurrencyCollection {
     }
 
     fun getByDistributionRange(minPercentage: Double, maxPercentage: Double): List<Currency> {
-        require(minPercentage >= 0.0 && minPercentage <= 100.0) {
-            "Min percentage must be between 0 and 100, but was: $minPercentage"
-        }
-        require(maxPercentage >= 0.0 && maxPercentage <= 100.0) {
-            "Max percentage must be between 0 and 100, but was: $maxPercentage"
-        }
-        require(minPercentage <= maxPercentage) {
-            "Min percentage ($minPercentage) must be less than or equal to max percentage ($maxPercentage)"
-        }
-        
-        return currencies.filter { it.distributionPercentage in minPercentage..maxPercentage }
+        return DistributionUtils.filterByDistribution(
+            currencies, minPercentage, maxPercentage
+        ) { it.distributionPercentage }
     }
 
     fun size(): Int = currencies.size
