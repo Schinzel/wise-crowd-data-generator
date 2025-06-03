@@ -74,33 +74,36 @@ Define the contract for all data generators using an iterator pattern with hasNe
 
 ### Design
 ```kotlin
-interface IDataGenerator<T> {
-    fun hasNext(): Boolean
-    fun getNext(): T
+interface IDataGenerator {
+    fun getColumnData(): List<ColumnData>
+    fun hasMoreRows(): Boolean
+    fun getNextRow(): List<Any>
 }
 ```
 
 ### Deliverables
-- IDataGenerator interface with generic type parameter
+- IDataGenerator interface with self-describing column structure
 - Proper documentation and examples
 - Integration with DataGenerationService pattern
 
 ### Acceptance Criteria
-1. Uses iterator pattern with hasNext() and getNext() methods
-2. Generic interface supporting different data types (Asset, PriceSeries, etc.)
-3. Pull-based approach allowing consumer to control generation flow
-4. Includes proper error handling mechanisms (getNext() can throw exceptions)
-5. Provides clear method contracts and documentation
-6. Designed for use with DataGenerationService and IDataSaver
+1. Uses iterator pattern with hasMoreRows() and getNextRow() methods
+2. Includes getColumnData() method for self-describing schema
+3. Returns List<Any> supporting mixed data types (String, Double, Int, Boolean, etc.)
+4. Pull-based approach allowing consumer to control generation flow
+5. Includes proper error handling mechanisms (getNextRow() can throw exceptions)
+6. Provides clear method contracts and documentation
+7. Designed for use with DataGenerationService and IDataSaver
 
 ### Task Summary (to be completed by AI)
 **Completed 2025-06-03** ✅
 
 **Major Changes Made:**
-- Created `IDataGenerator<T>` interface using iterator pattern with `hasNext()` and `getNext()` methods
-- Implemented comprehensive contract testing framework `IDataGeneratorContractTest<T>` for interface compliance
-- Created `TestStringDataGenerator` as concrete implementation for testing purposes
-- Added extensive unit tests covering all edge cases and behaviors
+- Created `IDataGenerator` interface with self-describing schema via `getColumnData(): List<ColumnData>`
+- Implemented iterator pattern with `hasMoreRows()` and `getNextRow(): List<Any>` methods
+- Implemented comprehensive contract testing framework `IDataGeneratorContractTest` for interface compliance
+- Created `TestStringDataGenerator` as concrete implementation demonstrating mixed data types and column structure
+- Added extensive unit tests covering all edge cases and schema consistency verification
 
 **Files Created:**
 - `src/main/kotlin/com/wisecrowd/data_generator/data_generators/IDataGenerator.kt`
@@ -109,13 +112,15 @@ interface IDataGenerator<T> {
 - `src/test/kotlin/com/wisecrowd/data_generator/data_generators/TestStringDataGeneratorTest.kt`
 
 **Key Decisions:**
-- Used iterator pattern (`hasNext()`/`getNext()`) instead of lifecycle methods for better control flow
-- Made interface generic `IDataGenerator<T>` to support different data types
+- Added `getColumnData()` method for self-describing generators (single source of truth for schema)
+- Used iterator pattern (`hasMoreRows()`/`getNextRow()`) for better control flow and clearer naming
+- Returns `List<Any>` to support mixed data types (String, Double, Int, Boolean) in each row
 - Implemented contract testing to ensure all future implementations follow the same behavior
-- Added comprehensive error handling with `NoSuchElementException` for consistency with Iterator pattern
+- Added comprehensive error handling with `NoSuchElementException` for consistency
 
 **Impact on Future Tasks:**
-- All data generators (Asset, PriceSeries, etc.) can now implement this clean interface
+- All data generators are now self-describing with consistent column structure
+- DataGenerationService no longer needs external column configuration
 - Contract testing ensures consistent behavior across all implementations
 - Pull-based iteration enables better memory management and consumer control
 - Ready for integration with DataGenerationService in next task
@@ -128,15 +133,17 @@ Implement the orchestration service that combines data generation and file savin
 
 ### Design Pattern
 ```kotlin
-class DataGenerationService<T>(
-    private val generator: IDataGenerator<T>,
+class DataGenerationService(
+    private val generator: IDataGenerator,
     private val saver: IDataSaver
 ) {
-    fun generateAndSave(columnData: List<ColumnData>, itemConverter: (T) -> List<String>) {
+    fun generateAndSave() {
+        val columnData = generator.getColumnData()  // Self-describing!
         saver.prepare(columnData)
-        while (generator.hasNext()) {
-            val item = generator.getNext()
-            val stringData = itemConverter(item)
+        
+        while (generator.hasMoreRows()) {
+            val dataRow = generator.getNextRow()  // List<Any>
+            val stringData = dataRow.map { it.toString() }
             saver.saveItem(stringData)
         }
         saver.complete()
@@ -152,10 +159,11 @@ class DataGenerationService<T>(
 ### Acceptance Criteria
 1. Takes IDataGenerator and IDataSaver as constructor parameters
 2. Orchestrates the complete generate-and-save workflow using iterator pattern
-3. Uses converter function to transform generated objects to string lists for saving
-4. Handles errors from both generator and saver components
-5. Includes comprehensive unit tests with mock IDataGenerator implementations
-6. Includes integration tests with FileDataSaver
+3. Uses generator.getColumnData() to obtain schema (no external column configuration needed)
+4. Converts List<Any> data rows to List<String> for file output using toString()
+5. Handles errors from both generator and saver components
+6. Includes comprehensive unit tests with mock IDataGenerator implementations
+7. Includes integration tests with FileDataSaver
 
 ### Task Summary (to be completed by AI)
 

@@ -11,47 +11,81 @@ import org.junit.jupiter.api.Test
  * Any class implementing IDataGenerator should extend this test class
  * and implement the createGenerator method to ensure contract compliance.
  */
-abstract class IDataGeneratorContractTest<T> {
+abstract class IDataGeneratorContractTest {
     
     /**
      * Creates a generator instance for testing.
-     * Should return a generator that produces at least 3 items for comprehensive testing.
+     * Should return a generator that produces at least 3 rows for comprehensive testing.
      */
-    abstract fun createGenerator(): IDataGenerator<T>
+    abstract fun createGenerator(): IDataGenerator
     
     /**
      * Creates an empty generator instance for testing edge cases.
      */
-    abstract fun createEmptyGenerator(): IDataGenerator<T>
+    abstract fun createEmptyGenerator(): IDataGenerator
     
     @Nested
-    inner class HasNextBehavior {
+    inner class GetColumnDataBehavior {
         
         @Test
-        fun `hasNext _ generator with items _ returns true`() {
+        fun `getColumnData _ any generator _ returns column definitions`() {
             val generator = createGenerator()
             
-            val result = generator.hasNext()
+            val result = generator.getColumnData()
+            
+            assertThat(result).isNotNull
+            assertThat(result).isNotEmpty
+        }
+        
+        @Test
+        fun `getColumnData _ called multiple times _ returns consistent result`() {
+            val generator = createGenerator()
+            
+            val firstCall = generator.getColumnData()
+            val secondCall = generator.getColumnData()
+            
+            assertThat(firstCall).isEqualTo(secondCall)
+        }
+        
+        @Test
+        fun `getColumnData _ structure matches data rows _ consistent schema`() {
+            val generator = createGenerator()
+            
+            val columnData = generator.getColumnData()
+            val dataRow = generator.getNextRow()
+            
+            assertThat(dataRow).hasSize(columnData.size)
+        }
+    }
+    
+    @Nested
+    inner class HasMoreRowsBehavior {
+        
+        @Test
+        fun `hasMoreRows _ generator with rows _ returns true`() {
+            val generator = createGenerator()
+            
+            val result = generator.hasMoreRows()
             
             assertThat(result).isTrue
         }
         
         @Test
-        fun `hasNext _ empty generator _ returns false`() {
+        fun `hasMoreRows _ empty generator _ returns false`() {
             val generator = createEmptyGenerator()
             
-            val result = generator.hasNext()
+            val result = generator.hasMoreRows()
             
             assertThat(result).isFalse
         }
         
         @Test
-        fun `hasNext _ called multiple times without consuming _ returns consistent result`() {
+        fun `hasMoreRows _ called multiple times without consuming _ returns consistent result`() {
             val generator = createGenerator()
             
-            val firstCall = generator.hasNext()
-            val secondCall = generator.hasNext()
-            val thirdCall = generator.hasNext()
+            val firstCall = generator.hasMoreRows()
+            val secondCall = generator.hasMoreRows()
+            val thirdCall = generator.hasMoreRows()
             
             assertThat(firstCall).isEqualTo(secondCall)
             assertThat(secondCall).isEqualTo(thirdCall)
@@ -59,32 +93,33 @@ abstract class IDataGeneratorContractTest<T> {
     }
     
     @Nested
-    inner class GetNextBehavior {
+    inner class GetNextRowBehavior {
         
         @Test
-        fun `getNext _ generator with items _ returns item`() {
+        fun `getNextRow _ generator with rows _ returns data row`() {
             val generator = createGenerator()
             
-            val result = generator.getNext()
+            val result = generator.getNextRow()
             
             assertThat(result).isNotNull
+            assertThat(result).isInstanceOf(List::class.java)
         }
         
         @Test
-        fun `getNext _ empty generator _ throws NoSuchElementException`() {
+        fun `getNextRow _ empty generator _ throws NoSuchElementException`() {
             val generator = createEmptyGenerator()
             
-            assertThatThrownBy { generator.getNext() }
+            assertThatThrownBy { generator.getNextRow() }
                 .isInstanceOf(NoSuchElementException::class.java)
         }
         
         @Test
-        fun `getNext _ called after hasNext returns false _ throws NoSuchElementException`() {
+        fun `getNextRow _ called after hasMoreRows returns false _ throws NoSuchElementException`() {
             val generator = createEmptyGenerator()
-            val hasNext = generator.hasNext()
+            val hasMoreRows = generator.hasMoreRows()
             
-            assertThat(hasNext).isFalse
-            assertThatThrownBy { generator.getNext() }
+            assertThat(hasMoreRows).isFalse
+            assertThatThrownBy { generator.getNextRow() }
                 .isInstanceOf(NoSuchElementException::class.java)
         }
     }
@@ -93,42 +128,42 @@ abstract class IDataGeneratorContractTest<T> {
     inner class IteratorBehavior {
         
         @Test
-        fun `hasNext and getNext _ multiple items _ works correctly`() {
+        fun `hasMoreRows and getNextRow _ multiple rows _ works correctly`() {
             val generator = createGenerator()
-            val items = mutableListOf<T>()
+            val rows = mutableListOf<List<Any>>()
             
-            while (generator.hasNext()) {
-                items.add(generator.getNext())
+            while (generator.hasMoreRows()) {
+                rows.add(generator.getNextRow())
             }
             
-            assertThat(items).isNotEmpty
-            assertThat(generator.hasNext()).isFalse
+            assertThat(rows).isNotEmpty
+            assertThat(generator.hasMoreRows()).isFalse
         }
         
         @Test
-        fun `hasNext _ after consuming all items _ returns false`() {
+        fun `hasMoreRows _ after consuming all rows _ returns false`() {
             val generator = createGenerator()
             
-            // Consume all items
-            while (generator.hasNext()) {
-                generator.getNext()
+            // Consume all rows
+            while (generator.hasMoreRows()) {
+                generator.getNextRow()
             }
             
-            val result = generator.hasNext()
+            val result = generator.hasMoreRows()
             
             assertThat(result).isFalse
         }
         
         @Test
-        fun `getNext _ after consuming all items _ throws NoSuchElementException`() {
+        fun `getNextRow _ after consuming all rows _ throws NoSuchElementException`() {
             val generator = createGenerator()
             
-            // Consume all items
-            while (generator.hasNext()) {
-                generator.getNext()
+            // Consume all rows
+            while (generator.hasMoreRows()) {
+                generator.getNextRow()
             }
             
-            assertThatThrownBy { generator.getNext() }
+            assertThatThrownBy { generator.getNextRow() }
                 .isInstanceOf(NoSuchElementException::class.java)
         }
     }
