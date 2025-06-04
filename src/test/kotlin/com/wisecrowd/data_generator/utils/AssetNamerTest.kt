@@ -11,7 +11,7 @@ class AssetNamerTest {
 
     @Test
     fun generateName_nordicStocksAssetClass_returnsEquityStyleName() {
-        val assetClass = createAssetClass(name = "Nordic stocks")
+        val assetClass = createAssetClass(id = 1, name = "Nordic stocks")
         val assetNamer = AssetNamer(Random(42))
         
         val result = assetNamer.generateName(assetClass)
@@ -24,7 +24,7 @@ class AssetNamerTest {
 
     @Test
     fun generateName_governmentBondAssetClass_returnsBondStyleName() {
-        val assetClass = createAssetClass(name = "Government bond")
+        val assetClass = createAssetClass(id = 2, name = "Government bond")
         val assetNamer = AssetNamer(Random(42))
         
         val result = assetNamer.generateName(assetClass)
@@ -37,7 +37,7 @@ class AssetNamerTest {
 
     @Test
     fun generateName_corporateBondAssetClass_returnsCorporateBondStyleName() {
-        val assetClass = createAssetClass(name = "Corporate Bond")
+        val assetClass = createAssetClass(id = 3, name = "Corporate Bond")
         val assetNamer = AssetNamer(Random(42))
         
         val result = assetNamer.generateName(assetClass)
@@ -49,7 +49,7 @@ class AssetNamerTest {
     }
     @Test
     fun generateName_mediumRiskFundAssetClass_returnsMixedFundStyleName() {
-        val assetClass = createAssetClass(name = "Medium-Risk Fund")
+        val assetClass = createAssetClass(id = 4, name = "Medium-Risk Fund")
         val assetNamer = AssetNamer(Random(42))
         
         val result = assetNamer.generateName(assetClass)
@@ -62,7 +62,7 @@ class AssetNamerTest {
 
     @Test
     fun generateName_cryptoAssetClass_returnsCryptoStyleName() {
-        val assetClass = createAssetClass(name = "Crypto")
+        val assetClass = createAssetClass(id = 8, name = "Crypto")
         val assetNamer = AssetNamer(Random(42))
         
         val result = assetNamer.generateName(assetClass)
@@ -74,12 +74,14 @@ class AssetNamerTest {
     @Test
     fun generateName_allAssetClassTypes_returnsValidNames() {
         val assetNamer = AssetNamer(Random(100))
-        val allAssetTypes = listOf("Nordic stocks", "Government bond", "Corporate Bond", 
-                                 "Medium-Risk Fund", "Large-Cap Equity", "Gold / Precious Metals", 
-                                 "REITs", "Crypto", "Unknown Asset")
+        val allAssetTypes = listOf(
+            1 to "Nordic stocks", 2 to "Government bond", 3 to "Corporate Bond", 
+            4 to "Medium-Risk Fund", 5 to "Large-Cap Equity", 6 to "Gold / Precious Metals", 
+            7 to "REITs", 8 to "Crypto", 99 to "Unknown Asset"
+        )
         
-        allAssetTypes.forEach { assetTypeName ->
-            val assetClass = createAssetClass(name = assetTypeName)
+        allAssetTypes.forEach { (id, name) ->
+            val assetClass = createAssetClass(id = id, name = name)
             val result = assetNamer.generateName(assetClass)
             assertThat(result).isNotBlank()
             assertThat(result.length).isGreaterThan(5)
@@ -88,7 +90,7 @@ class AssetNamerTest {
 
     @Test
     fun generateName_differentRandomSeeds_generatesDifferentNames() {
-        val assetClass = createAssetClass(name = "Nordic stocks")
+        val assetClass = createAssetClass(id = 1, name = "Nordic stocks")
         val assetNamer1 = AssetNamer(Random(42))
         val assetNamer2 = AssetNamer(Random(43))
         
@@ -100,7 +102,7 @@ class AssetNamerTest {
 
     @Test
     fun generateName_sameRandomSeed_generatesSameName() {
-        val assetClass = createAssetClass(name = "Nordic stocks")
+        val assetClass = createAssetClass(id = 1, name = "Nordic stocks")
         val assetNamer1 = AssetNamer(Random(42))
         val assetNamer2 = AssetNamer(Random(42))
         

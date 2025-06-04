@@ -24,15 +24,24 @@ class AssetNamer(
         val provider = PROVIDERS.random(random)
         val region = REGIONS.random(random)
         
-        return when (assetClass.name) {
-            "Nordic stocks" -> "$provider $region ${SECTORS.random(random)} ${EQUITY_FUND_TYPES.random(random)}"
-            "Government bond" -> "$provider $region ${BOND_FUND_TYPES.random(random)} Bond"
-            "Corporate Bond" -> "$provider $region Corporate ${BOND_FUND_TYPES.random(random)}"
-            "Medium-Risk Fund" -> "$provider $region ${MIXED_FUND_TYPES.random(random)} Fund"
-            "Large-Cap Equity" -> "$provider $region Large-Cap ${SECTORS.random(random)} ${EQUITY_FUND_TYPES.random(random)}"
-            "Gold / Precious Metals" -> "$provider $region Precious Metals ${ALTERNATIVE_FUND_TYPES.random(random)}"
-            "REITs" -> "$provider $region Real Estate ${ALTERNATIVE_FUND_TYPES.random(random)}"
-            "Crypto" -> "$provider Digital Assets Fund"
+        return when (assetClass.id) {
+            // Nordic stocks
+            1 -> "$provider $region ${SECTORS.random(random)} ${EQUITY_FUND_TYPES.random(random)}"
+            // Government bond
+            2 -> "$provider $region ${BOND_FUND_TYPES.random(random)} Bond"
+            // Corporate Bond
+            3 -> "$provider $region Corporate ${BOND_FUND_TYPES.random(random)}"
+            // Medium-Risk Fund
+            4 -> "$provider $region ${MIXED_FUND_TYPES.random(random)} Fund"
+            // Large-Cap Equity
+            5 -> "$provider $region Large-Cap ${SECTORS.random(random)} ${EQUITY_FUND_TYPES.random(random)}"
+            // Gold / Precious Metals
+            6 -> "$provider $region Precious Metals ${ALTERNATIVE_FUND_TYPES.random(random)}"
+            // REITs
+            7 -> "$provider $region Real Estate ${ALTERNATIVE_FUND_TYPES.random(random)}"
+            // Crypto
+            8 -> "$provider Digital Assets Fund"
+            // Unknown/fallback
             else -> "$provider $region ${assetClass.name} ${MIXED_FUND_TYPES.random(random)}"
         }
     }
