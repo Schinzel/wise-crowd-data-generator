@@ -96,10 +96,10 @@ class DataGenerationServiceIntegrationTest {
         // Header line
         lines.add("item_name\titem_index\titem_value")
         
-        // Data lines - TestStringDataGenerator creates 3 rows
-        lines.add("###item_0###\t0\t0.0")
-        lines.add("###item_1###\t1\t1.5") 
-        lines.add("###item_2###\t2\t3.0")
+        // Data lines - TestStringDataGenerator creates 3 rows with new Double formatting (always 2 decimals)
+        lines.add("###item_0###\t0\t0.00")
+        lines.add("###item_1###\t1\t1.50") 
+        lines.add("###item_2###\t2\t3.00")
         
         return lines.joinToString("\n") + "\n"
     }

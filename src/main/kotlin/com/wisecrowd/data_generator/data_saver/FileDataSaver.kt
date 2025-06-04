@@ -5,10 +5,23 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
+import java.text.DecimalFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.UUID
 
 /**
  * The purpose of this class is to save data to a text file in a delimited format
  * with proper handling of different data types and robust error management.
+ *
+ * SUPPORTED DATA TYPES:
+ * - UUID: Formatted as standard UUID string without quotes (e.g., 123e4567-e89b-12d3-a456-426614174000)
+ * - Int: Integer numbers formatted without quotes (e.g., 123)
+ * - Double: Decimal numbers with exactly 2 decimal places, rounded, without quotes (e.g., 123.45)
+ * - String: Text values always wrapped with qualifiers (e.g., ###Sample Text###)
+ * - LocalDate: Date values formatted as YYYY-MM-DD without quotes (e.g., 2025-05-20)
+ * - LocalDateTime: Date-time values formatted as YYYY-MM-DDTHH:mm:ssZ (UTC) without quotes (e.g., 2025-05-20T14:30:00Z)
  *
  * Written by Claude 3.7
  */
@@ -23,6 +36,15 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
         
         /** String qualifier used to wrap text data */
         const val STRING_QUALIFIER = "###"
+        
+        /** Formatter for Double values (always 2 decimal places) */
+        private val DOUBLE_FORMATTER = DecimalFormat("0.00")
+        
+        /** Formatter for LocalDateTime values (ISO format with seconds and UTC indicator) */
+        private val DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        
+        /** Formatter for LocalDate values (ISO format) */
+        private val DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     }
 
     // Writer used to output data to the file
@@ -155,67 +177,40 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
     override fun hasErrors(): Boolean = errors.isNotEmpty()
 
     /**
-     * Formats a value based on its data type.
-     * Strings are wrapped with qualifiers, other types are passed through.
-     * Numeric strings are treated as numbers and not wrapped.
+     * Formats a value based on its data type according to the official specification.
+     * 
+     * SUPPORTED DATA TYPES & FORMATTING:
+     * - UUID: Standard string representation without quotes (e.g., 123e4567-e89b-12d3-a456-426614174000)
+     * - Int: As-is without quotes (e.g., 123)
+     * - Double: Exactly 2 decimal places, rounded, without quotes (e.g., 123.45)
+     * - String: Always wrapped with ### qualifiers (e.g., ###Sample Text###)
+     * - LocalDate: ISO format YYYY-MM-DD without quotes (e.g., 2025-05-20)
+     * - LocalDateTime: ISO format YYYY-MM-DDTHH:mm:ssZ without quotes (e.g., 2025-05-20T14:30:00Z)
      *
-     * @param value the value of any type
+     * @param value the value of any supported type
      * @return formatted value as a string
      */
     private fun formatValue(value: Any): String {
         return when (value) {
-            is String -> {
-                // Check if the string should not be wrapped (numbers, dates, identifiers)
-                if (shouldNotWrapString(value)) {
-                    value
-                } else {
-                    // Wrap strings that contain spaces or special characters
-                    "$STRING_QUALIFIER$value$STRING_QUALIFIER"
-                }
-            }
-            // Other types don't need qualifiers
-            else -> value.toString()
-        }
-    }
-    
-    /**
-     * Checks if a string represents a value that should not be wrapped
-     * (numbers, dates, identifiers, etc.)
-     */
-    private fun shouldNotWrapString(value: String): Boolean {
-        if (value.isBlank()) return false
-        
-        // Don't process very long strings as identifiers
-        if (value.length > 50) return false
-        
-        // Check if it's a number
-        if (isNumeric(value)) return true
-        
-        // Check if it's a date (YYYY-MM-DD format)
-        if (value.matches(Regex("""\d{4}-\d{2}-\d{2}"""))) return true
-        
-        // Check if it's a datetime (ISO format)
-        if (value.matches(Regex("""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"""))) return true
-        
-        // Check if it's a simple identifier pattern (must contain alphanumeric and dashes, but not just letters)
-        if (value.matches(Regex("""[a-zA-Z0-9\-]+""")) && 
-            (value.contains('-') || value.any { it.isDigit() })) {
-            return true
-        }
-        
-        return false
-    }
-    
-    /**
-     * Checks if a string represents a numeric value
-     */
-    private fun isNumeric(value: String): Boolean {
-        if (value.isBlank()) return false
-        return try {
-            value.toDouble()
-            true
-        } catch (e: NumberFormatException) {
-            false
+            // UUID type - standard string representation
+            is UUID -> value.toString()
+            
+            // Numeric types
+            is Int -> value.toString()
+            is Double -> DOUBLE_FORMATTER.format(value)
+            
+            // Date/Time types
+            is LocalDate -> value.format(DATE_FORMATTER)
+            is LocalDateTime -> value.format(DATETIME_FORMATTER)
+            
+            // String type - always wrapped with qualifiers
+            is String -> "$STRING_QUALIFIER$value$STRING_QUALIFIER"
+            
+            // Unsupported types - throw exception to catch programming errors
+            else -> throw IllegalArgumentException(
+                "Unsupported data type: ${value::class.simpleName}. " +
+                "Supported types: UUID, Int, Double, String, LocalDate, LocalDateTime"
+            )
         }
     }
 }

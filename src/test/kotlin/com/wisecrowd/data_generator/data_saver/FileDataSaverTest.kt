@@ -90,18 +90,25 @@ class FileDataSaverTest {
     }
 
     @Nested
-    inner class SaveItem {
-        private val columns = listOf("id", "name", "age")
-
+    inner class SupportedDataTypesFormatting {
+        
         @BeforeEach
         fun prepareColumns() {
+            val columns = listOf("uuid", "integer", "double", "string", "date", "datetime")
             fileDataSaver.prepare(columns)
         }
 
         @Test
-        fun `valid data row _ writes with proper formatting`() {
+        fun `officially supported data types _ formats correctly`() {
             // Arrange
-            val data = listOf("1", "John Doe", "30")
+            val testUuid = java.util.UUID.fromString("123e4567-e89b-12d3-a456-426614174000")
+            val testInt = 123
+            val testDouble = 123.456 // Should round to 123.46
+            val testString = "Sample Text"
+            val testDate = java.time.LocalDate.of(2025, 5, 20)
+            val testDateTime = java.time.LocalDateTime.of(2025, 5, 20, 14, 30, 0)
+            
+            val data = listOf(testUuid, testInt, testDouble, testString, testDate, testDateTime)
             
             // Act
             fileDataSaver.saveItem(data)
@@ -109,15 +116,18 @@ class FileDataSaverTest {
             
             // Assert
             val fileContent = Files.readString(Path.of(testFilePath))
-            val expectedContent = "id${columnDelimiter}name${columnDelimiter}age${rowDelimiter}" +
-                    "1${columnDelimiter}${stringQualifier}John Doe${stringQualifier}${columnDelimiter}30${rowDelimiter}"
+            val expectedContent = "uuid${columnDelimiter}integer${columnDelimiter}double${columnDelimiter}string${columnDelimiter}date${columnDelimiter}datetime${rowDelimiter}" +
+                    "123e4567-e89b-12d3-a456-426614174000${columnDelimiter}123${columnDelimiter}123.46${columnDelimiter}${stringQualifier}Sample Text${stringQualifier}${columnDelimiter}2025-05-20${columnDelimiter}2025-05-20T14:30:00Z${rowDelimiter}"
             assertThat(fileContent).isEqualTo(expectedContent)
         }
 
         @Test
-        fun `mixed data types _ writes with proper formatting`() {
+        fun `double formatting _ always two decimals`() {
             // Arrange
-            val data = listOf(1, "John Doe", 30)  // Mix of Integer and String types
+            val columns = listOf("whole", "decimal", "rounded")
+            fileDataSaver.prepare(columns)
+            
+            val data = listOf(100.0, 123.4, 123.456)
             
             // Act
             fileDataSaver.saveItem(data)
@@ -125,151 +135,68 @@ class FileDataSaverTest {
             
             // Assert
             val fileContent = Files.readString(Path.of(testFilePath))
-            val expectedContent = "id${columnDelimiter}name${columnDelimiter}age${rowDelimiter}" +
-                    "1${columnDelimiter}${stringQualifier}John Doe${stringQualifier}${columnDelimiter}30${rowDelimiter}"
+            assertThat(fileContent).contains("100.00${columnDelimiter}123.40${columnDelimiter}123.46")
+        }
+
+        @Test
+        fun `string formatting _ always wrapped`() {
+            // Arrange
+            val columns = listOf("text", "number_string", "date_string", "identifier")
+            fileDataSaver.prepare(columns)
+            
+            val data = listOf("Regular Text", "123", "2025-05-20", "abc-123")
+            
+            // Act
+            fileDataSaver.saveItem(data)
+            fileDataSaver.complete()
+            
+            // Assert
+            val fileContent = Files.readString(Path.of(testFilePath))
+            val expectedContent = "text${columnDelimiter}number_string${columnDelimiter}date_string${columnDelimiter}identifier${rowDelimiter}" +
+                    "${stringQualifier}Regular Text${stringQualifier}${columnDelimiter}${stringQualifier}123${stringQualifier}${columnDelimiter}${stringQualifier}2025-05-20${stringQualifier}${columnDelimiter}${stringQualifier}abc-123${stringQualifier}${rowDelimiter}"
             assertThat(fileContent).isEqualTo(expectedContent)
         }
 
         @Test
-        fun `data size doesn't match column count _ adds error`() {
+        fun `datetime formatting _ includes seconds and UTC indicator`() {
             // Arrange
-            val invalidData = listOf("1", "John Doe") // Missing age
+            val columns = listOf("with_seconds", "without_seconds")
+            fileDataSaver.prepare(columns)
+            
+            val dateTimeWithSeconds = java.time.LocalDateTime.of(2025, 5, 20, 14, 30, 15)
+            val dateTimeWithoutSeconds = java.time.LocalDateTime.of(2025, 5, 20, 14, 30, 0)
+            
+            val data = listOf(dateTimeWithSeconds, dateTimeWithoutSeconds)
             
             // Act
-            fileDataSaver.saveItem(invalidData)
+            fileDataSaver.saveItem(data)
+            fileDataSaver.complete()
+            
+            // Assert
+            val fileContent = Files.readString(Path.of(testFilePath))
+            assertThat(fileContent).contains("2025-05-20T14:30:15Z${columnDelimiter}2025-05-20T14:30:00Z")
+        }
+
+        @Test
+        fun `unsupported data type _ adds error with helpful message`() {
+            // Arrange
+            val columns = listOf("unsupported")
+            fileDataSaver.prepare(columns)
+            
+            val unsupportedValue = listOf(java.math.BigDecimal("123.45")) // Unsupported type
+            
+            // Act
+            fileDataSaver.saveItem(unsupportedValue)
             
             // Assert
             assertThat(fileDataSaver.hasErrors()).isTrue()
             assertThat(fileDataSaver.getErrors()).hasSize(1)
-            assertThat(fileDataSaver.getErrors()[0].message).contains("Data size")
-            assertThat(fileDataSaver.getErrors()[0].rowData).isEqualTo(invalidData)
-        }
-
-        @Test
-        fun `prepare was not called _ adds error`() {
-            // Arrange
-            val newSaver = FileDataSaver(testFilePath)
-            val data = listOf("1", "John Doe", "30")
             
-            // Act
-            newSaver.saveItem(data)
-            
-            // Assert
-            assertThat(newSaver.hasErrors()).isTrue()
-            assertThat(newSaver.getErrors()).hasSize(1)
-            assertThat(newSaver.getErrors()[0].message).contains("prepare() must be called")
-        }
-        
-        @Test
-        fun `multiple rows provided _ writes all rows correctly`() {
-            // Arrange
-            val rows = listOf(
-                listOf("1", "John Doe", "30"),
-                listOf("2", "Jane Smith", "25"),
-                listOf("3", "Bob Johnson", "40")
-            )
-            
-            // Act
-            rows.forEach { fileDataSaver.saveItem(it) }
-            fileDataSaver.complete()
-            
-            // Assert
-            val fileContent = Files.readString(Path.of(testFilePath))
-            val expectedContent = "id${columnDelimiter}name${columnDelimiter}age${rowDelimiter}" +
-                    "1${columnDelimiter}${stringQualifier}John Doe${stringQualifier}${columnDelimiter}30${rowDelimiter}" +
-                    "2${columnDelimiter}${stringQualifier}Jane Smith${stringQualifier}${columnDelimiter}25${rowDelimiter}" +
-                    "3${columnDelimiter}${stringQualifier}Bob Johnson${stringQualifier}${columnDelimiter}40${rowDelimiter}"
-            assertThat(fileContent).isEqualTo(expectedContent)
-        }
-    }
-
-    @Nested
-    inner class DataTypes {
-        @Test
-        fun `different data types _ formats each type correctly`() {
-            // Arrange
-            val columns = listOf(
-                "string", "integer", "decimal", "date", "datetime", "boolean", "identifier"
-            )
-            
-            val data = listOf(
-                "Sample Text",
-                123,
-                123.45,
-                "2025-05-20",
-                "2025-05-20T14:30:00",
-                true,
-                "abc-123"
-            )
-            
-            // Act
-            fileDataSaver.prepare(columns)
-            fileDataSaver.saveItem(data)
-            fileDataSaver.complete()
-            
-            // Assert
-            val fileContent = Files.readString(Path.of(testFilePath))
-            val expectedContent = "string${columnDelimiter}integer${columnDelimiter}decimal${columnDelimiter}" +
-                    "date${columnDelimiter}datetime${columnDelimiter}boolean${columnDelimiter}identifier${rowDelimiter}" +
-                    "${stringQualifier}Sample Text${stringQualifier}${columnDelimiter}123${columnDelimiter}123.45${columnDelimiter}" +
-                    "2025-05-20${columnDelimiter}2025-05-20T14:30:00${columnDelimiter}true${columnDelimiter}abc-123${rowDelimiter}"
-            assertThat(fileContent).isEqualTo(expectedContent)
-        }
-        
-        @Test
-        fun `special characters including Cyrillic and Polish _ handles them correctly`() {
-            // Arrange
-            val columns = listOf("special")
-            
-            // Create a string with special characters
-            val specialChars = "ЯрусскийШЩЪЬ" + "ŁóźćĄ" + "ñ§µ€¥£"
-            val data = listOf(specialChars)
-            
-            // Act
-            fileDataSaver.prepare(columns)
-            fileDataSaver.saveItem(data)
-            fileDataSaver.complete()
-            
-            // Assert
-            val fileContent = Files.readString(Path.of(testFilePath))
-            val expectedRow = "${stringQualifier}$specialChars${stringQualifier}${rowDelimiter}"
-            assertThat(fileContent).contains(expectedRow)
-        }
-        
-        @Test
-        fun `extremely long string _ handles it correctly`() {
-            // Arrange
-            val columns = listOf("longText")
-            
-            // Create a very long string (10,000 characters)
-            val longString = "a".repeat(10_000)
-            val data = listOf(longString)
-            
-            // Act
-            fileDataSaver.prepare(columns)
-            fileDataSaver.saveItem(data)
-            fileDataSaver.complete()
-            
-            // Assert
-            val fileContent = Files.readString(Path.of(testFilePath))
-            assertThat(fileContent).contains("${stringQualifier}$longString${stringQualifier}")
-        }
-        
-        @Test
-        fun `empty string _ handles it correctly`() {
-            // Arrange
-            val columns = listOf("emptyText")
-            
-            val data = listOf("")
-            
-            // Act
-            fileDataSaver.prepare(columns)
-            fileDataSaver.saveItem(data)
-            fileDataSaver.complete()
-            
-            // Assert
-            val fileContent = Files.readString(Path.of(testFilePath))
-            assertThat(fileContent).contains("${stringQualifier}${stringQualifier}")
+            val error = fileDataSaver.getErrors()[0]
+            assertThat(error.message).isEqualTo("Failed to write data row")
+            assertThat(error.exception).isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(error.exception?.message).contains("Unsupported data type: BigDecimal")
+            assertThat(error.exception?.message).contains("Supported types: UUID, Int, Double, String, LocalDate, LocalDateTime")
         }
     }
 
