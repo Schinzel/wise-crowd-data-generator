@@ -63,11 +63,7 @@ class FileDataSaverTest {
         @Test
         fun `valid columns provided _ creates file with header row`() {
             // Arrange
-            val columns = listOf(
-                ColumnData("id", DataTypeEnum.IDENTIFIER),
-                ColumnData("name", DataTypeEnum.STRING),
-                ColumnData("age", DataTypeEnum.INTEGER)
-            )
+            val columns = listOf("id", "name", "age")
             
             // Act
             fileDataSaver.prepare(columns)
@@ -81,7 +77,7 @@ class FileDataSaverTest {
         @Test
         fun `empty column data _ adds error`() {
             // Arrange
-            val emptyColumns = emptyList<ColumnData>()
+            val emptyColumns = emptyList<String>()
             
             // Act
             fileDataSaver.prepare(emptyColumns)
@@ -89,17 +85,13 @@ class FileDataSaverTest {
             // Assert
             assertThat(fileDataSaver.hasErrors()).isTrue()
             assertThat(fileDataSaver.getErrors()).hasSize(1)
-            assertThat(fileDataSaver.getErrors()[0].message).contains("Column data cannot be empty")
+            assertThat(fileDataSaver.getErrors()[0].message).contains("Column names cannot be empty")
         }
     }
 
     @Nested
     inner class SaveItem {
-        private val columns = listOf(
-            ColumnData("id", DataTypeEnum.IDENTIFIER),
-            ColumnData("name", DataTypeEnum.STRING),
-            ColumnData("age", DataTypeEnum.INTEGER)
-        )
+        private val columns = listOf("id", "name", "age")
 
         @BeforeEach
         fun prepareColumns() {
@@ -197,13 +189,7 @@ class FileDataSaverTest {
         fun `different data types _ formats each type correctly`() {
             // Arrange
             val columns = listOf(
-                ColumnData("string", DataTypeEnum.STRING),
-                ColumnData("integer", DataTypeEnum.INTEGER),
-                ColumnData("decimal", DataTypeEnum.DECIMAL),
-                ColumnData("date", DataTypeEnum.DATE),
-                ColumnData("datetime", DataTypeEnum.DATETIME),
-                ColumnData("boolean", DataTypeEnum.BOOLEAN),
-                ColumnData("identifier", DataTypeEnum.IDENTIFIER)
+                "string", "integer", "decimal", "date", "datetime", "boolean", "identifier"
             )
             
             val data = listOf(
@@ -233,9 +219,7 @@ class FileDataSaverTest {
         @Test
         fun `special characters including Cyrillic and Polish _ handles them correctly`() {
             // Arrange
-            val columns = listOf(
-                ColumnData("special", DataTypeEnum.STRING)
-            )
+            val columns = listOf("special")
             
             // Create a string with special characters
             val specialChars = "ЯрусскийШЩЪЬ" + "ŁóźćĄ" + "ñ§µ€¥£"
@@ -255,9 +239,7 @@ class FileDataSaverTest {
         @Test
         fun `extremely long string _ handles it correctly`() {
             // Arrange
-            val columns = listOf(
-                ColumnData("longText", DataTypeEnum.STRING)
-            )
+            val columns = listOf("longText")
             
             // Create a very long string (10,000 characters)
             val longString = "a".repeat(10_000)
@@ -276,9 +258,7 @@ class FileDataSaverTest {
         @Test
         fun `empty string _ handles it correctly`() {
             // Arrange
-            val columns = listOf(
-                ColumnData("emptyText", DataTypeEnum.STRING)
-            )
+            val columns = listOf("emptyText")
             
             val data = listOf("")
             

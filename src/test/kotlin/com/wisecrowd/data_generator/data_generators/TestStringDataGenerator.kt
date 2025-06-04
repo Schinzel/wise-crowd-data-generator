@@ -1,8 +1,5 @@
 package com.wisecrowd.data_generator.data_generators
 
-import com.wisecrowd.data_generator.data_saver.ColumnData
-import com.wisecrowd.data_generator.data_saver.DataTypeEnum
-
 /**
  * The purpose of this class is to provide a simple concrete implementation
  * of IDataGenerator for testing and demonstration purposes.
@@ -19,12 +16,8 @@ class TestStringDataGenerator(
     
     private var currentIndex = 0
     
-    override fun getColumnData(): List<ColumnData> {
-        return listOf(
-            ColumnData("item_name", DataTypeEnum.STRING),
-            ColumnData("item_index", DataTypeEnum.INTEGER),
-            ColumnData("item_value", DataTypeEnum.DECIMAL)
-        )
+    override fun getColumnNames(): List<String> {
+        return listOf("item_name", "item_index", "item_value")
     }
     
     override fun hasMoreRows(): Boolean {

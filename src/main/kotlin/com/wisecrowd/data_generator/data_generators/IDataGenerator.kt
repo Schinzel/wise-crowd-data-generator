@@ -1,7 +1,5 @@
 package com.wisecrowd.data_generator.data_generators
 
-import com.wisecrowd.data_generator.data_saver.ColumnData
-
 /**
  * The purpose of this interface is to define the contract for generating data
  * using an iterator pattern that allows consumers to control the flow of data generation.
@@ -11,24 +9,24 @@ import com.wisecrowd.data_generator.data_saver.ColumnData
  * Each row is returned as List<Any> to support mixed data types (String, Double, Int, etc.)
  * while remaining flexible for different output formats (files, databases, JSON, etc.).
  *
- * The generator is self-describing through getColumnData(), which provides the column
- * structure and data types that match the rows returned by getNextRow().
+ * The generator is self-describing through getColumnNames(), which provides the column
+ * names that match the rows returned by getNextRow().
  *
  * Written by Claude Sonnet 4
  */
 interface IDataGenerator {
     
     /**
-     * Retrieves the column structure and metadata for this generator
+     * Retrieves the column names for this generator
      * 
-     * This method defines the schema of the data rows that will be generated.
-     * The returned column data should match the structure of rows returned by getNextRow().
+     * This method defines the column names of the data rows that will be generated.
+     * The returned column names should match the structure of rows returned by getNextRow().
      * This allows the generator to be self-describing and ensures consistency between
-     * column definitions and actual data.
+     * column names and actual data.
      * 
-     * @return List of ColumnData describing the structure, names, and types of generated rows
+     * @return List of column names for the generated rows
      */
-    fun getColumnData(): List<ColumnData>
+    fun getColumnNames(): List<String>
     
     /**
      * Checks if there are more data rows available to generate
@@ -49,8 +47,8 @@ interface IDataGenerator {
      * a NoSuchElementException being thrown.
      * 
      * The returned list contains values of different types (String, Double, Int, Boolean, etc.)
-     * that represent one row of generated data. The structure and types should match the
-     * column definitions returned by getColumnData(). The implementation may perform the actual 
+     * that represent one row of generated data. The structure should match the
+     * column names returned by getColumnNames(). The implementation may perform the actual 
      * data generation lazily when this method is called, allowing for efficient memory usage.
      * 
      * @return the next generated data row as List<Any> containing mixed-type values

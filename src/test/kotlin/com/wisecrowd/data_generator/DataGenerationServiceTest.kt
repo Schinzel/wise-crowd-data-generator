@@ -1,15 +1,12 @@
 package com.wisecrowd.data_generator
 
 import com.wisecrowd.data_generator.data_generators.IDataGenerator
-import com.wisecrowd.data_generator.data_saver.ColumnData
-import com.wisecrowd.data_generator.data_saver.DataTypeEnum
 import com.wisecrowd.data_generator.data_saver.IDataSaver
 import com.wisecrowd.data_generator.data_saver.SaveError
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Nested
 
 /**
  * The purpose of this class is to test the DataGenerationService orchestration
@@ -89,9 +86,9 @@ class DataGenerationServiceTest {
         // When: generate and save
         service.generateAndSave()
         
-        // Then: saver prepared with generator's column data
-        val expectedColumns = mockGenerator.getColumnData()
-        assertThat(mockSaver.preparedColumnData).isEqualTo(expectedColumns)
+        // Then: saver prepared with generator's column names
+        val expectedColumns = mockGenerator.getColumnNames()
+        assertThat(mockSaver.preparedColumnNames).isEqualTo(expectedColumns)
     }
     
     @Test
@@ -137,11 +134,8 @@ class DataGenerationServiceTest {
             this.shouldThrowException = shouldThrow
         }
         
-        override fun getColumnData(): List<ColumnData> {
-            return listOf(
-                ColumnData("test_column", DataTypeEnum.STRING),
-                ColumnData("number_column", DataTypeEnum.INTEGER)
-            )
+        override fun getColumnNames(): List<String> {
+            return listOf("test_column", "number_column")
         }
         
         override fun hasMoreRows(): Boolean {
@@ -163,14 +157,14 @@ class DataGenerationServiceTest {
      * Mock implementation of IDataSaver for testing
      */
     private class MockDataSaver : IDataSaver {
-        var preparedColumnData: List<ColumnData>? = null
+        var preparedColumnNames: List<String>? = null
         val savedItems = mutableListOf<List<String>>()
         var prepareCallCount = 0
         var completeCallCount = 0
         val methodCallOrder = mutableListOf<String>()
         
-        override fun prepare(columnData: List<ColumnData>) {
-            preparedColumnData = columnData
+        override fun prepare(columnNames: List<String>) {
+            preparedColumnNames = columnNames
             prepareCallCount++
             methodCallOrder.add("prepare")
         }

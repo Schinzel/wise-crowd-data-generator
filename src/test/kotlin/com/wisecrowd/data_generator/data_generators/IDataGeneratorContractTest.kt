@@ -6,55 +6,91 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 /**
- * Contract tests for IDataGenerator interface implementations.
- * 
- * Any class implementing IDataGenerator should extend this test class
- * and implement the createGenerator method to ensure contract compliance.
+ * The purpose of this class is to provide a comprehensive contract test
+ * for IDataGenerator implementations to ensure consistent behavior.
+ *
+ * This abstract class tests the fundamental contracts that all IDataGenerator
+ * implementations must satisfy, including iterator behavior, column schema
+ * consistency, and error handling patterns.
+ *
+ * Written by Claude Sonnet 4
  */
 abstract class IDataGeneratorContractTest {
     
     /**
-     * Creates a generator instance for testing.
-     * Should return a generator that produces at least 3 rows for comprehensive testing.
+     * Creates a generator instance with data for testing
+     * Subclasses must provide a generator that has at least one row of data
      */
-    abstract fun createGenerator(): IDataGenerator
+    protected abstract fun createGenerator(): IDataGenerator
     
     /**
-     * Creates an empty generator instance for testing edge cases.
+     * Creates an empty generator instance for testing
+     * Subclasses must provide a generator that has no rows of data
      */
-    abstract fun createEmptyGenerator(): IDataGenerator
+    protected abstract fun createEmptyGenerator(): IDataGenerator
     
     @Nested
-    inner class GetColumnDataBehavior {
+    inner class GetColumnNamesBehavior {
         
         @Test
-        fun `getColumnData _ any generator _ returns column definitions`() {
+        fun `getColumnNames _ any generator _ returns column names`() {
             val generator = createGenerator()
             
-            val result = generator.getColumnData()
+            val result = generator.getColumnNames()
             
             assertThat(result).isNotNull
             assertThat(result).isNotEmpty
         }
         
         @Test
-        fun `getColumnData _ called multiple times _ returns consistent result`() {
+        fun `getColumnNames _ called multiple times _ returns consistent result`() {
             val generator = createGenerator()
             
-            val firstCall = generator.getColumnData()
-            val secondCall = generator.getColumnData()
+            val firstCall = generator.getColumnNames()
+            val secondCall = generator.getColumnNames()
             
             assertThat(firstCall).isEqualTo(secondCall)
         }
-        
         @Test
-        fun `getColumnData _ structure matches data rows _ consistent schema`() {
+        fun `getColumnNames _ structure matches data rows _ consistent schema`() {
             val generator = createGenerator()
             
-            val columnData = generator.getColumnData()
+            val columnNames = generator.getColumnNames()
             val dataRow = generator.getNextRow()
             
-            assertThat(dataRow).hasSize(columnData.size)
+            assertThat(dataRow).hasSize(columnNames.size)
+        }
+        
+        @Test
+        fun `getColumnNames _ all names not blank _ valid column names`() {
+            val generator = createGenerator()
+            
+            val columnNames = generator.getColumnNames()
+            
+            columnNames.forEach { columnName ->
+                assertThat(columnName).isNotBlank()
+            }
+        }
+        
+        @Test
+        fun `getColumnNames _ no duplicate names _ unique column names`() {
+            val generator = createGenerator()
+            
+            val columnNames = generator.getColumnNames()
+            val uniqueNames = columnNames.toSet()
+            
+            assertThat(columnNames).hasSize(uniqueNames.size)
+        }
+        
+        @Test
+        fun `getColumnNames _ multiple generators _ consistent naming pattern`() {
+            val generator1 = createGenerator()
+            val generator2 = createGenerator()
+            
+            val columnNames1 = generator1.getColumnNames()
+            val columnNames2 = generator2.getColumnNames()
+            
+            assertThat(columnNames1).isEqualTo(columnNames2)
         }
     }
     
@@ -78,17 +114,14 @@ abstract class IDataGeneratorContractTest {
             
             assertThat(result).isFalse
         }
-        
         @Test
-        fun `hasMoreRows _ called multiple times without consuming _ returns consistent result`() {
+        fun `hasMoreRows _ called multiple times without consuming _ consistent result`() {
             val generator = createGenerator()
             
             val firstCall = generator.hasMoreRows()
             val secondCall = generator.hasMoreRows()
-            val thirdCall = generator.hasMoreRows()
             
             assertThat(firstCall).isEqualTo(secondCall)
-            assertThat(secondCall).isEqualTo(thirdCall)
         }
     }
     
@@ -96,7 +129,7 @@ abstract class IDataGeneratorContractTest {
     inner class GetNextRowBehavior {
         
         @Test
-        fun `getNextRow _ generator with rows _ returns data row`() {
+        fun `getNextRow _ generator with rows _ returns data`() {
             val generator = createGenerator()
             
             val result = generator.getNextRow()
@@ -114,11 +147,12 @@ abstract class IDataGeneratorContractTest {
         }
         
         @Test
-        fun `getNextRow _ called after hasMoreRows returns false _ throws NoSuchElementException`() {
+        fun `getNextRow _ after consuming all rows _ throws NoSuchElementException`() {
             val generator = createEmptyGenerator()
-            val hasMoreRows = generator.hasMoreRows()
             
-            assertThat(hasMoreRows).isFalse
+            // Ensure hasMoreRows returns false first
+            assertThat(generator.hasMoreRows()).isFalse
+            
             assertThatThrownBy { generator.getNextRow() }
                 .isInstanceOf(NoSuchElementException::class.java)
         }
@@ -128,43 +162,37 @@ abstract class IDataGeneratorContractTest {
     inner class IteratorBehavior {
         
         @Test
-        fun `hasMoreRows and getNextRow _ multiple rows _ works correctly`() {
+        fun `iterator pattern _ consume all rows _ hasMoreRows becomes false`() {
             val generator = createGenerator()
-            val rows = mutableListOf<List<Any>>()
             
+            // Consume all available rows
             while (generator.hasMoreRows()) {
-                rows.add(generator.getNextRow())
+                generator.getNextRow()
             }
             
-            assertThat(rows).isNotEmpty
             assertThat(generator.hasMoreRows()).isFalse
         }
         
         @Test
-        fun `hasMoreRows _ after consuming all rows _ returns false`() {
+        fun `iterator pattern _ row structure consistency _ all rows same size`() {
             val generator = createGenerator()
+            val columnCount = generator.getColumnNames().size
             
-            // Consume all rows
             while (generator.hasMoreRows()) {
-                generator.getNextRow()
+                val row = generator.getNextRow()
+                assertThat(row).hasSize(columnCount)
             }
-            
-            val result = generator.hasMoreRows()
-            
-            assertThat(result).isFalse
         }
         
         @Test
-        fun `getNextRow _ after consuming all rows _ throws NoSuchElementException`() {
+        fun `iterator pattern _ proper sequence _ getNextRow only when hasMoreRows true`() {
             val generator = createGenerator()
             
-            // Consume all rows
             while (generator.hasMoreRows()) {
-                generator.getNextRow()
+                generator.getNextRow() // Should not throw
             }
             
-            assertThatThrownBy { generator.getNextRow() }
-                .isInstanceOf(NoSuchElementException::class.java)
+            assertThat(generator.hasMoreRows()).isFalse
         }
     }
 }

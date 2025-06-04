@@ -29,8 +29,8 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
     private var writer: BufferedWriter? = null
     // Collection of errors that occurred during operations
     private val errors = mutableListOf<SaveError>()
-    // Metadata about the columns being saved
-    private var columnData: List<ColumnData> = emptyList()
+    // Names of the columns being saved
+    private var columnNames: List<String> = emptyList()
 
     init {
         try {
@@ -53,16 +53,16 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
         }
     }
 
-    override fun prepare(columnData: List<ColumnData>) {
-        // Validate that column data is not empty
-        if (columnData.isEmpty()) {
+    override fun prepare(columnNames: List<String>) {
+        // Validate that column names are not empty
+        if (columnNames.isEmpty()) {
             // Add an error if no columns were provided
-            errors.add(SaveError(message = "Column data cannot be empty"))
+            errors.add(SaveError(message = "Column names cannot be empty"))
             return
         }
 
-        // Store the column metadata for later use
-        this.columnData = columnData
+        // Store the column names for later use
+        this.columnNames = columnNames
         
         try {
             // Create a UTF-8 buffered writer for the output file
@@ -74,7 +74,7 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
             )
             
             // Convert column names to a delimited string
-            val headerRow = columnData.joinToString(COLUMN_DELIMITER) { it.name }
+            val headerRow = columnNames.joinToString(COLUMN_DELIMITER)
             // Write the header row to the file
             writer?.write(headerRow)
             // Add a row delimiter after the header
@@ -102,19 +102,19 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
         }
 
         // Validate that data size matches the number of columns
-        if (data.size != columnData.size) {
+        if (data.size != columnNames.size) {
             // Add an error if the data size is incorrect
             errors.add(SaveError(
-                message = "Data size (${data.size}) does not match column count (${columnData.size})",
+                message = "Data size (${data.size}) does not match column count (${columnNames.size})",
                 rowData = data
             ))
             return
         }
 
         try {
-            // Format each value based on its data type and join with the column delimiter
-            val rowData = data.mapIndexed { i, value -> 
-                formatValue(value, columnData[i].dataType)
+            // Format each value and join with the column delimiter (all converted to strings)
+            val rowData = data.map { value -> 
+                formatValue(value)
             }.joinToString(COLUMN_DELIMITER)
             
             // Write the formatted row to the file
@@ -157,18 +157,65 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
     /**
      * Formats a value based on its data type.
      * Strings are wrapped with qualifiers, other types are passed through.
+     * Numeric strings are treated as numbers and not wrapped.
      *
-     * @param value the value of any type (String, Int, Double, Boolean, etc.)
-     * @param dataType the type of data as defined in DataTypeEnum
+     * @param value the value of any type
      * @return formatted value as a string
      */
-    private fun formatValue(value: Any, dataType: DataTypeEnum): String {
-        // Apply different formatting based on the data type
-        return when (dataType) {
-            // Add qualifiers around string values to handle special characters
-            DataTypeEnum.STRING -> "$STRING_QUALIFIER$value$STRING_QUALIFIER"
+    private fun formatValue(value: Any): String {
+        return when (value) {
+            is String -> {
+                // Check if the string should not be wrapped (numbers, dates, identifiers)
+                if (shouldNotWrapString(value)) {
+                    value
+                } else {
+                    // Wrap strings that contain spaces or special characters
+                    "$STRING_QUALIFIER$value$STRING_QUALIFIER"
+                }
+            }
             // Other types don't need qualifiers
             else -> value.toString()
+        }
+    }
+    
+    /**
+     * Checks if a string represents a value that should not be wrapped
+     * (numbers, dates, identifiers, etc.)
+     */
+    private fun shouldNotWrapString(value: String): Boolean {
+        if (value.isBlank()) return false
+        
+        // Don't process very long strings as identifiers
+        if (value.length > 50) return false
+        
+        // Check if it's a number
+        if (isNumeric(value)) return true
+        
+        // Check if it's a date (YYYY-MM-DD format)
+        if (value.matches(Regex("""\d{4}-\d{2}-\d{2}"""))) return true
+        
+        // Check if it's a datetime (ISO format)
+        if (value.matches(Regex("""\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}"""))) return true
+        
+        // Check if it's a simple identifier pattern (must contain alphanumeric and dashes, but not just letters)
+        if (value.matches(Regex("""[a-zA-Z0-9\-]+""")) && 
+            (value.contains('-') || value.any { it.isDigit() })) {
+            return true
+        }
+        
+        return false
+    }
+    
+    /**
+     * Checks if a string represents a numeric value
+     */
+    private fun isNumeric(value: String): Boolean {
+        if (value.isBlank()) return false
+        return try {
+            value.toDouble()
+            true
+        } catch (e: NumberFormatException) {
+            false
         }
     }
 }

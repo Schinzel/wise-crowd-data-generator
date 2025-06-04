@@ -40,15 +40,15 @@ class TestStringDataGeneratorTest : IDataGeneratorContractTest() {
     }
     
     @Test
-    fun `getColumnData _ returns expected column structure`() {
+    fun `getColumnNames _ returns expected column names`() {
         val generator = TestStringDataGenerator(1)
         
-        val columnData = generator.getColumnData()
+        val columnNames = generator.getColumnNames()
         
-        assertThat(columnData).hasSize(3)
-        assertThat(columnData[0].name).isEqualTo("item_name")
-        assertThat(columnData[1].name).isEqualTo("item_index")
-        assertThat(columnData[2].name).isEqualTo("item_value")
+        assertThat(columnNames).hasSize(3)
+        assertThat(columnNames[0]).isEqualTo("item_name")
+        assertThat(columnNames[1]).isEqualTo("item_index")
+        assertThat(columnNames[2]).isEqualTo("item_value")
     }
     
     @Test

@@ -6,13 +6,12 @@ package com.wisecrowd.data_generator.data_saver
 interface IDataSaver {
 
     /**
-     * Prepare the destination for saving data with column metadata
-     * This allows implementations to handle different storage systems appropriately
-     * (e.g., create database tables with proper column types)
+     * Prepare the destination for saving data with column names
+     * This allows implementations to set up headers and structure for data storage
      *
-     * @param columnData list of column metadata including names and data types
+     * @param columnNames list of column names for the data
      */
-    fun prepare(columnData: List<ColumnData>)
+    fun prepare(columnNames: List<String>)
 
     /**
      * Save a single data item as a list of values.
@@ -47,5 +46,3 @@ interface IDataSaver {
      */
     fun complete()
 }
-
-

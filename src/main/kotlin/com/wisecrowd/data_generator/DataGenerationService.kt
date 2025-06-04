@@ -27,8 +27,8 @@ class DataGenerationService(
      * Executes the complete generate-and-save workflow
      * 
      * This method orchestrates the entire process:
-     * 1. Obtains column schema from the generator (self-describing)
-     * 2. Prepares the saver with the column metadata
+     * 1. Obtains column names from the generator (self-describing)
+     * 2. Prepares the saver with the column names
      * 3. Iterates through all available data rows from the generator
      * 4. Converts each row from List<Any> to List<String> using toString()
      * 5. Saves each converted row using the saver
@@ -42,22 +42,19 @@ class DataGenerationService(
      * @throws IllegalStateException if the generator is in an invalid state
      */
     fun generateAndSave() {
-        // Get self-describing column metadata from generator
-        val columnData = generator.getColumnData()
+        // Get self-describing column names from generator
+        val columnNames = generator.getColumnNames()
         
-        // Prepare the saver with column structure
-        saver.prepare(columnData)
+        // Prepare the saver with column names
+        saver.prepare(columnNames)
         
         // Iterate through all available data using pull-based pattern
         while (generator.hasMoreRows()) {
             // Get next row as mixed types from generator
             val dataRow = generator.getNextRow()
             
-            // Convert to strings for saver (toString() conversion)
-            val stringData = dataRow.map { it.toString() }
-            
-            // Save converted data (saver handles errors internally)
-            saver.saveItem(stringData)
+            // Save data directly (saver handles type conversion internally)
+            saver.saveItem(dataRow)
         }
         
         // Complete the saving process
