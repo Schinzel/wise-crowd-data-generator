@@ -4,6 +4,7 @@
 - Task 1 done - 2025-06-03
 - Task 2 done - 2025-06-03
 - Task 3 done - 2025-06-03
+- Task 4 done - 2025-06-04
 
 # Tasks
 ## Phase 3 - Task 1 - Weighted Random Selector
@@ -213,6 +214,34 @@ Implement a utility that takes an AssetClass instance and returns realistic Swed
 3. Generates names like "SEB Nordic Tech Active" or "Nordea European Corporate Bond"
 
 ### Task Summary (to be completed by AI)
+**Completed 2025-06-04** ✅
+
+**Major Changes Made:**
+- Created `AssetNamer` utility class that generates realistic Swedish/Nordic asset names based on AssetClass characteristics
+- Implemented naming logic following design.md specifications with providers, regions, sectors, and fund types
+- Added comprehensive unit tests covering all asset class types and naming patterns
+
+**Files Created:**
+- `src/main/kotlin/com/wisecrowd/data_generator/utils/AssetNamer.kt` (50 lines)
+- `src/test/kotlin/com/wisecrowd/data_generator/utils/AssetNamerTest.kt` (8 comprehensive tests)
+
+**Key Features:**
+- Takes AssetClass as input and returns realistic Swedish/Nordic asset names using predefined naming components
+- Supports all asset classes: Nordic stocks, Government/Corporate bonds, Mixed funds, Large-Cap equity, Precious metals, REITs, Crypto
+- Uses naming components from design.md: Providers (Swedbank, SEB, Nordea, Handelsbanken, Länsförsäkringar), Regions (Sweden, Nordic, Europe, Global, Asia, US), Sectors, and Fund types
+- Generates names like "SEB Nordic Tech Active" or "Nordea European Corporate Bond"
+- Injectable Random instance enables deterministic testing and consistent name generation
+
+**Key Decisions:**
+- Consolidated naming logic into single `generateName()` method with when-expression for different asset types
+- Used inline string interpolation for performance and readability
+- Followed 50-line class limit by keeping naming logic concise and focused
+- Added defensive programming with input validation (blank name check)
+
+**Impact on Future Tasks:**
+- AssetNamer is now ready for integration with AssetDataGenerator in next task
+- Provides realistic Swedish/Nordic asset names that will make generated data more authentic for banking simulation
+- Deterministic random naming enables consistent test data generation
 
 ## Phase 3 - Task 5 - Asset Generator → `asset_data.txt`
 Create AssetDataGenerator that implements IDataGenerator to generate asset data.
