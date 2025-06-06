@@ -7,11 +7,16 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.util.*
 import kotlin.random.Random
 
 class PriceSeriesDataGeneratorTest {
 
-    private val testAssetIds = listOf("asset-1", "asset-2", "asset-3")
+    private val testAssetIds = listOf(
+        UUID.fromString("00000000-0000-0000-0000-000000000001"),
+        UUID.fromString("00000000-0000-0000-0000-000000000002"),
+        UUID.fromString("00000000-0000-0000-0000-000000000003")
+    )
     private val testStartDate = LocalDate.of(2023, 1, 1)
     private val testEndDate = LocalDate.of(2023, 1, 3)
     private val fixedRandom = Random(42)
@@ -115,8 +120,9 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `after generating all rows _ returns false`() {
+            val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
             val generator = PriceSeriesDataGenerator(
-                assetIds = listOf("single-asset"),
+                assetIds = listOf(singleAssetId),
                 startDate = testStartDate,
                 endDate = testStartDate,
                 random = fixedRandom
@@ -219,7 +225,7 @@ class PriceSeriesDataGeneratorTest {
             val assetId = row[0]
             val date = row[1]
 
-            assertThat(assetId).isEqualTo("asset-1")
+            assertThat(assetId).isEqualTo(testAssetIds[0])
             assertThat(date).isEqualTo("2023-01-01")
         }
 
@@ -263,18 +269,19 @@ class PriceSeriesDataGeneratorTest {
             val thirdRowAssetId = firstThreeRows[2][0]
             val thirdRowDate = firstThreeRows[2][1]
 
-            assertThat(firstRowAssetId).isEqualTo("asset-1")
+            assertThat(firstRowAssetId).isEqualTo(testAssetIds[0])
             assertThat(firstRowDate).isEqualTo("2023-01-01")
-            assertThat(secondRowAssetId).isEqualTo("asset-2")
+            assertThat(secondRowAssetId).isEqualTo(testAssetIds[1])
             assertThat(secondRowDate).isEqualTo("2023-01-01")
-            assertThat(thirdRowAssetId).isEqualTo("asset-3")
+            assertThat(thirdRowAssetId).isEqualTo(testAssetIds[2])
             assertThat(thirdRowDate).isEqualTo("2023-01-01")
         }
 
         @Test
         fun `no more rows available _ throws no such element exception`() {
+            val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
             val generator = PriceSeriesDataGenerator(
-                assetIds = listOf("single-asset"),
+                assetIds = listOf(singleAssetId),
                 startDate = testStartDate,
                 endDate = testStartDate,
                 random = fixedRandom
@@ -288,8 +295,9 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `single asset single date _ generates one row`() {
+            val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
             val generator = PriceSeriesDataGenerator(
-                assetIds = listOf("single-asset"),
+                assetIds = listOf(singleAssetId),
                 startDate = testStartDate,
                 endDate = testStartDate,
                 random = fixedRandom
@@ -299,15 +307,16 @@ class PriceSeriesDataGeneratorTest {
             val assetId = row[0]
             val date = row[1]
 
-            assertThat(assetId).isEqualTo("single-asset")
+            assertThat(assetId).isEqualTo(singleAssetId)
             assertThat(date).isEqualTo("2023-01-01")
         }
 
         @Test
         fun `long date range _ generates correct number of rows`() {
+            val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
             val longEndDate = testStartDate.plusDays(30)
             val generator = PriceSeriesDataGenerator(
-                assetIds = listOf("test-asset"),
+                assetIds = listOf(singleAssetId),
                 startDate = testStartDate,
                 endDate = longEndDate,
                 random = fixedRandom
@@ -342,9 +351,10 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `custom initial price _ influences generated price range`() {
+            val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
             val initialPrice = 150.0
             val generator = PriceSeriesDataGenerator(
-                assetIds = listOf("test-asset"),
+                assetIds = listOf(singleAssetId),
                 startDate = testStartDate,
                 endDate = testStartDate,
                 initialPrice = initialPrice,
