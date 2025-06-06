@@ -21,7 +21,7 @@ unit tests unless explicitly stated otherwise.
   * Document key decisions and their rationale
   * Highlight any items that might affect future tasks
 * Fill out *Current Implementation Status (to be completed by AI)* and add which tasks have been completed. 
-  * Simply add a row with *Task X done - YYYY-MM-DD*.
+  * Simply add a row with *Task X done - Name of task - YYYY-MM-DD*.
 * Let me know when you've completed a task so I can verify it before moving to the next one
 
 ## When you are done with a phase
