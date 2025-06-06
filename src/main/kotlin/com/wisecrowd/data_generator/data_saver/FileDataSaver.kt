@@ -135,10 +135,10 @@ class FileDataSaver(private val filePath: String) : IDataSaver {
 
         try {
             // Format each value and join with the column delimiter (all converted to strings)
-            val rowData = data.map { value -> 
+            val rowData = data.joinToString(COLUMN_DELIMITER) { value ->
                 formatValue(value)
-            }.joinToString(COLUMN_DELIMITER)
-            
+            }
+
             // Write the formatted row to the file
             writer?.write(rowData)
             // Add a row delimiter after the data
