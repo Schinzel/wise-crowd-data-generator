@@ -5,7 +5,6 @@ import com.wisecrowd.data_generator.data_collections.asset_class.AssetClassColle
 import com.wisecrowd.data_generator.data_collections.asset_class.VolatilityLevelEnum
 import com.wisecrowd.data_generator.data_collections.market_trend.MarketTrendCollection
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.UUID
 import kotlin.math.exp
 import kotlin.math.ln
