@@ -1,7 +1,9 @@
 # WiseCrowd Platform
 
 ## Overview
-WiseCrowd is an investment advisory platform that leverages collective intelligence to provide optimized investment recommendations. Instead of relying on traditional financial advisors who may have conflicting interests, WiseCrowd analyzes the behavior and performance of many investors to identify the most successful strategies.
+WiseCrowd is an investment advisory platform that leverages collective intelligence to provide optimized investment recommendations. 
+Instead of relying on traditional financial advisors who may have conflicting interests, WiseCrowd analyzes the behavior and 
+performance of many investors to identify the most successful strategies.
 
 ## Key Problems Addressed
 - **Investment Complexity**: Many people find investments difficult to understand and manage effectively

@@ -7,4 +7,3 @@ The purpose of these documents is to describe the project
 - [Design](design.md)
 - [Architecture](architecture.md)
 - [Stack](stack.md)
-- [Implementation Summary](implementation_summary.md)
