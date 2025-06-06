@@ -37,7 +37,7 @@ Example:
  * Input validation happens at this boundary before any business
  * logic is executed.
  *
- * Written by Claude 3.7 with Code Standard 1.2
+ * Written by Claude 3.7
  */
 interface UserRegistrationPort {
     /**
