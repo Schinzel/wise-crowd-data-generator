@@ -79,7 +79,7 @@ Define the contract for all data generators using an iterator pattern with hasNe
 ### Design
 ```kotlin
 interface IDataGenerator {
-    fun getColumnData(): List<ColumnData>
+    fun getColumnNames(): List<String>
     fun hasMoreRows(): Boolean
     fun getNextRow(): List<Any>
 }
@@ -92,7 +92,7 @@ interface IDataGenerator {
 
 ### Acceptance Criteria
 1. Uses iterator pattern with hasMoreRows() and getNextRow() methods
-2. Includes getColumnData() method for self-describing schema
+2. Includes getColumnNames() method for self-describing schema
 3. Returns List<Any> supporting mixed data types (String, Double, Int, Boolean, etc.)
 4. Pull-based approach allowing consumer to control generation flow
 5. Includes proper error handling mechanisms (getNextRow() can throw exceptions)
@@ -103,7 +103,7 @@ interface IDataGenerator {
 **Completed 2025-06-03** ✅
 
 **Major Changes Made:**
-- Created `IDataGenerator` interface with self-describing schema via `getColumnData(): List<ColumnData>`
+- Created `IDataGenerator` interface with self-describing schema via `getColumnNames(): List<String>`
 - Implemented iterator pattern with `hasMoreRows()` and `getNextRow(): List<Any>` methods
 - Implemented comprehensive contract testing framework `IDataGeneratorContractTest` for interface compliance
 - Created `TestStringDataGenerator` as concrete implementation demonstrating mixed data types and column structure
@@ -116,7 +116,7 @@ interface IDataGenerator {
 - `src/test/kotlin/com/wisecrowd/data_generator/data_generators/TestStringDataGeneratorTest.kt`
 
 **Key Decisions:**
-- Added `getColumnData()` method for self-describing generators (single source of truth for schema)
+- Added `getColumnNames()` method for self-describing generators (single source of truth for schema)
 - Used iterator pattern (`hasMoreRows()`/`getNextRow()`) for better control flow and clearer naming
 - Returns `List<Any>` to support mixed data types (String, Double, Int, Boolean) in each row
 - Implemented contract testing to ensure all future implementations follow the same behavior
@@ -142,8 +142,8 @@ class DataGenerationService(
     private val saver: IDataSaver
 ) {
     fun generateAndSave() {
-        val columnData = generator.getColumnData()  // Self-describing!
-        saver.prepare(columnData)
+        val columnNames = generator.getColumnNames()  // Self-describing!
+        saver.prepare(columnNames)
         
         while (generator.hasMoreRows()) {
             val dataRow = generator.getNextRow()  // List<Any>
@@ -163,7 +163,7 @@ class DataGenerationService(
 ### Acceptance Criteria
 1. Takes IDataGenerator and IDataSaver as constructor parameters
 2. Orchestrates the complete generate-and-save workflow using iterator pattern
-3. Uses generator.getColumnData() to obtain schema (no external column configuration needed)
+3. Uses generator.getColumnNames() to obtain schema (no external column configuration needed)
 4. Converts List<Any> data rows to List<String> for file output using toString()
 5. Handles errors from both generator and saver components
 6. Includes comprehensive unit tests with mock IDataGenerator implementations
@@ -185,7 +185,7 @@ class DataGenerationService(
 - `src/test/kotlin/com/wisecrowd/data_generator/DataGenerationServiceIntegrationTest.kt`
 
 **Key Decisions:**
-- Service uses generator.getColumnData() for self-describing schema (no external column configuration needed)
+- Service uses generator.getColumnNames() for self-describing schema (no external column configuration needed)
 - Generator exceptions propagate to caller for visibility while saver errors are handled internally
 - Pull-based iteration pattern allows consumer control over data generation flow
 - Integration tests use temporary files and TestStringDataGenerator for realistic testing scenarios
