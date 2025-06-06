@@ -30,8 +30,8 @@ flowchart TD
     %% Relationships
     AC --> AG
     MT --> PSG
+    AN --> AG
     AG --> AD
-    AN --> AD
     AD --> PSG
     PSG --> PS
     IP --> UG
@@ -105,6 +105,7 @@ flowchart TD
 ### Asset Generator
 - Input:
   - asset classes data
+  - Asset Namer
 - Parameters:
   - Number of assets
 - Output:
@@ -162,6 +163,7 @@ flowchart TD
 ### Price Series Generator
 - Input:
   - asset data
+  - MarketTrendCollection
 - Parameters:
   - start date
   - end date
@@ -198,6 +200,7 @@ flowchart TD
 - Input:
   - price series
   - users
+  - currencies
 - Parameters:
   - start date
   - end date
@@ -208,22 +211,6 @@ flowchart TD
   - transaction type (buy or sell)
   - amount of money
   - currency
-
-### Transactions Data Generator
-- Input:
-  - price series
-  - users
-- Parameters:
-  - start date
-  - end date
-- Output:
-  - transaction_id
-  - user_id
-  - asset_id
-  - transaction type (buy or sell)
-  - amount of money
-  - currency
-  - date-time
 
 ### User Holdings Generator
 - Input:
