@@ -1,7 +1,7 @@
 package com.wisecrowd.data_generator
 
 import com.wisecrowd.data_generator.data_generators.TestStringDataGenerator
-import com.wisecrowd.data_generator.data_saver.FileDataSaver
+import com.wisecrowd.data_generator.data_saver.file_data_saver.FileDataSaver
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach

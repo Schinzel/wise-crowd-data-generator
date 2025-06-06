@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator.data_saver
+package com.wisecrowd.data_generator.data_saver.file_data_saver
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
@@ -22,7 +22,7 @@ class FileDataSaverTest {
     // Constants from FileDataSaver for better readability
     private val columnDelimiter = FileDataSaver.COLUMN_DELIMITER
     private val rowDelimiter = FileDataSaver.ROW_DELIMITER
-    private val stringQualifier = FileDataSaver.STRING_QUALIFIER
+    private val stringQualifier = DataFormatter.STRING_QUALIFIER
 
     @BeforeEach
     fun setUp() {
