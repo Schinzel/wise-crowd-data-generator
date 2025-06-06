@@ -6,6 +6,7 @@
 - Task 3 done - 2025-06-03
 - Task 4 done - 2025-06-04
 - Task 5 done - 2025-06-06
+- Task 6 done - 2025-06-06
 
 # Tasks
 ## Phase 3 - Task 1 - Weighted Random Selector
@@ -320,3 +321,40 @@ Implement a generator that creates realistic price series data influenced by mar
 4. Creates realistic price movements and historical patterns based on MarketTrendCollection
 
 ### Task Summary (to be completed by AI)
+**Completed 2025-06-06** ✅
+
+**Major Changes Made:**
+- Created `PriceSeriesDataGenerator` class implementing IDataGenerator interface for generating realistic price series data
+- Implemented geometric Brownian motion pricing model incorporating market trends and asset volatility 
+- Integrated MarketTrendCollection to influence daily price drift based on trend strength
+- Used asset class volatility levels to determine price movement variance (Low=10%, Medium=20%, High=35%, Very High=50%)
+- Generated price data ordered by date-first iteration (all assets for each date in sequence)
+- Added Box-Muller transformation for normal distribution random shocks in price modeling
+- Created comprehensive unit tests following proper naming conventions with nested test classes
+
+**Files Created:**
+- `src/main/kotlin/com/wisecrowd/data_generator/data_generators/PriceSeriesDataGenerator.kt`
+- `src/test/kotlin/com/wisecrowd/data_generator/data_generators/PriceSeriesDataGeneratorTest.kt`
+
+**Key Features:**
+- Generates price series data with columns: asset_id (String), date (String), price (Double)
+- Uses market trend strength to influence daily price drift (converted to daily from annual)
+- Applies asset class volatility for realistic price variance based on asset type
+- Implements geometric Brownian motion: S(t+1) = S(t) * exp(drift + volatility * randomShock)
+- Date-first iteration ensures all assets have prices for each date in chronological order
+- Injectable dependencies enable flexible testing and configuration
+
+**Key Decisions:**
+- Used geometric Brownian motion for realistic financial price modeling
+- Implemented date-first iteration pattern to generate all assets for each date sequentially
+- Applied market trend strength as daily drift component (trend.strength / 100.0 / 252.0)
+- Mapped asset class volatility to annual percentages: Low(10%), Medium(20%), High(35%), Very High(50%)
+- Used Box-Muller transformation for generating normal distribution random shocks
+- Extensive commenting above code lines following code standards
+- Comprehensive test coverage with proper naming: unitOfWork_StateUnderTest_ExpectedBehavior
+
+**Impact on Future Tasks:**
+- PriceSeriesDataGenerator is now ready to generate price_series.txt files using DataGenerationService
+- Provides realistic price movements influenced by historical market trends from Swedish/Nordic markets (1990-2025)
+- Foundation established for Transaction Generator which will use price series data for realistic trading decisions
+- Price continuity ensures assets maintain logical price progression over time periods
