@@ -107,49 +107,49 @@ class AssetClassCollection {
                     name = "Nordic stocks",
                     description = "Public company shares from Nordic high-growth markets",
                     volatilityLevel = VolatilityLevelEnum.VERY_HIGH,
-                    prevalencePercentage = 33
+                    prevalencePercentage = 27
                 ),
                 AssetClass(
                     id = 2,
                     name = "Government bond",
                     description = "Fixed income security issued by sovereign governments",
                     volatilityLevel = VolatilityLevelEnum.LOW,
-                    prevalencePercentage = 21
+                    prevalencePercentage = 17
                 ),
                 AssetClass(
                     id = 3,
                     name = "Corporate Bond",
                     description = "Fixed income security issued by private companies",
                     volatilityLevel = VolatilityLevelEnum.LOW,
-                    prevalencePercentage = 13
+                    prevalencePercentage = 11
                 ),
                 AssetClass(
                     id = 4,
                     name = "Medium-Risk Fund",
                     description = "Diversified fund with both stocks and bonds",
                     volatilityLevel = VolatilityLevelEnum.MEDIUM,
-                    prevalencePercentage = 20
+                    prevalencePercentage = 17
                 ),
                 AssetClass(
                     id = 5,
                     name = "Large-Cap Equity",
                     description = "Shares in large to established foreign companies",
                     volatilityLevel = VolatilityLevelEnum.HIGH,
-                    prevalencePercentage = 25
+                    prevalencePercentage = 21
                 ),
                 AssetClass(
                     id = 6,
                     name = "Gold / Precious Metals",
                     description = "Physical commodity or related securities",
                     volatilityLevel = VolatilityLevelEnum.HIGH,
-                    prevalencePercentage = 5
+                    prevalencePercentage = 4
                 ),
                 AssetClass(
                     id = 7,
                     name = "REITs",
                     description = "Real estate investment trusts",
                     volatilityLevel = VolatilityLevelEnum.MEDIUM,
-                    prevalencePercentage = 3
+                    prevalencePercentage = 2
                 ),
                 AssetClass(
                     id = 8,

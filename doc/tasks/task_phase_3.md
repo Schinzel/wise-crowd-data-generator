@@ -5,6 +5,7 @@
 - Task 2 done - 2025-06-03
 - Task 3 done - 2025-06-03
 - Task 4 done - 2025-06-04
+- Task 5 done - 2025-06-06
 
 # Tasks
 ## Phase 3 - Task 1 - Weighted Random Selector
@@ -263,6 +264,40 @@ Implement a generator that creates realistic asset data based on asset classes a
 3. Uses AssetNamer to create realistic asset names
 
 ### Task Summary (to be completed by AI)
+**Completed 2025-06-06** ✅
+
+**Major Changes Made:**
+- Created `AssetDataGenerator` class implementing IDataGenerator interface for generating asset data
+- Integrated AssetClassCollection and AssetNamer for realistic asset generation based on prevalence percentages
+- Implemented weighted random distribution using WeightedRandomSelector with asset class prevalence data
+- Fixed asset class prevalence percentages in AssetClassCollection to sum to exactly 100% (27+17+11+17+21+4+2+1=100)
+- Added comprehensive unit tests following proper naming conventions and using AssertJ assertions
+
+**Files Created:**
+- `src/main/kotlin/com/wisecrowd/data_generator/data_generators/AssetDataGenerator.kt`
+- `src/test/kotlin/com/wisecrowd/data_generator/data_generators/AssetDataGeneratorTest.kt`
+
+**Files Modified:**
+- `src/main/kotlin/com/wisecrowd/data_generator/data_collections/asset_class/AssetClassCollection.kt` (fixed prevalence percentages)
+
+**Key Features:**
+- Generates asset data with columns: asset_id (UUID), asset_class_id (Int), name (String)
+- Uses WeightedRandomSelector to distribute assets according to asset class prevalence percentages
+- Integrates with AssetNamer to generate realistic Swedish/Nordic asset names
+- Self-describing generator with getColumnNames() method for schema consistency
+- Comprehensive error handling and input validation
+
+**Key Decisions:**
+- Fixed prevalence percentages to sum to exactly 100% by proportionally adjusting original values
+- Used UUID.randomUUID() for unique asset identification 
+- Injectable dependencies (AssetClassCollection, AssetNamer) enable flexible testing and configuration
+- Followed IDataGenerator contract with iterator pattern for memory-efficient data generation
+
+**Impact on Future Tasks:**
+- AssetDataGenerator is now ready to be used with DataGenerationService to generate asset_data.txt files
+- Provides foundation for Price Series Generator which will use generated assets
+- Fixed asset class collection ensures consistent weighted distribution across all generators
+- Comprehensive test coverage ensures reliable asset generation for simulation data
 
 ## Phase 3 - Task 6 - Price Series Generator → `price_series.txt`
 Create PriceSeriesDataGenerator that implements IDataGenerator to generate historical price data.
