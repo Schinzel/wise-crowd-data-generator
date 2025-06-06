@@ -1,8 +1,9 @@
-package com.wisecrowd.data_generator.data_generators
+package com.wisecrowd.data_generator.data_generators.user_data_generator
 
 import com.wisecrowd.data_generator.data_collections.activity_level.ActivityLevelCollection
 import com.wisecrowd.data_generator.data_collections.customer_country.CustomerCountriesCollection
 import com.wisecrowd.data_generator.data_collections.investor_profile.InvestorProfileCollection
+import com.wisecrowd.data_generator.data_generators.IDataGenerator
 import com.wisecrowd.data_generator.utils.WeightedItem
 import com.wisecrowd.data_generator.utils.WeightedRandomSelector
 import java.time.LocalDate
@@ -127,16 +128,16 @@ class UserDataGenerator(
         val countryId = countrySelector.getRandomItem()
 
         // Generate customer lifecycle attributes
-        val (joinDate, departureDate, customerStatus) = generateCustomerLifecycle()
+        val customerLifecycle = generateCustomerLifecycle()
 
         return arrayListOf<Any>(
             UUID.randomUUID(),                  // user_id (UUID)
             investorProfileId,                  // investor_profile_id (Int)
             activityLevelId,                    // activity_level_id (Int)
             countryId,                          // country_id (Int)
-            joinDate,                           // join_date (LocalDate)
-            departureDate,                      // departure_date (LocalDate - sentinel date for active users)
-            customerStatus                      // customer_status (String)
+            customerLifecycle.joinDate,         // join_date (LocalDate)
+            customerLifecycle.departureDate,    // departure_date (LocalDate - sentinel date for active users)
+            customerLifecycle.status.name       // customer_status (String)
         )
     }
 
@@ -147,7 +148,7 @@ class UserDataGenerator(
      * - Remaining are active throughout (start at simulation start, ACTIVE status)
      * - Uses sentinel date (9999-12-31) for users who never departed
      */
-    private fun generateCustomerLifecycle(): Triple<LocalDate, LocalDate, String> {
+    private fun generateCustomerLifecycle(): CustomerLifecycle {
         val joinPercentage = random.nextDouble() * 100.0
         val departurePercentage = random.nextDouble() * 100.0
 
@@ -162,13 +163,13 @@ class UserDataGenerator(
         val (departureDate, customerStatus) = if (departurePercentage <= customerDepartureRate && simulationEndDate > joinDate) {
             // 20% depart before simulation end - only if there are days after join date
             val departure = generateRandomDateBetween(joinDate.plusDays(1), simulationEndDate)
-            Pair(departure, "DEPARTED")
+            Pair(departure, CustomerStatus.DEPARTED)
         } else {
             // 80% remain active throughout simulation - use sentinel date
-            Pair(SENTINEL_DATE, "ACTIVE")
+            Pair(SENTINEL_DATE, CustomerStatus.ACTIVE)
         }
 
-        return Triple(joinDate, departureDate, customerStatus)
+        return CustomerLifecycle(joinDate, departureDate, customerStatus)
     }
 
     /**
