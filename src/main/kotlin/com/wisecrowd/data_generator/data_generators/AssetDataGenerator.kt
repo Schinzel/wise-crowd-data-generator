@@ -57,7 +57,7 @@ class AssetDataGenerator(
         val assetName = assetNamer.generateName(assetClass)
 
         return listOf(
-            UUID.randomUUID().toString(),   // asset_id (String)
+            UUID.randomUUID(),              // asset_id (UUID)
             assetClassId,                   // asset_class_id (Int)
             assetName                       // name (String)
         )

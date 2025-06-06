@@ -6,6 +6,7 @@ import com.wisecrowd.data_generator.data_collections.asset_class.VolatilityLevel
 import com.wisecrowd.data_generator.data_collections.market_trend.MarketTrendCollection
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.UUID
 import kotlin.math.exp
 import kotlin.math.ln
 import kotlin.math.sqrt
@@ -28,7 +29,7 @@ import kotlin.random.Random
  * Written by Claude Sonnet 4
  */
 class PriceSeriesDataGenerator(
-    private val assetIds: List<String>,
+    private val assetIds: List<UUID>,
     private val startDate: LocalDate,
     private val endDate: LocalDate,
     private val assetClassCollection: AssetClassCollection = AssetClassCollection.createDefaultCollection(),
@@ -42,7 +43,7 @@ class PriceSeriesDataGenerator(
     private var currentAssetIndex = 0
     
     // Track current price for each asset to ensure continuity
-    private val assetPrices = mutableMapOf<String, Double>()
+    private val assetPrices = mutableMapOf<UUID, Double>()
     
     // Total number of rows to generate (dates × assets)
     private val totalRows: Int
@@ -98,10 +99,10 @@ class PriceSeriesDataGenerator(
 
         // Create the row data matching column structure
         val result = listOf(
-            // asset_id (String)
+            // asset_id (UUID)
             assetId,
-            // date (String)
-            currentDate.format(DateTimeFormatter.ISO_LOCAL_DATE),
+            // date (LocalDate)
+            currentDate,
             // price (Double)
             currentPrice
         )
@@ -122,7 +123,7 @@ class PriceSeriesDataGenerator(
      * Generates the next price for an asset using geometric Brownian motion
      * Incorporates market trend strength and asset-specific volatility
      */
-    private fun generateNextPrice(assetId: String, date: LocalDate): Double {
+    private fun generateNextPrice(assetId: UUID, date: LocalDate): Double {
         // Get the current price for this asset (or initial price if first day)
         val currentPrice = assetPrices[assetId] ?: initialPrice
         
@@ -157,7 +158,7 @@ class PriceSeriesDataGenerator(
      * Maps an asset ID to its corresponding asset class
      * Uses asset index to distribute assets across available asset classes
      */
-    private fun getAssetClassForAsset(assetId: String): AssetClass {
+    private fun getAssetClassForAsset(assetId: UUID): AssetClass {
         // Since we don't have direct asset->assetClass mapping, distribute evenly
         val assetIndex = assetIds.indexOf(assetId)
         val assetClassCount = assetClassCollection.size()
