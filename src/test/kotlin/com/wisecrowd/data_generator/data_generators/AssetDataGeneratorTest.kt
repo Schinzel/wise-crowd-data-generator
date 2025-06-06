@@ -7,6 +7,7 @@ import com.wisecrowd.data_generator.utils.AssetNamer
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
+import java.util.UUID
 import kotlin.random.Random
 
 class AssetDataGeneratorTest {
@@ -57,20 +58,9 @@ class AssetDataGeneratorTest {
         val row = generator.getNextRow()
         
         assertThat(row).hasSize(3)
-        assertThat(row[0]).isInstanceOf(String::class.java)
+        assertThat(row[0]).isInstanceOf(UUID::class.java)
         assertThat(row[1]).isInstanceOf(Integer::class.java)
         assertThat(row[2]).isInstanceOf(String::class.java)
-    }
-
-    @Test
-    fun getNextRow_validGenerator_returnsValidUuidFormat() {
-        val generator = AssetDataGenerator(assetCount = 1)
-        
-        val row = generator.getNextRow()
-        val assetId = row[0] as String
-        
-        val uuidPattern = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
-        assertThat(assetId).matches(uuidPattern)
     }
 
     @Test
@@ -151,10 +141,10 @@ class AssetDataGeneratorTest {
     fun getNextRow_multipleGenerations_generatesUniqueAssetIds() {
         val generator = AssetDataGenerator(assetCount = 20)
         
-        val assetIds = mutableSetOf<String>()
+        val assetIds = mutableSetOf<UUID>()
         repeat(20) {
             val row = generator.getNextRow()
-            val assetId = row[0] as String
+            val assetId = row[0] as UUID
             assetIds.add(assetId)
         }
         
