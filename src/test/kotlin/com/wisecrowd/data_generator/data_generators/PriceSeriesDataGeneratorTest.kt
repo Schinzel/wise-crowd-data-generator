@@ -153,7 +153,7 @@ class PriceSeriesDataGeneratorTest {
         }
 
         @Test
-        fun `valid state _ returns asset id as string`() {
+        fun `valid state _ returns asset id as uuid`() {
             val generator = PriceSeriesDataGenerator(
                 assetIds = testAssetIds,
                 startDate = testStartDate,
@@ -164,11 +164,11 @@ class PriceSeriesDataGeneratorTest {
             val row = generator.getNextRow()
             val assetId = row[0]
 
-            assertThat(assetId).isInstanceOf(String::class.java)
+            assertThat(assetId).isInstanceOf(UUID::class.java)
         }
 
         @Test
-        fun `valid state _ returns date as string`() {
+        fun `valid state _ returns date as local date`() {
             val generator = PriceSeriesDataGenerator(
                 assetIds = testAssetIds,
                 startDate = testStartDate,
@@ -179,7 +179,7 @@ class PriceSeriesDataGeneratorTest {
             val row = generator.getNextRow()
             val date = row[1]
 
-            assertThat(date).isInstanceOf(String::class.java)
+            assertThat(date).isInstanceOf(LocalDate::class.java)
         }
 
         @Test
@@ -226,7 +226,7 @@ class PriceSeriesDataGeneratorTest {
             val date = row[1]
 
             assertThat(assetId).isEqualTo(testAssetIds[0])
-            assertThat(date).isEqualTo("2023-01-01")
+            assertThat(date).isEqualTo(testStartDate)
         }
 
         @Test
@@ -270,11 +270,11 @@ class PriceSeriesDataGeneratorTest {
             val thirdRowDate = firstThreeRows[2][1]
 
             assertThat(firstRowAssetId).isEqualTo(testAssetIds[0])
-            assertThat(firstRowDate).isEqualTo("2023-01-01")
+            assertThat(firstRowDate).isEqualTo(testStartDate)
             assertThat(secondRowAssetId).isEqualTo(testAssetIds[1])
-            assertThat(secondRowDate).isEqualTo("2023-01-01")
+            assertThat(secondRowDate).isEqualTo(testStartDate)
             assertThat(thirdRowAssetId).isEqualTo(testAssetIds[2])
-            assertThat(thirdRowDate).isEqualTo("2023-01-01")
+            assertThat(thirdRowDate).isEqualTo(testStartDate)
         }
 
         @Test
@@ -308,7 +308,7 @@ class PriceSeriesDataGeneratorTest {
             val date = row[1]
 
             assertThat(assetId).isEqualTo(singleAssetId)
-            assertThat(date).isEqualTo("2023-01-01")
+            assertThat(date).isEqualTo(testStartDate)
         }
 
         @Test
