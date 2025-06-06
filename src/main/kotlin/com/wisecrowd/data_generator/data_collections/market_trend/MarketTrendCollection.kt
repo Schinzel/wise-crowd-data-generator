@@ -1,7 +1,6 @@
 package com.wisecrowd.data_generator.data_collections.market_trend
 
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 /**
  * The purpose of this class is to manage a collection of market trends and
@@ -91,8 +90,7 @@ class MarketTrendCollection {
      * @return A populated MarketTrendCollection
      */
     companion object {
-        private val DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-        
+
         fun createDefaultCollection(): MarketTrendCollection {
             val collection = MarketTrendCollection()
             
