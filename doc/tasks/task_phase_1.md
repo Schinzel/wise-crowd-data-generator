@@ -281,7 +281,7 @@ a row of data. ActivityLevelCollection holds the rows.
     - Implemented methods to add, retrieve, and filter activity levels
     - Created getById and getByName methods that throw IllegalArgumentException when level not found (following defensive programming principles)
     - Added getByDistributionRange method with proper validation for percentage ranges
-    - Added a companion object with createDefaultCollection() method that creates the predefined activity levels from the design document (5 levels: Inactive 20%, Low 35%, Moderate 25%, Active 8%, Hyperactive 2%)
+    - Added a companion object with createDefaultCollection() method that creates the predefined activity levels from the design document (5 levels: Inactive 22%, Low 39%, Moderate 28%, Active 9%, Hyperactive 2%)
 
 - **Testing**:
   - Created comprehensive tests for both classes following the project's testing standards

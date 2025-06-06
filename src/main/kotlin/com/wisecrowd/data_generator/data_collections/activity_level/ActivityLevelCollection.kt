@@ -43,25 +43,25 @@ class ActivityLevelCollection {
                 id = 1, 
                 name = "Inactive", 
                 description = "Trades 0-1 times per year", 
-                distributionPercentage = 20.0
+                distributionPercentage = 22.0
             ))
             collection.addActivityLevel(ActivityLevel(
                 id = 2, 
                 name = "Low", 
                 description = "Trades 2-4 times per year", 
-                distributionPercentage = 35.0
+                distributionPercentage = 39.0
             ))
             collection.addActivityLevel(ActivityLevel(
                 id = 3, 
                 name = "Moderate", 
                 description = "Trades 5-12 times per year", 
-                distributionPercentage = 25.0
+                distributionPercentage = 28.0
             ))
             collection.addActivityLevel(ActivityLevel(
                 id = 4, 
                 name = "Active", 
                 description = "Trades 13-52 times per year", 
-                distributionPercentage = 8.0
+                distributionPercentage = 9.0
             ))
             collection.addActivityLevel(ActivityLevel(
                 id = 5, 

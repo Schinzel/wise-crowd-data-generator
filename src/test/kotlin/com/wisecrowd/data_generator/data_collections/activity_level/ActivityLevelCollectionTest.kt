@@ -187,7 +187,7 @@ class ActivityLevelCollectionTest {
     fun createDefaultCollection_inactiveLevel_hasCorrectDistribution() {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val inactiveFromDefault = defaultCollection.getById(1)
-        val expectedDistribution = 20.0
+        val expectedDistribution = 22.0
         
         assertThat(inactiveFromDefault.distributionPercentage).isEqualTo(expectedDistribution)
     }
@@ -196,7 +196,7 @@ class ActivityLevelCollectionTest {
     fun createDefaultCollection_lowLevel_hasCorrectDistribution() {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val lowFromDefault = defaultCollection.getById(2)
-        val expectedDistribution = 35.0
+        val expectedDistribution = 39.0
         
         assertThat(lowFromDefault.distributionPercentage).isEqualTo(expectedDistribution)
     }
@@ -226,5 +226,14 @@ class ActivityLevelCollectionTest {
         val expectedDistribution = 2.0
         
         assertThat(hyperactiveFromDefault.distributionPercentage).isEqualTo(expectedDistribution)
+    }
+
+    @Test
+    fun createDefaultCollection_allDistributionPercentages_sumToOneHundred() {
+        val defaultCollection = ActivityLevelCollection.createDefaultCollection()
+        val allLevels = defaultCollection.getAllActivityLevels()
+        val totalPercentage = allLevels.sumOf { it.distributionPercentage }
+        
+        assertThat(totalPercentage).isEqualTo(100.0)
     }
 }

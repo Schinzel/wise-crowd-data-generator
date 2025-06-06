@@ -41,7 +41,7 @@ All data collection classes are organized under `com.wisecrowd.data_generator.da
 #### Activity Levels (`activity_level/`)
 - **ActivityLevel**: Represents user trading activity patterns
 - **ActivityLevelCollection**: Collection management with distribution-based operations
-- Contains 5 levels: Inactive (20%), Low (35%), Moderate (25%), Active (18%), Hyperactive (2%)
+- Contains 5 levels: Inactive (22%), Low (39%), Moderate (28%), Active (9%), Hyperactive (2%)
 
 ## Output Structure
 The system generates UTF-8 encoded text files in a timestamped directory on the user's desktop:

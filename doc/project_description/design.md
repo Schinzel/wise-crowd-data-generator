@@ -141,10 +141,10 @@ flowchart TD
 
 | ID | Name | Description | Distribution (%) |
 |----|------|-------------|------------------|
-| 1  | Inactive | Trades 0-1 times per year | 20% |
-| 2  | Low | Trades 2-4 times per year | 35% |
-| 3  | Moderate | Trades 5-12 times per year | 25% |
-| 4  | Active | Trades 13-52 times per year | 8% |
+| 1  | Inactive | Trades 0-1 times per year | 22% |
+| 2  | Low | Trades 2-4 times per year | 39% |
+| 3  | Moderate | Trades 5-12 times per year | 28% |
+| 4  | Active | Trades 13-52 times per year | 9% |
 | 5  | Hyperactive | Trades 53+ times per year | 2% |
 
 ### Currencies
