@@ -24,7 +24,7 @@
 - A utility class used in tests, located in the test package, is named: `[Something]Util`
 
 ### Functions
-Test method names should follow this pattern:
+Test method names **MUST** follow this exact pattern:
 ```
 unitOfWork_StateUnderTest_ExpectedBehavior
 ```
@@ -39,6 +39,49 @@ For example:
 ```
 `constructor _ valid asset class _ creates object with correct id`
 ```
+
+### Function Naming Examples (Required for Claude Code)
+
+**✅ Correct Examples:**
+```kotlin
+@Test
+fun constructor_zeroAssetCount_throwsIllegalArgumentException()
+
+@Test
+fun getColumnNames_defaultConfiguration_returnsCorrectColumnNames()
+
+@Test
+fun hasMoreRows_newGenerator_returnsTrue()
+
+@Test
+fun hasMoreRows_allAssetsGenerated_returnsFalse()
+
+@Test
+fun getNextRow_validGenerator_returnsCorrectDataTypes()
+
+@Test
+fun generateName_nordicStocksAssetClass_returnsEquityStyleName()
+```
+
+**❌ Common Mistakes to Avoid:**
+```kotlin
+@Test
+fun testGetColumnNames()  // Too generic, missing state and behavior
+
+@Test
+fun shouldReturnTrue()    // No unit of work or state context
+
+@Test
+fun getColumnNamesReturnsCorrectNames()  // Missing underscores
+
+@Test
+fun getColumnNamesDefaultConfigurationReturnsCorrectColumnNames()  // camelCase instead of underscores
+```
+
+**Naming Components:**
+- **unitOfWork**: Exact method name (`getColumnNames`, `hasMoreRows`) or `constructor`
+- **StateUnderTest**: Input scenario (`defaultConfiguration`, `zeroAssetCount`, `validAssetClass`)
+- **ExpectedBehavior**: Expected outcome (`returnsCorrectColumnNames`, `throwsIllegalArgumentException`, `returnsTrue`)
 
 
 ## Nested Test Classes
