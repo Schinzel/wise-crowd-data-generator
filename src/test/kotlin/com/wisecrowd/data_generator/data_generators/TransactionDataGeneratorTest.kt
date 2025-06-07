@@ -185,6 +185,52 @@ class TransactionDataGeneratorTest {
             val transactionTypes = transactions.map { it[3] as String }.toSet()
             assertThat(transactionTypes).isNotEmpty
         }
+        
+        @Test
+        fun getNextRow_swedishUser_prefersHomeCurrency() {
+            val swedishUserData = createSwedishUserData()
+            val priceData = createValidPriceData()
+            val generator = TransactionDataGenerator(priceData, listOf(swedishUserData), random = Random(42))
+            
+            val transactions = mutableListOf<List<Any>>()
+            while (generator.hasMoreRows()) {
+                transactions.add(generator.getNextRow())
+            }
+            
+            // Should have transactions for Swedish user
+            assertThat(transactions).isNotEmpty
+            
+            // Extract currency IDs from transactions
+            val currencyIds = transactions.map { it[5] as Int }
+            val sekTransactions = currencyIds.count { it == 1 }  // SEK currency ID
+            
+            // Swedish users should prefer SEK (expect >60% usage)
+            val sekRatio = sekTransactions.toDouble() / currencyIds.size
+            assertThat(sekRatio).isGreaterThan(0.6)
+        }
+        
+        @Test
+        fun getNextRow_norwegianUser_prefersHomeCurrency() {
+            val norwegianUserData = createNorwegianUserData()
+            val priceData = createValidPriceData()
+            val generator = TransactionDataGenerator(priceData, listOf(norwegianUserData), random = Random(42))
+            
+            val transactions = mutableListOf<List<Any>>()
+            while (generator.hasMoreRows()) {
+                transactions.add(generator.getNextRow())
+            }
+            
+            // Should have transactions for Norwegian user
+            assertThat(transactions).isNotEmpty
+            
+            // Extract currency IDs from transactions
+            val currencyIds = transactions.map { it[5] as Int }
+            val nokTransactions = currencyIds.count { it == 4 }  // NOK currency ID
+            
+            // Norwegian users should prefer NOK (expect >60% usage)
+            val nokRatio = nokTransactions.toDouble() / currencyIds.size
+            assertThat(nokRatio).isGreaterThan(0.6)
+        }
     }
 
     // Helper methods for creating test data
@@ -258,6 +304,50 @@ class TransactionDataGeneratorTest {
             departureDate,
             // customer_status
             CustomerStatus.DEPARTED.name
+        )
+    }
+    
+    private fun createSwedishUserData(): List<Any> {
+        val baseDate = LocalDate.of(2024, 1, 1)
+        val sentinelDate = LocalDate.of(9999, 12, 31)
+        
+        return listOf(
+            // user_id
+            UUID.randomUUID(),
+            // investor_profile_id
+            1,
+            // activity_level_id (High activity for more transactions)
+            4,
+            // country_id (Sweden)
+            1,
+            // join_date
+            baseDate,
+            // departure_date (sentinel for active)
+            sentinelDate,
+            // customer_status
+            CustomerStatus.ACTIVE.name
+        )
+    }
+    
+    private fun createNorwegianUserData(): List<Any> {
+        val baseDate = LocalDate.of(2024, 1, 1)
+        val sentinelDate = LocalDate.of(9999, 12, 31)
+        
+        return listOf(
+            // user_id
+            UUID.randomUUID(),
+            // investor_profile_id
+            1,
+            // activity_level_id (High activity for more transactions)
+            4,
+            // country_id (Norway)
+            2,
+            // join_date
+            baseDate,
+            // departure_date (sentinel for active)
+            sentinelDate,
+            // customer_status
+            CustomerStatus.ACTIVE.name
         )
     }
 }

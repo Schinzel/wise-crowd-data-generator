@@ -3,8 +3,6 @@ package com.wisecrowd.data_generator.data_generators
 import com.wisecrowd.data_generator.data_collections.currency.CurrencyCollection
 import com.wisecrowd.data_generator.data_generators.transaction_data_generator.*
 import com.wisecrowd.data_generator.data_generators.user_data_generator.CustomerStatus
-import com.wisecrowd.data_generator.utils.WeightedItem
-import com.wisecrowd.data_generator.utils.WeightedRandomSelector
 import java.time.LocalDate
 import java.util.*
 import kotlin.random.Random
@@ -14,9 +12,9 @@ import kotlin.random.Random
  * proper currency distribution and user activity patterns based on existing data.
  *
  * This generator implements IDataGenerator to produce transactions.txt file contents
- * incorporating price series data, user lifecycle events, and currency distribution.
- * It delegates transaction generation logic to specialized components while maintaining
- * the iterator pattern required by the IDataGenerator interface.
+ * incorporating price series data, user lifecycle events, and user-specific currency
+ * preferences. Users maintain realistic currency usage patterns based on their
+ * country and typically stick to 1-2 preferred currencies.
  *
  * The generator processes all user and price data to create a complete set of
  * transactions that reflect realistic trading behavior patterns including
@@ -43,19 +41,16 @@ class TransactionDataGenerator(
         require(userData.isNotEmpty()) { "User data cannot be empty" }
         require(!currencyCollection.getAllCurrencies().isEmpty()) { "Currency collection cannot be empty" }
 
-        // Create weighted currency selector using distribution percentages from design
-        val currencyItems = currencyCollection.getAllCurrencies().map { currency ->
-            WeightedItem(currency.id, currency.distributionPercentage)
-        }
-        val currencySelector = WeightedRandomSelector(currencyItems, random)
+        // Create user currency preferences for realistic currency usage patterns
+        val userCurrencyPreferences = UserCurrencyPreferences(currencyCollection, random)
 
         // Convert raw data into structured objects for cleaner processing
         val priceData = convertPriceSeriesData(priceSeriesData)
         val assetPriceCollection = AssetPriceCollection(priceData)
         val users = convertUserData(userData)
 
-        // Create transaction generator with currency selection logic
-        val transactionGenerator = TransactionGenerator(currencySelector, random)
+        // Create transaction generator with user-specific currency preferences
+        val transactionGenerator = TransactionGenerator(userCurrencyPreferences, random)
 
         // Generate all transactions during initialization for consistent iteration
         generatedTransactions = generateAllTransactions(users, assetPriceCollection, transactionGenerator)

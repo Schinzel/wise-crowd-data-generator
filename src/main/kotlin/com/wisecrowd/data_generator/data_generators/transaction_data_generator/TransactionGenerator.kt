@@ -18,7 +18,7 @@ import kotlin.random.Random
  * Written by Claude Sonnet 4
  */
 class TransactionGenerator(
-    private val currencySelector: WeightedRandomSelector<Int>,
+    private val userCurrencyPreferences: UserCurrencyPreferences,
     private val random: Random = Random.Default
 ) {
     
@@ -39,6 +39,9 @@ class TransactionGenerator(
     ): List<TransactionRequest> {
         val transactions = mutableListOf<TransactionRequest>()
         
+        // Generate user-specific currency preferences based on their country
+        val userCurrencySelector = userCurrencyPreferences.generateUserCurrencyPreferences(userData.countryId)
+        
         // Determine the effective departure date for active vs departed customers
         val actualDepartureDate = if (userData.customerStatus == CustomerStatus.ACTIVE) {
             null
@@ -55,7 +58,8 @@ class TransactionGenerator(
             userData.joinDate,
             actualDepartureDate,
             annualTransactionCount,
-            assetPriceCollection
+            assetPriceCollection,
+            userCurrencySelector
         )
         transactions.addAll(regularTransactions)
         
@@ -64,7 +68,8 @@ class TransactionGenerator(
             val sellOffTransactions = generateSellOffTransactions(
                 userData.userId,
                 actualDepartureDate,
-                assetPriceCollection
+                assetPriceCollection,
+                userCurrencySelector
             )
             transactions.addAll(sellOffTransactions)
         }
@@ -84,6 +89,7 @@ class TransactionGenerator(
      * @param endDate When the user departed (null if still active)
      * @param annualTransactionCount Expected transactions per year for this activity level
      * @param assetPriceCollection Price data for transaction generation
+     * @param userCurrencySelector User-specific currency preference selector
      * @return List of regular transaction requests
      */
     private fun generateRegularTransactions(
@@ -91,7 +97,8 @@ class TransactionGenerator(
         startDate: LocalDate,
         endDate: LocalDate?,
         annualTransactionCount: Int,
-        assetPriceCollection: AssetPriceCollection
+        assetPriceCollection: AssetPriceCollection,
+        userCurrencySelector: WeightedRandomSelector<Int>
     ): List<TransactionRequest> {
         // Determine the effective end date for transaction generation
         val effectiveEndDate = endDate ?: assetPriceCollection.getLatestPriceDate()
@@ -117,7 +124,7 @@ class TransactionGenerator(
         
         // Generate the calculated number of transactions
         return (0 until periodTransactionCount).mapNotNull {
-            generateSingleRegularTransaction(userId, startDate, effectiveEndDate, assetPriceCollection)
+            generateSingleRegularTransaction(userId, startDate, effectiveEndDate, assetPriceCollection, userCurrencySelector)
         }
     }
     
@@ -131,12 +138,14 @@ class TransactionGenerator(
      * @param userId The user who is departing
      * @param departureDate The date of departure
      * @param assetPriceCollection Price data for determining which assets to sell
+     * @param userCurrencySelector User-specific currency preference selector
      * @return List of sell-off transaction requests
      */
     private fun generateSellOffTransactions(
         userId: UUID,
         departureDate: LocalDate,
-        assetPriceCollection: AssetPriceCollection
+        assetPriceCollection: AssetPriceCollection,
+        userCurrencySelector: WeightedRandomSelector<Int>
     ): List<TransactionRequest> {
         // Get all assets that have price data available on the departure date
         val availableAssets = assetPriceCollection.getAssetsWithPriceOnDate(departureDate)
@@ -154,7 +163,7 @@ class TransactionGenerator(
             val price = assetPriceCollection.getPriceOnDate(assetId, departureDate)
             if (price != null) {
                 val amount = generateTransactionAmount(price) * 2.0  // Larger amounts for liquidation
-                val currencyId = currencySelector.getRandomItem()
+                val currencyId = userCurrencySelector.getRandomItem()
                 
                 TransactionRequest(
                     userId = userId,
@@ -181,13 +190,15 @@ class TransactionGenerator(
      * @param startDate The earliest possible transaction date
      * @param endDate The latest possible transaction date
      * @param assetPriceCollection Price data for asset and date validation
+     * @param userCurrencySelector User-specific currency preference selector
      * @return A single transaction request or null if no valid transaction can be generated
      */
     private fun generateSingleRegularTransaction(
         userId: UUID,
         startDate: LocalDate,
         endDate: LocalDate,
-        assetPriceCollection: AssetPriceCollection
+        assetPriceCollection: AssetPriceCollection,
+        userCurrencySelector: WeightedRandomSelector<Int>
     ): TransactionRequest? {
         // Generate a random transaction date within the active period
         val daysInPeriod = startDate.until(endDate).days
@@ -208,7 +219,7 @@ class TransactionGenerator(
         // Generate transaction details
         val transactionType = if (random.nextBoolean()) "buy" else "sell"
         val amount = generateTransactionAmount(price)
-        val currencyId = currencySelector.getRandomItem()
+        val currencyId = userCurrencySelector.getRandomItem()
         
         return TransactionRequest(
             userId = userId,
