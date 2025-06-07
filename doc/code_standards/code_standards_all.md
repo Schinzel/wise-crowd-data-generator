@@ -99,9 +99,32 @@ Use defensive programming:
 - Isolate failures: Don't let one bad input or bug take down the whole system
 - Add guardrails: For example, require(), check(), assert(), or fallback logic
 
+### Type Design
+Always use meaningful domain types instead of generic container types like `Pair`, `Triple`, or `Map<String, Any>`.
+
+**✅ Correct:**
+```kotlin
+data class CustomerLifecycle(
+    val joinDate: LocalDate,
+    val departureDate: LocalDate,
+    val status: String
+)
+
+fun generateCustomerLifecycle(): CustomerLifecycle
+```
+
+**❌ Avoid:**
+```kotlin
+fun generateCustomerLifecycle(): Triple<LocalDate, LocalDate, String>
+fun getUserInfo(): Pair<String, Int>
+```
+
+Benefits: Self-documenting code, type safety, better maintainability, and meaningful IDE auto-completion.
+
 ### Avoid Cleverness
-- The cleverer the code, the less likely the AI is to understand it on first pass
-- Go for clarity over elegance unless you can explain it easily in a prompt
+- The cleverer the code, the harder it is to understand and maintain
+- Prioritize clarity over elegance unless the solution can be easily explained
+- Write code that others (including your future self) can quickly comprehend
 
 ## Naming
 - Variables, classes, functions and files should have self-explanatory names
