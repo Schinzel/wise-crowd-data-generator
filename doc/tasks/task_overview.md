@@ -34,12 +34,14 @@ The project is divided into logical phases. The phases are:
 - [Phase 2](task_phase_2.md)
 - [Phase 3](task_phase_3.md)
 - [Phase 4](task_phase_4.md)
+- [Phase 5](task_phase_5.md)
 
 # Current Phase Status (to be completed by AI)
 - Phase 1 Complete ✅ - Data Collections & Data Saver - Completed 2025-05-28
 - Phase 2 Complete ✅ - Data generator setup - Completed 2025-06-03
 - Phase 3 Complete ✅ - Asset pipeline - Completed 2025-06-06
 - Phase 4 Complete ✅ - User pipeline - Completed 2025-06-07
+- Phase 5 In Progress 🚧 - Main Orchestrator - Started 2025-06-07
 
 
 
