@@ -14,17 +14,12 @@ import java.util.*
  */
 class AssetPriceCollection(priceData: List<PriceData>) {
     
-    // Group prices by asset for efficient lookups
-    private val pricesByAsset: Map<UUID, List<PriceData>>
-    
-    init {
-        // Group and sort price data by asset and date for efficient access
-        pricesByAsset = priceData.groupBy { it.assetId }
-            .mapValues { (_, prices) -> 
-                prices.sortedBy { it.date } 
-            }
-    }
-    
+    // Group and sort price data by asset and date for efficient access
+    private val pricesByAsset: Map<UUID, List<PriceData>> = priceData.groupBy { it.assetId }
+        .mapValues { (_, prices) ->
+            prices.sortedBy { it.date }
+        }
+
     /**
      * Gets the price for a specific asset on a specific date
      * 

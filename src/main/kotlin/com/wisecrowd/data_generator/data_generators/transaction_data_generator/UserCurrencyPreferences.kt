@@ -3,7 +3,6 @@ package com.wisecrowd.data_generator.data_generators.transaction_data_generator
 import com.wisecrowd.data_generator.data_collections.currency.CurrencyCollection
 import com.wisecrowd.data_generator.utils.WeightedItem
 import com.wisecrowd.data_generator.utils.WeightedRandomSelector
-import java.util.*
 import kotlin.random.Random
 
 /**
