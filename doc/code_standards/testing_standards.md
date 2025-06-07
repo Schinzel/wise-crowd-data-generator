@@ -51,31 +51,7 @@ fun constructor_zeroAssetCount_throwsIllegalArgumentException()
 fun getColumnNames_defaultConfiguration_returnsCorrectColumnNames()
 
 @Test
-fun hasMoreRows_newGenerator_returnsTrue()
-
-@Test
 fun `has more rows _ all assets generated _ returns false`()
-
-@Test
-fun getNextRow_validGenerator_returnsCorrectDataTypes()
-
-@Test
-fun generateName_nordicStocksAssetClass_returnsEquityStyleName()
-```
-
-**❌ Common Mistakes to Avoid:**
-```kotlin
-@Test
-fun testGetColumnNames()  // Too generic, missing state and behavior
-
-@Test
-fun shouldReturnTrue()    // No unit of work or state context
-
-@Test
-fun getColumnNamesReturnsCorrectNames()  // Missing underscores
-
-@Test
-fun getColumnNamesDefaultConfigurationReturnsCorrectColumnNames()  // camelCase instead of underscores
 ```
 
 **Naming Components:**
