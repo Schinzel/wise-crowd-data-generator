@@ -170,28 +170,58 @@ Warnings encountered:
 
 ### Deliverables
 - WiseCrowdDataGenerator main orchestrator class
+- ILog interface for output handling
+- SystemOutLog default implementation
 - Integration with all existing generators
 - File dependency handling using FileDataParser
 - Progress reporting with timing
 
 ### Acceptance Criteria
-1. WiseCrowdDataGenerator takes DataGenerationConfig as constructor parameter
-2. Single generate() method orchestrates complete pipeline
-3. Generates all 5 files in correct dependency order
+1. Create ILog interface with writeToLog(message: String) method
+2. Create SystemOutLog class implementing ILog that writes to System.out
+3. WiseCrowdDataGenerator takes DataGenerationConfig and ILog as constructor parameters
+4. ILog defaults to SystemOutLog() for backward compatibility
+5. Single generate() method orchestrates complete pipeline
+6. Generates all 5 files in correct dependency order
 4. Uses FileDataParser to read intermediate files for dependent generators
 5. Creates output directory if it doesn't exist
 6. Detailed progress feedback with step numbers, descriptions, timing, and warning counts
-7. Fail fast error handling with partial file cleanup
+7. All progress messages use ILog interface instead of direct println()
+8. Fail fast error handling with partial file cleanup
 8. Collect and report errors from DataGenerationService after each step
 9. Display warning summary at end if any errors were collected
 10. Integration with DataGenerationService for each generator
-9. Comprehensive unit tests with mocked components
-10. Integration test generating actual files with small dataset
-11. Error reporting tests verify warning collection and display
+11. Comprehensive unit tests with mocked components and TestLog for output verification
+12. Integration test generating actual files with small dataset
+13. Error reporting tests verify warning collection and display
 
 ### Task Summary (to be completed by AI)
 
-## Phase 5 - Task 6 - Integration Testing & Final Verification
+## Phase 5 - Task 7 - Update README with Usage Examples
+Update the main README.md file to include basic usage documentation for the completed data generation system.
+
+### Description
+Add a simple usage section to the README explaining the purpose, generated files, and how to run the data generator.
+
+### Content to Add
+- Brief purpose statement
+- List of 5 generated files with descriptions
+- Basic usage example showing how to generate data
+
+### Deliverables
+- Updated README.md with usage section
+
+### Acceptance Criteria
+1. Add "Usage" section to README.md
+2. Explain purpose: generates mock data for WiseCrowd platform
+3. List all 5 generated files (asset_data.txt, price_series.txt, users.txt, transactions.txt, user_holdings.txt) with brief descriptions
+4. Show basic code example of how to generate data
+5. Keep existing content (code standards links, project description links)
+6. Simple and concise - no advanced scenarios or troubleshooting
+
+### Task Summary (to be completed by AI)
+
+## Phase 5 - Task 8 - Integration Testing & Final Verification
 Create comprehensive integration tests and verify the complete data generation pipeline works end-to-end.
 
 ### Description
@@ -199,8 +229,6 @@ Implement integration tests that verify the complete data generation pipeline pr
 
 ### Test Scenarios
 - Small dataset generation (10 assets, 50 users)
-- Medium dataset generation (100 assets, 1,000 users) 
-- Large dataset generation (1,000 assets, 10,000 users)
 - Custom date ranges and parameters
 - Error scenarios and recovery
 
@@ -209,30 +237,20 @@ Implement integration tests that verify the complete data generation pipeline pr
 - Asset IDs are consistent across asset_data.txt and price_series.txt
 - User IDs are consistent across users.txt, transactions.txt, and user_holdings.txt
 - Price series covers complete date range for all assets
-- Transaction amounts and currencies are realistic
+- All generated files are within the expected ranges of rows or data
 - User holdings match transaction history
 - No orphaned references between files
-
-### Performance Requirements
-- Generate 100 assets, 1,000 users in under 30 seconds
-- Memory usage stays reasonable for large datasets
-- Progress reporting provides accurate timing information
 
 ### Deliverables
 - Comprehensive integration test suite
 - Data validation utilities
-- Performance benchmarking tests
 - End-to-end pipeline verification
 
 ### Acceptance Criteria
-1. Integration tests cover small, medium, and large dataset scenarios
+1. Integration tests cover small dataset scenarios and custom configurations
 2. Data consistency validation across all generated files
-3. Performance tests verify generation time requirements
-4. Error scenario testing (invalid config, disk space, etc.)
-5. Generated files can be successfully used by WiseCrowd platform
-6. Memory usage profiling for large datasets
-7. Cross-platform testing (Windows, macOS, Linux)
-8. Documentation for running complete data generation process
-9. Verification that all original design requirements are met
+3. Error scenario testing (invalid config, disk space, etc.)
+4. Documentation for running complete data generation process
+5. Verification that all original design requirements are met
 
 ### Task Summary (to be completed by AI)
