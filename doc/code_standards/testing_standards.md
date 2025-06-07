@@ -54,7 +54,7 @@ fun getColumnNames_defaultConfiguration_returnsCorrectColumnNames()
 fun hasMoreRows_newGenerator_returnsTrue()
 
 @Test
-fun hasMoreRows_allAssetsGenerated_returnsFalse()
+fun `has more rows _ all assets generated _ returns false`()
 
 @Test
 fun getNextRow_validGenerator_returnsCorrectDataTypes()
@@ -114,77 +114,22 @@ inner class UnitOfWork {
 ```
 
 ## AssertJ Usage
+Use AssertJ for more readable assertions and better error messages.
 
-### Overview
-AssertJ provides fluent, readable assertions that make test failures more descriptive and improve test readability.
-
-### Key Points
-- Always use static imports for AssertJ's `assertThat` method: `import static org.assertj.core.api.Assertions.assertThat`
-- Prefer AssertJ's fluent API over JUnit's built-in assertions
-- Take advantage of AssertJ's descriptive failure messages
-
-### Examples
-
-Instead of:
+**Examples:**
 ```kotlin
-// JUnit style
-assertEquals(3, parts.size)
-assertEquals(1, parts[0].length)
-assertTrue(parts[2].endsWith(".jpeg"))
-```
-
-Use:
-```kotlin
-// AssertJ style
+// Instead of JUnit assertEquals/assertTrue
 assertThat(parts).hasSize(3)
-assertThat(parts[0]).hasSize(1)
+assertThat(parts[0]).hasSize(1) 
 assertThat(parts[2]).endsWith(".jpeg")
-```
-
-### String Assertions
-```kotlin
-// Checking string content
-assertThat("hello").isEqualTo("hello")
-assertThat("hello").contains("el")
-assertThat("hello").startsWith("he")
-assertThat("hello").endsWith("lo")
-assertThat("hello").hasSize(5)
-```
-
-### Collection Assertions
-```kotlin
-// For lists, sets, maps
-assertThat(list).hasSize(3)
-assertThat(list).contains("item")
-assertThat(list).containsExactly("a", "b", "c")
-assertThat(list).containsExactlyInAnyOrder("c", "a", "b")
-assertThat(list).doesNotContain("item")
-assertThat(map).containsKey("key")
-```
-
-### Numeric Assertions
-```kotlin
-// For integers, longs, doubles, etc.
-assertThat(42).isEqualTo(42)
-assertThat(42).isGreaterThan(41)
-assertThat(42).isLessThan(43)
-assertThat(42).isBetween(40, 45)
-```
-
-### Boolean Assertions
-```kotlin
-// For booleans
 assertThat(true).isTrue
-assertThat(false).isFalse
-```
+assertThat(list).contains("item")
+assertThat(42).isGreaterThan(41)
 
-### Exception Assertions
-```kotlin
-// For exceptions
+// Exception testing
 assertThatThrownBy { 
-    // code that should throw an exception
+    // code that throws
 }.isInstanceOf(IllegalArgumentException::class.java)
-  .hasMessageContaining("specific message")
 ```
 
 ## Minimal assertion logic
