@@ -1,9 +1,11 @@
-package com.wisecrowd.data_generator.data_generators.user_data_generator
+package com.wisecrowd.data_generator.data_generators
 
 import com.wisecrowd.data_generator.data_collections.activity_level.ActivityLevelCollection
 import com.wisecrowd.data_generator.data_collections.customer_country.CustomerCountriesCollection
 import com.wisecrowd.data_generator.data_collections.investor_profile.InvestorProfileCollection
 import com.wisecrowd.data_generator.data_generators.IDataGenerator
+import com.wisecrowd.data_generator.data_generators.user_data_generator.CustomerLifecycle
+import com.wisecrowd.data_generator.data_generators.user_data_generator.CustomerStatus
 import com.wisecrowd.data_generator.utils.WeightedItem
 import com.wisecrowd.data_generator.utils.WeightedRandomSelector
 import java.time.LocalDate

@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator.data_generators.user_data_generator
+package com.wisecrowd.data_generator.data_generators
 
 import com.wisecrowd.data_generator.data_collections.activity_level.ActivityLevel
 import com.wisecrowd.data_generator.data_collections.activity_level.ActivityLevelCollection
@@ -8,6 +8,7 @@ import com.wisecrowd.data_generator.data_collections.investor_profile.InvestorPr
 import com.wisecrowd.data_generator.data_collections.investor_profile.InvestorProfileCollection
 import com.wisecrowd.data_generator.data_generators.IDataGenerator
 import com.wisecrowd.data_generator.data_generators.IDataGeneratorContractTest
+import com.wisecrowd.data_generator.data_generators.user_data_generator.CustomerStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
