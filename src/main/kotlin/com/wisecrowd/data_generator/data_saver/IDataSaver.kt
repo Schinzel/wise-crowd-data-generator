@@ -4,7 +4,6 @@ package com.wisecrowd.data_generator.data_saver
  * Interface for saving generated data to various destinations
  */
 interface IDataSaver {
-
     /**
      * Prepare the destination for saving data with column names
      * This allows implementations to set up headers and structure for data storage

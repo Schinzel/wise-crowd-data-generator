@@ -4,7 +4,7 @@ import com.wisecrowd.data_generator.data_collections.asset_class.AssetClassColle
 import com.wisecrowd.data_generator.utils.AssetNamer
 import com.wisecrowd.data_generator.utils.WeightedItem
 import com.wisecrowd.data_generator.utils.WeightedRandomSelector
-import java.util.*
+import java.util.UUID
 
 /**
  * The purpose of this class is to generate realistic asset data distributed
@@ -19,9 +19,8 @@ import java.util.*
 class AssetDataGenerator(
     private val assetCount: Int,
     private val assetClassCollection: AssetClassCollection = AssetClassCollection.createDefaultCollection(),
-    private val assetNamer: AssetNamer = AssetNamer()
+    private val assetNamer: AssetNamer = AssetNamer(),
 ) : IDataGenerator {
-
     private var currentIndex = 0
     private val assetClassSelector: WeightedRandomSelector<Int>
 
@@ -30,20 +29,17 @@ class AssetDataGenerator(
         require(!assetClassCollection.isEmpty()) { "Asset class collection cannot be empty" }
 
         // Create weighted selector using asset class prevalence percentages
-        val weightedItems = assetClassCollection.getAll().map { assetClass ->
-            WeightedItem(assetClass.id, assetClass.prevalencePercentage.toDouble())
-        }
+        val weightedItems =
+            assetClassCollection.getAll().map { assetClass ->
+                WeightedItem(assetClass.id, assetClass.prevalencePercentage.toDouble())
+            }
 
         assetClassSelector = WeightedRandomSelector(weightedItems)
     }
 
-    override fun getColumnNames(): List<String> {
-        return listOf("asset_id", "asset_class_id", "name")
-    }
+    override fun getColumnNames(): List<String> = listOf("asset_id", "asset_class_id", "name")
 
-    override fun hasMoreRows(): Boolean {
-        return currentIndex < assetCount
-    }
+    override fun hasMoreRows(): Boolean = currentIndex < assetCount
 
     override fun getNextRow(): List<Any> {
         if (!hasMoreRows()) {
@@ -57,9 +53,9 @@ class AssetDataGenerator(
         val assetName = assetNamer.generateName(assetClass)
 
         return listOf(
-            UUID.randomUUID(),              // asset_id (UUID)
-            assetClassId,                   // asset_class_id (Int)
-            assetName                       // name (String)
+            UUID.randomUUID(), // asset_id (UUID)
+            assetClassId, // asset_class_id (Int)
+            assetName, // name (String)
         )
     }
 }

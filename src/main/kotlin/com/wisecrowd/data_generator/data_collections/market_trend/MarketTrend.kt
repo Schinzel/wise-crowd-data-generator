@@ -13,49 +13,48 @@ import java.time.format.DateTimeParseException
 data class MarketTrend(
     /** Start date of the trend period as string (format: YYYY-MM-DD) */
     val startDateString: String,
-    
     /** End date of the trend period as string (format: YYYY-MM-DD) */
     val endDateString: String,
-    
     /** Type of market trend (e.g., Bull, Bear, Recovery) */
     val trendType: String,
-    
     /** Strength factor of the trend (positive for bull, negative for bear) */
     val strength: Double,
-    
     /** Description of the market event or period */
-    val description: String
+    val description: String,
 ) {
     /** Start date of the trend period */
     val startDate: LocalDate = parseDate(startDateString, "start date")
-    
+
     /** End date of the trend period */
     val endDate: LocalDate = parseDate(endDateString, "end date")
-    
-    private fun parseDate(dateString: String, fieldName: String): LocalDate {
-        return try {
+
+    private fun parseDate(
+        dateString: String,
+        fieldName: String,
+    ): LocalDate =
+        try {
             LocalDate.parse(dateString, DateTimeFormatter.ISO_LOCAL_DATE)
         } catch (e: DateTimeParseException) {
             throw IllegalArgumentException(
-                "Invalid $fieldName format '$dateString'. Expected format: YYYY-MM-DD", e
+                "Invalid $fieldName format '$dateString'. Expected format: YYYY-MM-DD",
+                e,
             )
         }
-    }
-    
+
     init {
         // Validate that end date is not before start date
-        require(endDate >= startDate) { 
-            "End date ($endDate) cannot be before start date ($startDate)" 
+        require(endDate >= startDate) {
+            "End date ($endDate) cannot be before start date ($startDate)"
         }
-        
+
         // Validate strength is within reasonable range (-5.0 to 5.0)
-        require(strength in -5.0..5.0) { 
-            "Strength ($strength) must be between -5.0 and 5.0" 
+        require(strength in -5.0..5.0) {
+            "Strength ($strength) must be between -5.0 and 5.0"
         }
-        
+
         // Validate that trend type is not empty
-        require(trendType.isNotBlank()) { 
-            "Trend type cannot be empty" 
+        require(trendType.isNotBlank()) {
+            "Trend type cannot be empty"
         }
     }
 }

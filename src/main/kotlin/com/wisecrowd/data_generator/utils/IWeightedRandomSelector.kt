@@ -10,7 +10,6 @@ package com.wisecrowd.data_generator.utils
  * Written by Claude Sonnet 4
  */
 interface IWeightedRandomSelector<T> {
-    
     /**
      * Returns a randomly selected item based on weighted distribution.
      *

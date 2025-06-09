@@ -7,5 +7,5 @@ data class SaveError(
     val message: String,
     val identifier: String = "",
     val rowData: List<Any>? = null,
-    val exception: Exception? = null
+    val exception: Exception? = null,
 )

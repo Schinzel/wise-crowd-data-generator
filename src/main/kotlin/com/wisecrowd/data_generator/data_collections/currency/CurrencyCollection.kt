@@ -17,28 +17,30 @@ class CurrencyCollection {
 
     fun getAllCurrencies(): List<Currency> = currencies.toList()
 
-    fun getById(id: Int): Currency {
-        return currencies.find { it.id == id }
+    fun getById(id: Int): Currency =
+        currencies.find { it.id == id }
             ?: throw IllegalArgumentException("Currency with ID $id not found")
-    }
 
-    fun getByCode(code: String): Currency {
-        return currencies.find { it.code.equals(code, ignoreCase = true) }
+    fun getByCode(code: String): Currency =
+        currencies.find { it.code.equals(code, ignoreCase = true) }
             ?: throw IllegalArgumentException("Currency with code '$code' not found")
-    }
 
-    fun getByDistributionRange(minPercentage: Double, maxPercentage: Double): List<Currency> {
-        return DistributionUtils.filterByDistribution(
-            currencies, minPercentage, maxPercentage
+    fun getByDistributionRange(
+        minPercentage: Double,
+        maxPercentage: Double,
+    ): List<Currency> =
+        DistributionUtils.filterByDistribution(
+            currencies,
+            minPercentage,
+            maxPercentage,
         ) { it.distributionPercentage }
-    }
 
     fun size(): Int = currencies.size
 
     companion object {
         fun createDefaultCollection(): CurrencyCollection {
             val collection = CurrencyCollection()
-            
+
             collection.addCurrency(Currency(1, "SEK", "Swedish Krona", 60.0, 1.0))
             collection.addCurrency(Currency(2, "EUR", "Euro", 20.0, 11.96))
             collection.addCurrency(Currency(3, "USD", "US Dollar", 10.0, 10.32))
@@ -47,7 +49,7 @@ class CurrencyCollection {
             collection.addCurrency(Currency(6, "GBP", "British Pound", 3.0, 13.88))
             collection.addCurrency(Currency(7, "JPY", "Japanese Yen", 0.5, 0.070))
             collection.addCurrency(Currency(8, "CHF", "Swiss Franc", 0.5, 12.08))
-            
+
             return collection
         }
     }

@@ -9,15 +9,12 @@ package com.wisecrowd.data_generator.data_collections.investor_profile
 data class InvestorProfile(
     /** Unique identifier for the investor profile */
     val id: Int,
-    
     /** Name of the investor profile */
     val name: String,
-    
     /** Description of the investment strategy */
     val description: String,
-    
     /** Distribution percentage in the market (0-100) */
-    val distributionPercentage: Double
+    val distributionPercentage: Double,
 ) {
     init {
         require(id > 0) { "Investor profile ID must be positive, but was: $id" }

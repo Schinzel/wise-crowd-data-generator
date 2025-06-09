@@ -34,16 +34,15 @@ class PriceSeriesDataGenerator(
     private val assetClassCollection: AssetClassCollection = AssetClassCollection.createDefaultCollection(),
     private val marketTrendCollection: MarketTrendCollection = MarketTrendCollection.createDefaultCollection(),
     private val initialPrice: Double = 100.0,
-    private val random: Random = Random.Default
+    private val random: Random = Random.Default,
 ) : IDataGenerator {
-
     // Current position in the iteration: date first, then asset within that date
     private var currentDate = startDate
     private var currentAssetIndex = 0
-    
+
     // Track current price for each asset to ensure continuity
     private val assetPrices = mutableMapOf<UUID, Double>()
-    
+
     // Total number of rows to generate (dates × assets)
     private val totalRows: Int
 
@@ -67,17 +66,13 @@ class PriceSeriesDataGenerator(
      * Returns the column structure for price series data
      * Matches the design specification for price_series.txt output
      */
-    override fun getColumnNames(): List<String> {
-        return listOf("asset_id", "date", "price")
-    }
+    override fun getColumnNames(): List<String> = listOf("asset_id", "date", "price")
 
     /**
      * Checks if more price data rows are available for generation
      * Continues until all dates have prices for all assets
      */
-    override fun hasMoreRows(): Boolean {
-        return currentDate <= endDate
-    }
+    override fun hasMoreRows(): Boolean = currentDate <= endDate
 
     /**
      * Generates the next price data row using market trends and volatility
@@ -92,23 +87,24 @@ class PriceSeriesDataGenerator(
         // Get current asset and generate its price for the current date
         val assetId = assetIds[currentAssetIndex]
         val currentPrice = generateNextPrice(assetId, currentDate)
-        
+
         // Store the new price for price continuity
         assetPrices[assetId] = currentPrice
 
         // Create the row data matching column structure
-        val result = listOf(
-            // asset_id (UUID)
-            assetId,
-            // date (LocalDate)
-            currentDate,
-            // price (Double)
-            currentPrice
-        )
+        val result =
+            listOf(
+                // asset_id (UUID)
+                assetId,
+                // date (LocalDate)
+                currentDate,
+                // price (Double)
+                currentPrice,
+            )
 
         // Move to next asset for this date
         currentAssetIndex++
-        
+
         // If we've completed all assets for this date, move to next date
         if (currentAssetIndex >= assetIds.size) {
             currentAssetIndex = 0
@@ -122,33 +118,37 @@ class PriceSeriesDataGenerator(
      * Generates the next price for an asset using geometric Brownian motion
      * Incorporates market trend strength and asset-specific volatility
      */
-    private fun generateNextPrice(assetId: UUID, date: LocalDate): Double {
+    private fun generateNextPrice(
+        assetId: UUID,
+        date: LocalDate,
+    ): Double {
         // Get the current price for this asset (or initial price if first day)
         val currentPrice = assetPrices[assetId] ?: initialPrice
-        
+
         // Determine asset class to get volatility characteristics
         val assetClass = getAssetClassForAsset(assetId)
-        
+
         // Find active market trend for this date to influence price direction
         val marketTrend = marketTrendCollection.getTrendsOnDate(date).firstOrNull()
 
         // Convert asset class volatility to daily volatility for modeling
         val baseVolatility = getVolatilityForAssetClass(assetClass.volatilityLevel)
-        
+
         // Convert market trend strength to daily drift component
         // Market trend strength affects the expected return direction
-        val trendDrift = marketTrend?.let { 
-            // Convert to daily drift (252 trading days/year)
-            (it.strength / 100.0) / 252.0
-        } ?: 0.0
+        val trendDrift =
+            marketTrend?.let {
+                // Convert to daily drift (252 trading days/year)
+                (it.strength / 100.0) / 252.0
+            } ?: 0.0
 
         // Generate random shock using normal distribution for price randomness
         // Daily time step
         val randomShock = random.nextGaussian() * sqrt(1.0 / 252.0)
-        
+
         // Calculate log return using drift + volatility * random shock
         val logReturn = trendDrift + baseVolatility * randomShock
-        
+
         // Apply geometric Brownian motion: S(t+1) = S(t) * exp(logReturn)
         return currentPrice * exp(logReturn)
     }
@@ -161,10 +161,10 @@ class PriceSeriesDataGenerator(
         // Since we don't have direct asset->assetClass mapping, distribute evenly
         val assetIndex = assetIds.indexOf(assetId)
         val assetClassCount = assetClassCollection.size()
-        
+
         // Cycle through asset classes based on asset position
         val assetClassIndex = (assetIndex % assetClassCount) + 1
-        
+
         return assetClassCollection.getById(assetClassIndex)
     }
 
@@ -172,8 +172,8 @@ class PriceSeriesDataGenerator(
      * Converts volatility level enum to annual volatility percentage
      * Based on typical financial market volatility ranges
      */
-    private fun getVolatilityForAssetClass(volatilityLevel: VolatilityLevelEnum): Double {
-        return when (volatilityLevel) {
+    private fun getVolatilityForAssetClass(volatilityLevel: VolatilityLevelEnum): Double =
+        when (volatilityLevel) {
             // 10% annual volatility (bonds)
             VolatilityLevelEnum.LOW -> 0.10
             // 20% annual volatility (balanced funds)
@@ -183,7 +183,6 @@ class PriceSeriesDataGenerator(
             // 50% annual volatility (crypto, gold)
             VolatilityLevelEnum.VERY_HIGH -> 0.50
         }
-    }
 
     /**
      * Generates normally distributed random numbers using Box-Muller transformation
@@ -193,13 +192,13 @@ class PriceSeriesDataGenerator(
         // Box-Muller transformation to convert uniform to normal distribution
         var u1: Double
         var u2: Double
-        
+
         // Ensure u1 is not zero to avoid log(0)
         do {
             u1 = nextDouble()
             u2 = nextDouble()
         } while (u1 <= Double.MIN_VALUE)
-        
+
         // Apply Box-Muller formula for normal distribution
         return sqrt(-2.0 * ln(u1)) * kotlin.math.cos(2.0 * kotlin.math.PI * u2)
     }

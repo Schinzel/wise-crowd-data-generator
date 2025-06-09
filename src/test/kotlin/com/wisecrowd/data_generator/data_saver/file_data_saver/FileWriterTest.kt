@@ -12,7 +12,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 class FileWriterTest {
-
     @TempDir
     lateinit var tempDir: Path
     private lateinit var testFilePath: String
@@ -33,7 +32,6 @@ class FileWriterTest {
 
     @Nested
     inner class DirectoryCreation {
-
         @Test
         fun `parent directories don't exist _ creates directories`() {
             // Arrange
@@ -58,7 +56,6 @@ class FileWriterTest {
 
     @Nested
     inner class FileOperations {
-
         @Test
         fun `file not opened _ isOpen returns false`() {
             // Assert
@@ -121,7 +118,6 @@ class FileWriterTest {
 
     @Nested
     inner class ErrorConditions {
-
         @Test
         fun `invalid file path _ throws exception on open`() {
             // Arrange

@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test
  * Written by Claude Sonnet 4
  */
 class WeightedItemTest {
-
     @Test
     fun `constructor _ positive percent _ creates valid WeightedItem`() {
         val item = "test"
@@ -36,8 +35,7 @@ class WeightedItemTest {
     fun `constructor _ negative percent _ throws IllegalArgumentException`() {
         assertThatThrownBy {
             WeightedItem("test", -1.0)
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
+        }.isInstanceOf(IllegalArgumentException::class.java)
             .hasMessageContaining("Percent must be non-negative, but was: -1.0")
     }
 
@@ -45,8 +43,7 @@ class WeightedItemTest {
     fun `constructor _ infinite percent _ throws IllegalArgumentException`() {
         assertThatThrownBy {
             WeightedItem("test", Double.POSITIVE_INFINITY)
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
+        }.isInstanceOf(IllegalArgumentException::class.java)
             .hasMessageContaining("Percent must be a finite number, but was: Infinity")
     }
 
@@ -54,8 +51,7 @@ class WeightedItemTest {
     fun `constructor _ NaN percent _ throws IllegalArgumentException`() {
         assertThatThrownBy {
             WeightedItem("test", Double.NaN)
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
+        }.isInstanceOf(IllegalArgumentException::class.java)
             .hasMessageContaining("Percent must be a finite number, but was: NaN")
     }
 
@@ -63,8 +59,7 @@ class WeightedItemTest {
     fun `constructor _ percent over 100 _ throws IllegalArgumentException`() {
         assertThatThrownBy {
             WeightedItem("test", 101.0)
-        }
-            .isInstanceOf(IllegalArgumentException::class.java)
+        }.isInstanceOf(IllegalArgumentException::class.java)
             .hasMessageContaining("Percent must be at most 100.0, but was: 101.0")
     }
 

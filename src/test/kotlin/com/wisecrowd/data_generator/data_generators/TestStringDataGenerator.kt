@@ -11,29 +11,24 @@ package com.wisecrowd.data_generator.data_generators
  * Written by Claude Sonnet 4
  */
 class TestStringDataGenerator(
-    private val rowCount: Int
+    private val rowCount: Int,
 ) : IDataGenerator {
-    
     private var currentIndex = 0
-    
-    override fun getColumnNames(): List<String> {
-        return listOf("item_name", "item_index", "item_value")
-    }
-    
-    override fun hasMoreRows(): Boolean {
-        return currentIndex < rowCount
-    }
-    
+
+    override fun getColumnNames(): List<String> = listOf("item_name", "item_index", "item_value")
+
+    override fun hasMoreRows(): Boolean = currentIndex < rowCount
+
     override fun getNextRow(): List<Any> {
         if (!hasMoreRows()) {
             throw NoSuchElementException("No more rows available in generator")
         }
-        
+
         val index = currentIndex++
         return listOf(
-            "item_$index",      // String
-            index,              // Int  
-            index * 1.5         // Double
+            "item_$index", // String
+            index, // Int
+            index * 1.5, // Double
         )
     }
 }

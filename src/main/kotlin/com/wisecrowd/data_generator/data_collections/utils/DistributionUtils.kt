@@ -7,7 +7,6 @@ package com.wisecrowd.data_generator.data_collections.utils
  * Written by Claude
  */
 object DistributionUtils {
-    
     /**
      * Filters a collection of items based on their distribution percentage within a specified range.
      *
@@ -22,12 +21,12 @@ object DistributionUtils {
         items: Collection<T>,
         minPercentage: Double,
         maxPercentage: Double,
-        distributionSelector: (T) -> Double
+        distributionSelector: (T) -> Double,
     ): List<T> {
         validatePercentageRange(minPercentage, maxPercentage)
         return items.filter { distributionSelector(it) in minPercentage..maxPercentage }
     }
-    
+
     /**
      * Validates that percentage parameters are within valid ranges and properly ordered.
      *
@@ -35,7 +34,10 @@ object DistributionUtils {
      * @param maxPercentage The maximum percentage to validate
      * @throws IllegalArgumentException if parameters are invalid
      */
-    private fun validatePercentageRange(minPercentage: Double, maxPercentage: Double) {
+    private fun validatePercentageRange(
+        minPercentage: Double,
+        maxPercentage: Double,
+    ) {
         require(minPercentage >= 0.0 && minPercentage <= 100.0) {
             "Min percentage must be between 0 and 100, but was: $minPercentage"
         }

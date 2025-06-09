@@ -17,59 +17,71 @@ class ActivityLevelCollection {
 
     fun getAllActivityLevels(): List<ActivityLevel> = activityLevels.toList()
 
-    fun getById(id: Int): ActivityLevel {
-        return activityLevels.find { it.id == id }
+    fun getById(id: Int): ActivityLevel =
+        activityLevels.find { it.id == id }
             ?: throw IllegalArgumentException("Activity level with ID $id not found")
-    }
 
-    fun getByName(name: String): ActivityLevel {
-        return activityLevels.find { it.name.equals(name, ignoreCase = true) }
+    fun getByName(name: String): ActivityLevel =
+        activityLevels.find { it.name.equals(name, ignoreCase = true) }
             ?: throw IllegalArgumentException("Activity level with name '$name' not found")
-    }
 
-    fun getByDistributionRange(minPercentage: Double, maxPercentage: Double): List<ActivityLevel> {
-        return DistributionUtils.filterByDistribution(
-            activityLevels, minPercentage, maxPercentage
+    fun getByDistributionRange(
+        minPercentage: Double,
+        maxPercentage: Double,
+    ): List<ActivityLevel> =
+        DistributionUtils.filterByDistribution(
+            activityLevels,
+            minPercentage,
+            maxPercentage,
         ) { it.distributionPercentage }
-    }
 
     fun size(): Int = activityLevels.size
 
     companion object {
         fun createDefaultCollection(): ActivityLevelCollection {
             val collection = ActivityLevelCollection()
-            
-            collection.addActivityLevel(ActivityLevel(
-                id = 1, 
-                name = "Inactive", 
-                description = "Trades 0-1 times per year", 
-                distributionPercentage = 22.0
-            ))
-            collection.addActivityLevel(ActivityLevel(
-                id = 2, 
-                name = "Low", 
-                description = "Trades 2-4 times per year", 
-                distributionPercentage = 39.0
-            ))
-            collection.addActivityLevel(ActivityLevel(
-                id = 3, 
-                name = "Moderate", 
-                description = "Trades 5-12 times per year", 
-                distributionPercentage = 28.0
-            ))
-            collection.addActivityLevel(ActivityLevel(
-                id = 4, 
-                name = "Active", 
-                description = "Trades 13-52 times per year", 
-                distributionPercentage = 9.0
-            ))
-            collection.addActivityLevel(ActivityLevel(
-                id = 5, 
-                name = "Hyperactive", 
-                description = "Trades 53+ times per year", 
-                distributionPercentage = 2.0
-            ))
-            
+
+            collection.addActivityLevel(
+                ActivityLevel(
+                    id = 1,
+                    name = "Inactive",
+                    description = "Trades 0-1 times per year",
+                    distributionPercentage = 22.0,
+                ),
+            )
+            collection.addActivityLevel(
+                ActivityLevel(
+                    id = 2,
+                    name = "Low",
+                    description = "Trades 2-4 times per year",
+                    distributionPercentage = 39.0,
+                ),
+            )
+            collection.addActivityLevel(
+                ActivityLevel(
+                    id = 3,
+                    name = "Moderate",
+                    description = "Trades 5-12 times per year",
+                    distributionPercentage = 28.0,
+                ),
+            )
+            collection.addActivityLevel(
+                ActivityLevel(
+                    id = 4,
+                    name = "Active",
+                    description = "Trades 13-52 times per year",
+                    distributionPercentage = 9.0,
+                ),
+            )
+            collection.addActivityLevel(
+                ActivityLevel(
+                    id = 5,
+                    name = "Hyperactive",
+                    description = "Trades 53+ times per year",
+                    distributionPercentage = 2.0,
+                ),
+            )
+
             return collection
         }
     }

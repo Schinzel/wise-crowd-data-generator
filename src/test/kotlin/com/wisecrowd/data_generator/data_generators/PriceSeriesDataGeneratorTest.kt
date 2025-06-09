@@ -7,31 +7,31 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 import kotlin.random.Random
 
 class PriceSeriesDataGeneratorTest {
-
-    private val testAssetIds = listOf(
-        UUID.fromString("00000000-0000-0000-0000-000000000001"),
-        UUID.fromString("00000000-0000-0000-0000-000000000002"),
-        UUID.fromString("00000000-0000-0000-0000-000000000003")
-    )
+    private val testAssetIds =
+        listOf(
+            UUID.fromString("00000000-0000-0000-0000-000000000001"),
+            UUID.fromString("00000000-0000-0000-0000-000000000002"),
+            UUID.fromString("00000000-0000-0000-0000-000000000003"),
+        )
     private val testStartDate = LocalDate.of(2023, 1, 1)
     private val testEndDate = LocalDate.of(2023, 1, 3)
     private val fixedRandom = Random(42)
 
     @Nested
     inner class Constructor {
-
         @Test
         fun `valid parameters _ creates generator successfully`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             assertThat(generator).isInstanceOf(IDataGenerator::class.java)
         }
@@ -42,7 +42,7 @@ class PriceSeriesDataGeneratorTest {
                 PriceSeriesDataGenerator(
                     assetIds = emptyList(),
                     startDate = testStartDate,
-                    endDate = testEndDate
+                    endDate = testEndDate,
                 )
             }.isInstanceOf(IllegalArgumentException::class.java)
         }
@@ -53,7 +53,7 @@ class PriceSeriesDataGeneratorTest {
                 PriceSeriesDataGenerator(
                     assetIds = testAssetIds,
                     startDate = testEndDate,
-                    endDate = testStartDate
+                    endDate = testStartDate,
                 )
             }.isInstanceOf(IllegalArgumentException::class.java)
         }
@@ -65,7 +65,7 @@ class PriceSeriesDataGeneratorTest {
                     assetIds = testAssetIds,
                     startDate = testStartDate,
                     endDate = testEndDate,
-                    initialPrice = 0.0
+                    initialPrice = 0.0,
                 )
             }.isInstanceOf(IllegalArgumentException::class.java)
         }
@@ -77,7 +77,7 @@ class PriceSeriesDataGeneratorTest {
                     assetIds = testAssetIds,
                     startDate = testStartDate,
                     endDate = testEndDate,
-                    initialPrice = -10.0
+                    initialPrice = -10.0,
                 )
             }.isInstanceOf(IllegalArgumentException::class.java)
         }
@@ -85,15 +85,15 @@ class PriceSeriesDataGeneratorTest {
 
     @Nested
     inner class GetColumnNames {
-
         @Test
         fun `default state _ returns correct column names`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             val columnNames = generator.getColumnNames()
 
@@ -103,15 +103,15 @@ class PriceSeriesDataGeneratorTest {
 
     @Nested
     inner class HasMoreRows {
-
         @Test
         fun `initial state _ returns true`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             val hasMoreRows = generator.hasMoreRows()
 
@@ -121,12 +121,13 @@ class PriceSeriesDataGeneratorTest {
         @Test
         fun `after generating all rows _ returns false`() {
             val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
-            val generator = PriceSeriesDataGenerator(
-                assetIds = listOf(singleAssetId),
-                startDate = testStartDate,
-                endDate = testStartDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = listOf(singleAssetId),
+                    startDate = testStartDate,
+                    endDate = testStartDate,
+                    random = fixedRandom,
+                )
 
             generator.getNextRow()
             val hasMoreRows = generator.hasMoreRows()
@@ -137,15 +138,15 @@ class PriceSeriesDataGeneratorTest {
 
     @Nested
     inner class GetNextRow {
-
         @Test
         fun `valid state _ returns row with correct structure`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             val row = generator.getNextRow()
 
@@ -154,12 +155,13 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `valid state _ returns asset id as uuid`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             val row = generator.getNextRow()
             val assetId = row[0]
@@ -169,12 +171,13 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `valid state _ returns date as local date`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             val row = generator.getNextRow()
             val date = row[1]
@@ -184,12 +187,13 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `valid state _ returns price as double`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             val row = generator.getNextRow()
             val price = row[2]
@@ -199,12 +203,13 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `valid state _ returns positive price`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             val row = generator.getNextRow()
             val price = row[2] as Double
@@ -214,12 +219,13 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `first row _ returns first asset for start date`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             val row = generator.getNextRow()
             val assetId = row[0]
@@ -231,12 +237,13 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `three asset ids with three dates _ generates nine rows total`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
             var rowCount = 0
             while (generator.hasMoreRows()) {
@@ -249,18 +256,20 @@ class PriceSeriesDataGeneratorTest {
 
         @Test
         fun `multiple calls _ generates all assets for each date in sequence`() {
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    random = fixedRandom,
+                )
 
-            val firstThreeRows = listOf(
-                generator.getNextRow(),
-                generator.getNextRow(),
-                generator.getNextRow()
-            )
+            val firstThreeRows =
+                listOf(
+                    generator.getNextRow(),
+                    generator.getNextRow(),
+                    generator.getNextRow(),
+                )
 
             val firstRowAssetId = firstThreeRows[0][0]
             val firstRowDate = firstThreeRows[0][1]
@@ -280,12 +289,13 @@ class PriceSeriesDataGeneratorTest {
         @Test
         fun `no more rows available _ throws no such element exception`() {
             val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
-            val generator = PriceSeriesDataGenerator(
-                assetIds = listOf(singleAssetId),
-                startDate = testStartDate,
-                endDate = testStartDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = listOf(singleAssetId),
+                    startDate = testStartDate,
+                    endDate = testStartDate,
+                    random = fixedRandom,
+                )
 
             generator.getNextRow()
 
@@ -296,12 +306,13 @@ class PriceSeriesDataGeneratorTest {
         @Test
         fun `single asset single date _ generates one row`() {
             val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
-            val generator = PriceSeriesDataGenerator(
-                assetIds = listOf(singleAssetId),
-                startDate = testStartDate,
-                endDate = testStartDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = listOf(singleAssetId),
+                    startDate = testStartDate,
+                    endDate = testStartDate,
+                    random = fixedRandom,
+                )
 
             val row = generator.getNextRow()
             val assetId = row[0]
@@ -315,12 +326,13 @@ class PriceSeriesDataGeneratorTest {
         fun `long date range _ generates correct number of rows`() {
             val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
             val longEndDate = testStartDate.plusDays(30)
-            val generator = PriceSeriesDataGenerator(
-                assetIds = listOf(singleAssetId),
-                startDate = testStartDate,
-                endDate = longEndDate,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = listOf(singleAssetId),
+                    startDate = testStartDate,
+                    endDate = longEndDate,
+                    random = fixedRandom,
+                )
 
             var rowCount = 0
             while (generator.hasMoreRows()) {
@@ -335,14 +347,15 @@ class PriceSeriesDataGeneratorTest {
         fun `custom collections provided _ generates data without errors`() {
             val assetClassCollection = AssetClassCollection.createDefaultCollection()
             val marketTrendCollection = MarketTrendCollection.createDefaultCollection()
-            val generator = PriceSeriesDataGenerator(
-                assetIds = testAssetIds,
-                startDate = testStartDate,
-                endDate = testEndDate,
-                assetClassCollection = assetClassCollection,
-                marketTrendCollection = marketTrendCollection,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = testAssetIds,
+                    startDate = testStartDate,
+                    endDate = testEndDate,
+                    assetClassCollection = assetClassCollection,
+                    marketTrendCollection = marketTrendCollection,
+                    random = fixedRandom,
+                )
 
             val row = generator.getNextRow()
 
@@ -353,13 +366,14 @@ class PriceSeriesDataGeneratorTest {
         fun `custom initial price _ influences generated price range`() {
             val singleAssetId = UUID.fromString("00000000-0000-0000-0000-000000000001")
             val initialPrice = 150.0
-            val generator = PriceSeriesDataGenerator(
-                assetIds = listOf(singleAssetId),
-                startDate = testStartDate,
-                endDate = testStartDate,
-                initialPrice = initialPrice,
-                random = fixedRandom
-            )
+            val generator =
+                PriceSeriesDataGenerator(
+                    assetIds = listOf(singleAssetId),
+                    startDate = testStartDate,
+                    endDate = testStartDate,
+                    initialPrice = initialPrice,
+                    random = fixedRandom,
+                )
 
             val row = generator.getNextRow()
             val generatedPrice = row[2] as Double

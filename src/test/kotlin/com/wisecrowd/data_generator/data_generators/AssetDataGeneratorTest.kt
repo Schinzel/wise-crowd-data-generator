@@ -11,13 +11,12 @@ import java.util.UUID
 import kotlin.random.Random
 
 class AssetDataGeneratorTest {
-
     @Test
     fun getColumnNames_defaultConfiguration_returnsCorrectColumnNames() {
         val generator = AssetDataGenerator(assetCount = 5)
-        
+
         val columnNames = generator.getColumnNames()
-        
+
         val expectedColumns = listOf("asset_id", "asset_class_id", "name")
         assertThat(columnNames).isEqualTo(expectedColumns)
     }
@@ -25,19 +24,19 @@ class AssetDataGeneratorTest {
     @Test
     fun hasMoreRows_newGenerator_returnsTrue() {
         val generator = AssetDataGenerator(assetCount = 2)
-        
+
         val hasMore = generator.hasMoreRows()
-        
+
         assertThat(hasMore).isTrue()
     }
 
     @Test
     fun hasMoreRows_allAssetsGenerated_returnsFalse() {
         val generator = AssetDataGenerator(assetCount = 1)
-        
+
         generator.getNextRow()
         val hasMore = generator.hasMoreRows()
-        
+
         assertThat(hasMore).isFalse()
     }
 
@@ -45,7 +44,7 @@ class AssetDataGeneratorTest {
     fun getNextRow_allAssetsGenerated_throwsNoSuchElementException() {
         val generator = AssetDataGenerator(assetCount = 1)
         generator.getNextRow()
-        
+
         assertThatThrownBy { generator.getNextRow() }
             .isInstanceOf(NoSuchElementException::class.java)
             .hasMessageContaining("No more rows available in generator")
@@ -54,9 +53,9 @@ class AssetDataGeneratorTest {
     @Test
     fun getNextRow_validGenerator_returnsCorrectDataTypes() {
         val generator = AssetDataGenerator(assetCount = 1)
-        
+
         val row = generator.getNextRow()
-        
+
         assertThat(row).hasSize(3)
         assertThat(row[0]).isInstanceOf(UUID::class.java)
         assertThat(row[1]).isInstanceOf(Integer::class.java)
@@ -70,14 +69,14 @@ class AssetDataGeneratorTest {
         val expectedAssetClass2 = AssetClass(2, "Another Asset", "Description", VolatilityLevelEnum.HIGH, 40)
         customCollection.addAll(listOf(expectedAssetClass1, expectedAssetClass2))
         val generator = AssetDataGenerator(assetCount = 10, assetClassCollection = customCollection)
-        
+
         val assetClassIds = mutableSetOf<Int>()
         repeat(10) {
             val row = generator.getNextRow()
             val assetClassId = row[1] as Int
             assetClassIds.add(assetClassId)
         }
-        
+
         val validIds = setOf(1, 2)
         assertThat(assetClassIds).allMatch { it in validIds }
     }
@@ -89,14 +88,14 @@ class AssetDataGeneratorTest {
         val lowPrevalence = AssetClass(2, "Low Prevalence", "Description", VolatilityLevelEnum.HIGH, 20)
         customCollection.addAll(listOf(highPrevalence, lowPrevalence))
         val generator = AssetDataGenerator(assetCount = 1000, assetClassCollection = customCollection)
-        
+
         val assetClassCounts = mutableMapOf<Int, Int>()
         repeat(1000) {
             val row = generator.getNextRow()
             val assetClassId = row[1] as Int
             assetClassCounts[assetClassId] = assetClassCounts.getOrDefault(assetClassId, 0) + 1
         }
-        
+
         val highPrevalenceCount = assetClassCounts[1] ?: 0
         val highPrevalenceRatio = highPrevalenceCount.toDouble() / 1000
         assertThat(highPrevalenceRatio).isBetween(0.7, 0.9)
@@ -106,10 +105,10 @@ class AssetDataGeneratorTest {
     fun getNextRow_customAssetNamer_generatesRealisticNames() {
         val fixedSeedNamer = AssetNamer(Random(42))
         val generator = AssetDataGenerator(assetCount = 1, assetNamer = fixedSeedNamer)
-        
+
         val row = generator.getNextRow()
         val assetName = row[2] as String
-        
+
         assertThat(assetName).isNotBlank()
         assertThat(assetName).hasSizeGreaterThan(5)
     }
@@ -131,7 +130,7 @@ class AssetDataGeneratorTest {
     @Test
     fun constructor_emptyAssetClassCollection_throwsIllegalArgumentException() {
         val emptyCollection = AssetClassCollection()
-        
+
         assertThatThrownBy { AssetDataGenerator(assetCount = 10, assetClassCollection = emptyCollection) }
             .isInstanceOf(IllegalArgumentException::class.java)
             .hasMessageContaining("Asset class collection cannot be empty")
@@ -140,28 +139,28 @@ class AssetDataGeneratorTest {
     @Test
     fun getNextRow_multipleGenerations_generatesUniqueAssetIds() {
         val generator = AssetDataGenerator(assetCount = 20)
-        
+
         val assetIds = mutableSetOf<UUID>()
         repeat(20) {
             val row = generator.getNextRow()
             val assetId = row[0] as UUID
             assetIds.add(assetId)
         }
-        
+
         assertThat(assetIds).hasSize(20)
     }
 
     @Test
     fun getNextRow_defaultAssetClassCollection_returnsValidAssetClassIds() {
         val generator = AssetDataGenerator(assetCount = 50)
-        
+
         val assetClassIds = mutableSetOf<Int>()
         repeat(50) {
             val row = generator.getNextRow()
             val assetClassId = row[1] as Int
             assetClassIds.add(assetClassId)
         }
-        
+
         assertThat(assetClassIds).allMatch { it in 1..8 }
         assertThat(assetClassIds).hasSizeGreaterThan(1)
     }
@@ -170,13 +169,13 @@ class AssetDataGeneratorTest {
     fun getNextRow_specifiedAssetCount_generatesExactCount() {
         val assetCount = 15
         val generator = AssetDataGenerator(assetCount = assetCount)
-        
+
         var generatedCount = 0
         while (generator.hasMoreRows()) {
             generator.getNextRow()
             generatedCount++
         }
-        
+
         assertThat(generatedCount).isEqualTo(assetCount)
     }
 }

@@ -9,18 +9,14 @@ package com.wisecrowd.data_generator.data_collections.asset_class
 data class AssetClass(
     /** Unique identifier for the asset class */
     val id: Int,
-    
     /** Name of the asset class */
     val name: String,
-    
     /** Description of the asset class */
     val description: String,
-    
     /** Volatility level (Low, Medium, High, Very High) */
     val volatilityLevel: VolatilityLevelEnum,
-    
     /** Prevalence percentage in the market (0-100) */
-    val prevalencePercentage: Int
+    val prevalencePercentage: Int,
 ) {
     init {
         require(id > 0) { "Asset class ID must be positive, but was: $id" }

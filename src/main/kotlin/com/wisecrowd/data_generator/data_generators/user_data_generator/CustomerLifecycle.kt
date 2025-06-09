@@ -11,5 +11,5 @@ import java.time.LocalDate
 data class CustomerLifecycle(
     val joinDate: LocalDate,
     val departureDate: LocalDate,
-    val status: CustomerStatus
+    val status: CustomerStatus,
 )

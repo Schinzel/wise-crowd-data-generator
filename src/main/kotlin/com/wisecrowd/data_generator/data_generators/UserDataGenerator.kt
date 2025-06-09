@@ -8,7 +8,7 @@ import com.wisecrowd.data_generator.data_generators.user_data_generator.Customer
 import com.wisecrowd.data_generator.utils.WeightedItem
 import com.wisecrowd.data_generator.utils.WeightedRandomSelector
 import java.time.LocalDate
-import java.util.*
+import java.util.UUID
 import kotlin.random.Random
 
 /**
@@ -34,17 +34,16 @@ class UserDataGenerator(
     private val simulationEndDate: LocalDate,
     private val customerJoinDistribution: Double = 30.0,
     private val customerDepartureRate: Double = 20.0,
-    investorProfileCollection: InvestorProfileCollection = 
+    investorProfileCollection: InvestorProfileCollection =
         InvestorProfileCollection.createDefaultCollection(),
-    activityLevelCollection: ActivityLevelCollection = 
+    activityLevelCollection: ActivityLevelCollection =
         ActivityLevelCollection.createDefaultCollection(),
-    customerCountriesCollection: CustomerCountriesCollection = 
+    customerCountriesCollection: CustomerCountriesCollection =
         CustomerCountriesCollection.createDefaultCollection(),
-    private val random: Random = Random.Default
+    private val random: Random = Random.Default,
 ) : IDataGenerator {
-
     companion object {
-        // Sentinel date representing "never departed" 
+        // Sentinel date representing "never departed"
         val SENTINEL_DATE: LocalDate = LocalDate.of(9999, 12, 31)
     }
 
@@ -55,8 +54,8 @@ class UserDataGenerator(
 
     init {
         require(userCount >= 0) { "User count must be non-negative, but was: $userCount" }
-        require(simulationEndDate >= simulationStartDate) { 
-            "End date ($simulationEndDate) cannot be before start date ($simulationStartDate)" 
+        require(simulationEndDate >= simulationStartDate) {
+            "End date ($simulationEndDate) cannot be before start date ($simulationStartDate)"
         }
         require(customerJoinDistribution >= 0.0 && customerJoinDistribution <= 100.0) {
             "Customer join distribution must be between 0 and 100, but was: $customerJoinDistribution"
@@ -67,30 +66,33 @@ class UserDataGenerator(
 
         // Only initialize selectors if we have users to generate
         if (userCount > 0) {
-            require(!investorProfileCollection.getAllInvestorProfiles().isEmpty()) { 
-                "Investor profile collection cannot be empty" 
+            require(!investorProfileCollection.getAllInvestorProfiles().isEmpty()) {
+                "Investor profile collection cannot be empty"
             }
-            require(!activityLevelCollection.getAllActivityLevels().isEmpty()) { 
-                "Activity level collection cannot be empty" 
+            require(!activityLevelCollection.getAllActivityLevels().isEmpty()) {
+                "Activity level collection cannot be empty"
             }
-            require(!customerCountriesCollection.getAll().isEmpty()) { 
-                "Customer countries collection cannot be empty" 
+            require(!customerCountriesCollection.getAll().isEmpty()) {
+                "Customer countries collection cannot be empty"
             }
 
             // Create weighted selectors using distribution percentages
-            val investorProfileItems = investorProfileCollection.getAllInvestorProfiles().map { profile ->
-                WeightedItem(profile.id, profile.distributionPercentage)
-            }
+            val investorProfileItems =
+                investorProfileCollection.getAllInvestorProfiles().map { profile ->
+                    WeightedItem(profile.id, profile.distributionPercentage)
+                }
             investorProfileSelector = WeightedRandomSelector(investorProfileItems, random)
 
-            val activityLevelItems = activityLevelCollection.getAllActivityLevels().map { level ->
-                WeightedItem(level.id, level.distributionPercentage)
-            }
+            val activityLevelItems =
+                activityLevelCollection.getAllActivityLevels().map { level ->
+                    WeightedItem(level.id, level.distributionPercentage)
+                }
             activityLevelSelector = WeightedRandomSelector(activityLevelItems, random)
 
-            val countryItems = customerCountriesCollection.getAll().map { country ->
-                WeightedItem(country.id, country.distributionPercentage)
-            }
+            val countryItems =
+                customerCountriesCollection.getAll().map { country ->
+                    WeightedItem(country.id, country.distributionPercentage)
+                }
             countrySelector = WeightedRandomSelector(countryItems, random)
         } else {
             // For empty generators, create dummy selectors that will never be used
@@ -100,21 +102,18 @@ class UserDataGenerator(
         }
     }
 
-    override fun getColumnNames(): List<String> {
-        return listOf(
-            "user_id", 
-            "investor_profile_id", 
-            "activity_level_id", 
-            "country_id", 
-            "join_date", 
-            "departure_date", 
-            "customer_status"
+    override fun getColumnNames(): List<String> =
+        listOf(
+            "user_id",
+            "investor_profile_id",
+            "activity_level_id",
+            "country_id",
+            "join_date",
+            "departure_date",
+            "customer_status",
         )
-    }
 
-    override fun hasMoreRows(): Boolean {
-        return currentIndex < userCount
-    }
+    override fun hasMoreRows(): Boolean = currentIndex < userCount
 
     override fun getNextRow(): List<Any> {
         if (!hasMoreRows()) {
@@ -132,13 +131,13 @@ class UserDataGenerator(
         val customerLifecycle = generateCustomerLifecycle()
 
         return arrayListOf<Any>(
-            UUID.randomUUID(),                  // user_id (UUID)
-            investorProfileId,                  // investor_profile_id (Int)
-            activityLevelId,                    // activity_level_id (Int)
-            countryId,                          // country_id (Int)
-            customerLifecycle.joinDate,         // join_date (LocalDate)
-            customerLifecycle.departureDate,    // departure_date (LocalDate - sentinel date for active users)
-            customerLifecycle.status.name       // customer_status (String)
+            UUID.randomUUID(), // user_id (UUID)
+            investorProfileId, // investor_profile_id (Int)
+            activityLevelId, // activity_level_id (Int)
+            countryId, // country_id (Int)
+            customerLifecycle.joinDate, // join_date (LocalDate)
+            customerLifecycle.departureDate, // departure_date (LocalDate - sentinel date for active users)
+            customerLifecycle.status.name, // customer_status (String)
         )
     }
 
@@ -153,22 +152,26 @@ class UserDataGenerator(
         val joinPercentage = random.nextDouble() * 100.0
         val departurePercentage = random.nextDouble() * 100.0
 
-        val joinDate = if (joinPercentage <= customerJoinDistribution && simulationEndDate > simulationStartDate) {
-            // 30% join after simulation start - only if simulation period has multiple days
-            generateRandomDateBetween(simulationStartDate.plusDays(1), simulationEndDate)
-        } else {
-            // 70% start at simulation beginning (or all if single day period)
-            simulationStartDate
-        }
+        val joinDate =
+            if (joinPercentage <= customerJoinDistribution && simulationEndDate > simulationStartDate) {
+                // 30% join after simulation start - only if simulation period has multiple days
+                generateRandomDateBetween(simulationStartDate.plusDays(1), simulationEndDate)
+            } else {
+                // 70% start at simulation beginning (or all if single day period)
+                simulationStartDate
+            }
 
-        val (departureDate, customerStatus) = if (departurePercentage <= customerDepartureRate && simulationEndDate > joinDate) {
-            // 20% depart before simulation end - only if there are days after join date
-            val departure = generateRandomDateBetween(joinDate.plusDays(1), simulationEndDate)
-            Pair(departure, CustomerStatus.DEPARTED)
-        } else {
-            // 80% remain active throughout simulation - use sentinel date
-            Pair(SENTINEL_DATE, CustomerStatus.ACTIVE)
-        }
+        val (departureDate, customerStatus) =
+            if (departurePercentage <= customerDepartureRate &&
+                simulationEndDate > joinDate
+            ) {
+                // 20% depart before simulation end - only if there are days after join date
+                val departure = generateRandomDateBetween(joinDate.plusDays(1), simulationEndDate)
+                Pair(departure, CustomerStatus.DEPARTED)
+            } else {
+                // 80% remain active throughout simulation - use sentinel date
+                Pair(SENTINEL_DATE, CustomerStatus.ACTIVE)
+            }
 
         return CustomerLifecycle(joinDate, departureDate, customerStatus)
     }
@@ -176,7 +179,10 @@ class UserDataGenerator(
     /**
      * Generates a random date between the given start and end dates (inclusive)
      */
-    private fun generateRandomDateBetween(startDate: LocalDate, endDate: LocalDate): LocalDate {
+    private fun generateRandomDateBetween(
+        startDate: LocalDate,
+        endDate: LocalDate,
+    ): LocalDate {
         val daysBetween = startDate.until(endDate).days
         if (daysBetween <= 0) {
             return startDate

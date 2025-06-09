@@ -9,15 +9,12 @@ package com.wisecrowd.data_generator.data_collections.activity_level
 data class ActivityLevel(
     /** Unique identifier for the activity level */
     val id: Int,
-    
     /** Name of the activity level */
     val name: String,
-    
     /** Description of the trading frequency */
     val description: String,
-    
     /** Distribution percentage in the market (0-100) */
-    val distributionPercentage: Double
+    val distributionPercentage: Double,
 ) {
     init {
         require(id > 0) { "Activity level ID must be positive, but was: $id" }

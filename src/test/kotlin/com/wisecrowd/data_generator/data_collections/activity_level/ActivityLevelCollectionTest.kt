@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class ActivityLevelCollectionTest {
-
     private lateinit var collection: ActivityLevelCollection
     private lateinit var inactiveLevel: ActivityLevel
     private lateinit var lowLevel: ActivityLevel
@@ -15,25 +14,28 @@ class ActivityLevelCollectionTest {
     @BeforeEach
     fun setUp() {
         collection = ActivityLevelCollection()
-        inactiveLevel = ActivityLevel(
-            id = 1, 
-            name = "Inactive", 
-            description = "Trades 0-1 times per year", 
-            distributionPercentage = 20.0
-        )
-        lowLevel = ActivityLevel(
-            id = 2, 
-            name = "Low", 
-            description = "Trades 2-4 times per year", 
-            distributionPercentage = 35.0
-        )
-        moderateLevel = ActivityLevel(
-            id = 3, 
-            name = "Moderate", 
-            description = "Trades 5-12 times per year", 
-            distributionPercentage = 25.0
-        )
-        
+        inactiveLevel =
+            ActivityLevel(
+                id = 1,
+                name = "Inactive",
+                description = "Trades 0-1 times per year",
+                distributionPercentage = 20.0,
+            )
+        lowLevel =
+            ActivityLevel(
+                id = 2,
+                name = "Low",
+                description = "Trades 2-4 times per year",
+                distributionPercentage = 35.0,
+            )
+        moderateLevel =
+            ActivityLevel(
+                id = 3,
+                name = "Moderate",
+                description = "Trades 5-12 times per year",
+                distributionPercentage = 25.0,
+            )
+
         collection.addActivityLevel(inactiveLevel)
         collection.addActivityLevel(lowLevel)
         collection.addActivityLevel(moderateLevel)
@@ -41,50 +43,51 @@ class ActivityLevelCollectionTest {
 
     @Test
     fun addActivityLevel_validLevel_increasesSizeByOne() {
-        val activeLevel = ActivityLevel(
-            id = 4, 
-            name = "Active", 
-            description = "Trades 13-52 times per year", 
-            distributionPercentage = 8.0
-        )
-        
+        val activeLevel =
+            ActivityLevel(
+                id = 4,
+                name = "Active",
+                description = "Trades 13-52 times per year",
+                distributionPercentage = 8.0,
+            )
+
         collection.addActivityLevel(activeLevel)
-        
+
         assertThat(collection.size()).isEqualTo(4)
     }
 
     @Test
     fun getAllActivityLevels_withThreeLevels_returnsAllThree() {
         val levels = collection.getAllActivityLevels()
-        
+
         assertThat(levels).hasSize(3)
     }
 
     @Test
     fun getAllActivityLevels_withThreeLevels_containsInactiveLevel() {
         val levels = collection.getAllActivityLevels()
-        
+
         assertThat(levels).contains(inactiveLevel)
     }
 
     @Test
     fun getAllActivityLevels_withThreeLevels_containsLowLevel() {
         val levels = collection.getAllActivityLevels()
-        
+
         assertThat(levels).contains(lowLevel)
     }
 
     @Test
     fun getAllActivityLevels_withThreeLevels_containsModerateLevel() {
         val levels = collection.getAllActivityLevels()
-        
+
         assertThat(levels).contains(moderateLevel)
     }
 
     @Test
     fun getById_existingId_returnsLevel() {
         val level = collection.getById(1)
-        
+
         assertThat(level).isEqualTo(inactiveLevel)
     }
 
@@ -98,21 +101,21 @@ class ActivityLevelCollectionTest {
     @Test
     fun getByName_existingNameExactCase_returnsLevel() {
         val level = collection.getByName("Inactive")
-        
+
         assertThat(level).isEqualTo(inactiveLevel)
     }
 
     @Test
     fun getByName_existingNameLowercase_returnsLevel() {
         val level = collection.getByName("inactive")
-        
+
         assertThat(level).isEqualTo(inactiveLevel)
     }
 
     @Test
     fun getByName_existingNameMixedCase_returnsLevel() {
         val level = collection.getByName("InAcTiVe")
-        
+
         assertThat(level).isEqualTo(inactiveLevel)
     }
 
@@ -126,7 +129,7 @@ class ActivityLevelCollectionTest {
     @Test
     fun getByDistributionRange_validRange_returnsFilteredResults() {
         val levels = collection.getByDistributionRange(20.0, 35.0)
-        
+
         assertThat(levels).hasSize(3)
         assertThat(levels).containsExactlyInAnyOrder(inactiveLevel, lowLevel, moderateLevel)
     }
@@ -139,7 +142,7 @@ class ActivityLevelCollectionTest {
     @Test
     fun createDefaultCollection_createsLevels_hasCorrectSize() {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
-        
+
         assertThat(defaultCollection.size()).isEqualTo(5)
     }
 
@@ -147,7 +150,7 @@ class ActivityLevelCollectionTest {
     fun createDefaultCollection_createsLevels_containsInactive() {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val inactiveFromDefault = defaultCollection.getById(1)
-        
+
         assertThat(inactiveFromDefault.name).isEqualTo("Inactive")
     }
 
@@ -155,7 +158,7 @@ class ActivityLevelCollectionTest {
     fun createDefaultCollection_createsLevels_containsLow() {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val lowFromDefault = defaultCollection.getById(2)
-        
+
         assertThat(lowFromDefault.name).isEqualTo("Low")
     }
 
@@ -163,7 +166,7 @@ class ActivityLevelCollectionTest {
     fun createDefaultCollection_createsLevels_containsModerate() {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val moderateFromDefault = defaultCollection.getById(3)
-        
+
         assertThat(moderateFromDefault.name).isEqualTo("Moderate")
     }
 
@@ -171,7 +174,7 @@ class ActivityLevelCollectionTest {
     fun createDefaultCollection_createsLevels_containsActive() {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val activeFromDefault = defaultCollection.getById(4)
-        
+
         assertThat(activeFromDefault.name).isEqualTo("Active")
     }
 
@@ -179,7 +182,7 @@ class ActivityLevelCollectionTest {
     fun createDefaultCollection_createsLevels_containsHyperactive() {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val hyperactiveFromDefault = defaultCollection.getById(5)
-        
+
         assertThat(hyperactiveFromDefault.name).isEqualTo("Hyperactive")
     }
 
@@ -188,7 +191,7 @@ class ActivityLevelCollectionTest {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val inactiveFromDefault = defaultCollection.getById(1)
         val expectedDistribution = 22.0
-        
+
         assertThat(inactiveFromDefault.distributionPercentage).isEqualTo(expectedDistribution)
     }
 
@@ -197,7 +200,7 @@ class ActivityLevelCollectionTest {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val lowFromDefault = defaultCollection.getById(2)
         val expectedDistribution = 39.0
-        
+
         assertThat(lowFromDefault.distributionPercentage).isEqualTo(expectedDistribution)
     }
 
@@ -206,7 +209,7 @@ class ActivityLevelCollectionTest {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val activeFromDefault = defaultCollection.getById(4)
         val expectedDescription = "Trades 13-52 times per year"
-        
+
         assertThat(activeFromDefault.description).isEqualTo(expectedDescription)
     }
 
@@ -215,7 +218,7 @@ class ActivityLevelCollectionTest {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val hyperactiveFromDefault = defaultCollection.getById(5)
         val expectedDescription = "Trades 53+ times per year"
-        
+
         assertThat(hyperactiveFromDefault.description).isEqualTo(expectedDescription)
     }
 
@@ -224,7 +227,7 @@ class ActivityLevelCollectionTest {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val hyperactiveFromDefault = defaultCollection.getById(5)
         val expectedDistribution = 2.0
-        
+
         assertThat(hyperactiveFromDefault.distributionPercentage).isEqualTo(expectedDistribution)
     }
 
@@ -233,7 +236,7 @@ class ActivityLevelCollectionTest {
         val defaultCollection = ActivityLevelCollection.createDefaultCollection()
         val allLevels = defaultCollection.getAllActivityLevels()
         val totalPercentage = allLevels.sumOf { it.distributionPercentage }
-        
+
         assertThat(totalPercentage).isEqualTo(100.0)
     }
 }

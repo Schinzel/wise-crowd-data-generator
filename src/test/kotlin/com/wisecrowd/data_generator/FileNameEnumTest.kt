@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class FileNameEnumTest {
-
     @Test
     fun assetData_hasCorrectFileName() {
         assertThat(FileNameEnum.ASSET_DATA.fileName).isEqualTo("asset_data.txt")

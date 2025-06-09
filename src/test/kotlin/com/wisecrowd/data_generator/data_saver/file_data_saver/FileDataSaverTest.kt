@@ -15,12 +15,11 @@ import java.nio.file.Path
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FileDataSaverTest {
-
     @TempDir
     lateinit var tempDir: Path
     private lateinit var testFilePath: String
     private lateinit var fileDataSaver: FileDataSaver
-    
+
     // Constants from FileFormatConstants for better readability
     private val columnDelimiter = FileFormatConstants.COLUMN_DELIMITER
     private val rowDelimiter = FileFormatConstants.ROW_DELIMITER
@@ -44,10 +43,10 @@ class FileDataSaverTest {
         fun `parent directories don't exist _ creates directories`() {
             // Arrange
             val nestedFilePath = tempDir.resolve("nested/directories/test.txt").toString()
-            
+
             // Act
             FileDataSaver(nestedFilePath)
-            
+
             // Assert
             val parentDir = File(nestedFilePath).parentFile
             assertThat(parentDir.exists()).isTrue()
@@ -66,21 +65,21 @@ class FileDataSaverTest {
         fun `valid columns provided _ creates file with header row`() {
             // Arrange
             val columns = listOf("id", "name", "age")
-            
+
             // Act
             fileDataSaver.prepare(columns)
             fileDataSaver.complete()
-            
+
             // Assert
             val fileContent = Files.readString(Path.of(testFilePath))
-            assertThat(fileContent).isEqualTo("id${columnDelimiter}name${columnDelimiter}age${rowDelimiter}")
+            assertThat(fileContent).isEqualTo("id${columnDelimiter}name${columnDelimiter}age$rowDelimiter")
         }
 
         @Test
         fun `empty column data _ throws exception`() {
             // Arrange
             val emptyColumns = emptyList<String>()
-            
+
             // Act & Assert
             assertThatThrownBy { fileDataSaver.prepare(emptyColumns) }
                 .isInstanceOf(IllegalArgumentException::class.java)
@@ -90,7 +89,6 @@ class FileDataSaverTest {
 
     @Nested
     inner class SupportedDataTypesFormatting {
-        
         @BeforeEach
         fun prepareColumns() {
             val columns = listOf("uuid", "integer", "double", "string", "date", "datetime")
@@ -106,17 +104,18 @@ class FileDataSaverTest {
             val testString = "Sample Text"
             val testDate = java.time.LocalDate.of(2025, 5, 20)
             val testDateTime = java.time.LocalDateTime.of(2025, 5, 20, 14, 30, 0)
-            
+
             val data = listOf(testUuid, testInt, testDouble, testString, testDate, testDateTime)
-            
+
             // Act
             fileDataSaver.saveItem(data)
             fileDataSaver.complete()
-            
+
             // Assert
             val fileContent = Files.readString(Path.of(testFilePath))
-            val expectedContent = "uuid${columnDelimiter}integer${columnDelimiter}double${columnDelimiter}string${columnDelimiter}date${columnDelimiter}datetime${rowDelimiter}" +
-                    "123e4567-e89b-12d3-a456-426614174000${columnDelimiter}123${columnDelimiter}123.46${columnDelimiter}${stringQualifier}Sample Text${stringQualifier}${columnDelimiter}2025-05-20${columnDelimiter}2025-05-20T14:30:00Z${rowDelimiter}"
+            val expectedContent =
+                "uuid${columnDelimiter}integer${columnDelimiter}double${columnDelimiter}string${columnDelimiter}date${columnDelimiter}datetime$rowDelimiter" +
+                    "123e4567-e89b-12d3-a456-426614174000${columnDelimiter}123${columnDelimiter}123.46${columnDelimiter}${stringQualifier}Sample Text${stringQualifier}${columnDelimiter}2025-05-20${columnDelimiter}2025-05-20T14:30:00Z$rowDelimiter"
             assertThat(fileContent).isEqualTo(expectedContent)
         }
 
@@ -125,13 +124,13 @@ class FileDataSaverTest {
             // Arrange
             val columns = listOf("whole", "decimal", "rounded")
             fileDataSaver.prepare(columns)
-            
+
             val data = listOf(100.0, 123.4, 123.456)
-            
+
             // Act
             fileDataSaver.saveItem(data)
             fileDataSaver.complete()
-            
+
             // Assert
             val fileContent = Files.readString(Path.of(testFilePath))
             assertThat(fileContent).contains("100.00${columnDelimiter}123.40${columnDelimiter}123.46")
@@ -142,17 +141,18 @@ class FileDataSaverTest {
             // Arrange
             val columns = listOf("text", "number_string", "date_string", "identifier")
             fileDataSaver.prepare(columns)
-            
+
             val data = listOf("Regular Text", "123", "2025-05-20", "abc-123")
-            
+
             // Act
             fileDataSaver.saveItem(data)
             fileDataSaver.complete()
-            
+
             // Assert
             val fileContent = Files.readString(Path.of(testFilePath))
-            val expectedContent = "text${columnDelimiter}number_string${columnDelimiter}date_string${columnDelimiter}identifier${rowDelimiter}" +
-                    "${stringQualifier}Regular Text${stringQualifier}${columnDelimiter}${stringQualifier}123${stringQualifier}${columnDelimiter}${stringQualifier}2025-05-20${stringQualifier}${columnDelimiter}${stringQualifier}abc-123${stringQualifier}${rowDelimiter}"
+            val expectedContent =
+                "text${columnDelimiter}number_string${columnDelimiter}date_string${columnDelimiter}identifier$rowDelimiter" +
+                    "${stringQualifier}Regular Text${stringQualifier}${columnDelimiter}${stringQualifier}123${stringQualifier}${columnDelimiter}${stringQualifier}2025-05-20${stringQualifier}${columnDelimiter}${stringQualifier}abc-123${stringQualifier}$rowDelimiter"
             assertThat(fileContent).isEqualTo(expectedContent)
         }
 
@@ -161,16 +161,16 @@ class FileDataSaverTest {
             // Arrange
             val columns = listOf("with_seconds", "without_seconds")
             fileDataSaver.prepare(columns)
-            
+
             val dateTimeWithSeconds = java.time.LocalDateTime.of(2025, 5, 20, 14, 30, 15)
             val dateTimeWithoutSeconds = java.time.LocalDateTime.of(2025, 5, 20, 14, 30, 0)
-            
+
             val data = listOf(dateTimeWithSeconds, dateTimeWithoutSeconds)
-            
+
             // Act
             fileDataSaver.saveItem(data)
             fileDataSaver.complete()
-            
+
             // Assert
             val fileContent = Files.readString(Path.of(testFilePath))
             assertThat(fileContent).contains("2025-05-20T14:30:15Z${columnDelimiter}2025-05-20T14:30:00Z")
@@ -181,9 +181,9 @@ class FileDataSaverTest {
             // Arrange
             val columns = listOf("unsupported")
             fileDataSaver.prepare(columns)
-            
+
             val unsupportedValue = listOf(java.math.BigDecimal("123.45")) // Unsupported type
-            
+
             // Act & Assert
             assertThatThrownBy { fileDataSaver.saveItem(unsupportedValue) }
                 .isInstanceOf(IllegalArgumentException::class.java)
@@ -191,5 +191,4 @@ class FileDataSaverTest {
                 .hasMessageContaining("Supported types: UUID, Int, Double, String, LocalDate, LocalDateTime")
         }
     }
-
 }

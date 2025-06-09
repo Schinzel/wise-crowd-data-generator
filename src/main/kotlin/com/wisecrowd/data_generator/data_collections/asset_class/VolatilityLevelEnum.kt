@@ -10,5 +10,5 @@ enum class VolatilityLevelEnum {
     LOW,
     MEDIUM,
     HIGH,
-    VERY_HIGH
+    VERY_HIGH,
 }

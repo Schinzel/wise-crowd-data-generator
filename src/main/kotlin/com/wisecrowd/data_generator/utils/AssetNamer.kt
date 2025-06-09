@@ -10,20 +10,20 @@ import kotlin.random.Random
  * Written by Claude Sonnet 4
  */
 class AssetNamer(
-    private val random: Random = Random.Default
+    private val random: Random = Random.Default,
 ) {
     /**
      * Generates a realistic asset name based on the asset class characteristics
-     * 
+     *
      * @param assetClass The asset class to generate a name for
      * @return A realistic Swedish/Nordic asset name
      */
     fun generateName(assetClass: AssetClass): String {
         require(assetClass.name.isNotBlank()) { "Asset class name cannot be blank" }
-        
+
         val provider = PROVIDERS.random(random)
         val region = REGIONS.random(random)
-        
+
         return when (assetClass.id) {
             // Nordic stocks
             1 -> "$provider $region ${SECTORS.random(random)} ${EQUITY_FUND_TYPES.random(random)}"
@@ -45,7 +45,7 @@ class AssetNamer(
             else -> "$provider $region ${assetClass.name} ${MIXED_FUND_TYPES.random(random)}"
         }
     }
-    
+
     companion object {
         private val PROVIDERS = listOf("Swedbank", "SEB", "Nordea", "Handelsbanken", "Länsförsäkringar")
         private val REGIONS = listOf("Sweden", "Nordic", "Europe", "Global", "Asia", "US")

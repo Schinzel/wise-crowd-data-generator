@@ -7,10 +7,9 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
+import java.util.UUID
 
 class DataFormatterTest {
-
     private lateinit var dataFormatter: DataFormatter
 
     @BeforeEach
@@ -20,7 +19,6 @@ class DataFormatterTest {
 
     @Nested
     inner class SupportedDataTypes {
-
         @Test
         fun `UUID value _ formats as string without quotes`() {
             // Arrange
@@ -96,7 +94,6 @@ class DataFormatterTest {
 
     @Nested
     inner class UnsupportedDataTypes {
-
         @Test
         fun `BigDecimal value _ throws IllegalArgumentException`() {
             // Arrange

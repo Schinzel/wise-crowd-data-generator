@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class InvestorProfileCollectionTest {
-
     private lateinit var collection: InvestorProfileCollection
     private lateinit var conservativeProfile: InvestorProfile
     private lateinit var balancedProfile: InvestorProfile
@@ -15,25 +14,28 @@ class InvestorProfileCollectionTest {
     @BeforeEach
     fun setUp() {
         collection = InvestorProfileCollection()
-        conservativeProfile = InvestorProfile(
-            id = 1, 
-            name = "Conservative", 
-            description = "Risk-averse strategy", 
-            distributionPercentage = 25.0
-        )
-        balancedProfile = InvestorProfile(
-            id = 2, 
-            name = "Balanced", 
-            description = "Moderate approach", 
-            distributionPercentage = 40.0
-        )
-        aggressiveProfile = InvestorProfile(
-            id = 3, 
-            name = "Aggressive", 
-            description = "High risk strategy", 
-            distributionPercentage = 20.0
-        )
-        
+        conservativeProfile =
+            InvestorProfile(
+                id = 1,
+                name = "Conservative",
+                description = "Risk-averse strategy",
+                distributionPercentage = 25.0,
+            )
+        balancedProfile =
+            InvestorProfile(
+                id = 2,
+                name = "Balanced",
+                description = "Moderate approach",
+                distributionPercentage = 40.0,
+            )
+        aggressiveProfile =
+            InvestorProfile(
+                id = 3,
+                name = "Aggressive",
+                description = "High risk strategy",
+                distributionPercentage = 20.0,
+            )
+
         collection.addInvestorProfile(conservativeProfile)
         collection.addInvestorProfile(balancedProfile)
         collection.addInvestorProfile(aggressiveProfile)
@@ -41,50 +43,51 @@ class InvestorProfileCollectionTest {
 
     @Test
     fun addInvestorProfile_validProfile_increasesSizeByOne() {
-        val incomeProfile = InvestorProfile(
-            id = 4, 
-            name = "Income", 
-            description = "Focus on dividend generating assets", 
-            distributionPercentage = 10.0
-        )
-        
+        val incomeProfile =
+            InvestorProfile(
+                id = 4,
+                name = "Income",
+                description = "Focus on dividend generating assets",
+                distributionPercentage = 10.0,
+            )
+
         collection.addInvestorProfile(incomeProfile)
-        
+
         assertThat(collection.size()).isEqualTo(4)
     }
 
     @Test
     fun getAllInvestorProfiles_withThreeProfiles_returnsAllThree() {
         val profiles = collection.getAllInvestorProfiles()
-        
+
         assertThat(profiles).hasSize(3)
     }
 
     @Test
     fun getAllInvestorProfiles_withThreeProfiles_containsConservativeProfile() {
         val profiles = collection.getAllInvestorProfiles()
-        
+
         assertThat(profiles).contains(conservativeProfile)
     }
 
     @Test
     fun getAllInvestorProfiles_withThreeProfiles_containsBalancedProfile() {
         val profiles = collection.getAllInvestorProfiles()
-        
+
         assertThat(profiles).contains(balancedProfile)
     }
 
     @Test
     fun getAllInvestorProfiles_withThreeProfiles_containsAggressiveProfile() {
         val profiles = collection.getAllInvestorProfiles()
-        
+
         assertThat(profiles).contains(aggressiveProfile)
     }
 
     @Test
     fun getById_existingId_returnsProfile() {
         val profile = collection.getById(1)
-        
+
         assertThat(profile).isEqualTo(conservativeProfile)
     }
 
@@ -98,21 +101,21 @@ class InvestorProfileCollectionTest {
     @Test
     fun getByName_existingNameExactCase_returnsProfile() {
         val profile = collection.getByName("Conservative")
-        
+
         assertThat(profile).isEqualTo(conservativeProfile)
     }
 
     @Test
     fun getByName_existingNameLowercase_returnsProfile() {
         val profile = collection.getByName("conservative")
-        
+
         assertThat(profile).isEqualTo(conservativeProfile)
     }
 
     @Test
     fun getByName_existingNameMixedCase_returnsProfile() {
         val profile = collection.getByName("CoNsErVaTiVe")
-        
+
         assertThat(profile).isEqualTo(conservativeProfile)
     }
 
@@ -126,7 +129,7 @@ class InvestorProfileCollectionTest {
     @Test
     fun getByDistributionRange_validRange_returnsFilteredResults() {
         val profiles = collection.getByDistributionRange(25.0, 45.0)
-        
+
         assertThat(profiles).hasSize(2)
         assertThat(profiles).containsExactlyInAnyOrder(conservativeProfile, balancedProfile)
     }
@@ -139,7 +142,7 @@ class InvestorProfileCollectionTest {
     @Test
     fun createDefaultCollection_createsProfiles_hasCorrectSize() {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
-        
+
         assertThat(defaultCollection.size()).isEqualTo(5)
     }
 
@@ -147,7 +150,7 @@ class InvestorProfileCollectionTest {
     fun createDefaultCollection_createsProfiles_containsConservative() {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val conservativeFromDefault = defaultCollection.getById(1)
-        
+
         assertThat(conservativeFromDefault.name).isEqualTo("Conservative")
     }
 
@@ -155,7 +158,7 @@ class InvestorProfileCollectionTest {
     fun createDefaultCollection_createsProfiles_containsBalanced() {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val balancedFromDefault = defaultCollection.getById(2)
-        
+
         assertThat(balancedFromDefault.name).isEqualTo("Balanced")
     }
 
@@ -163,7 +166,7 @@ class InvestorProfileCollectionTest {
     fun createDefaultCollection_createsProfiles_containsAggressive() {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val aggressiveFromDefault = defaultCollection.getById(3)
-        
+
         assertThat(aggressiveFromDefault.name).isEqualTo("Aggressive")
     }
 
@@ -171,7 +174,7 @@ class InvestorProfileCollectionTest {
     fun createDefaultCollection_createsProfiles_containsIncome() {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val incomeFromDefault = defaultCollection.getById(4)
-        
+
         assertThat(incomeFromDefault.name).isEqualTo("Income")
     }
 
@@ -179,7 +182,7 @@ class InvestorProfileCollectionTest {
     fun createDefaultCollection_createsProfiles_containsTrend() {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val trendFromDefault = defaultCollection.getById(5)
-        
+
         assertThat(trendFromDefault.name).isEqualTo("Trend")
     }
 
@@ -188,7 +191,7 @@ class InvestorProfileCollectionTest {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val conservativeFromDefault = defaultCollection.getById(1)
         val expectedDistribution = 25.0
-        
+
         assertThat(conservativeFromDefault.distributionPercentage).isEqualTo(expectedDistribution)
     }
 
@@ -197,7 +200,7 @@ class InvestorProfileCollectionTest {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val balancedFromDefault = defaultCollection.getById(2)
         val expectedDistribution = 40.0
-        
+
         assertThat(balancedFromDefault.distributionPercentage).isEqualTo(expectedDistribution)
     }
 
@@ -206,7 +209,7 @@ class InvestorProfileCollectionTest {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val aggressiveFromDefault = defaultCollection.getById(3)
         val expectedDescription = "High risk strategy seeking maximum returns"
-        
+
         assertThat(aggressiveFromDefault.description).isEqualTo(expectedDescription)
     }
 
@@ -215,7 +218,7 @@ class InvestorProfileCollectionTest {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val incomeFromDefault = defaultCollection.getById(4)
         val expectedDescription = "Focus on dividend/interest generating assets"
-        
+
         assertThat(incomeFromDefault.description).isEqualTo(expectedDescription)
     }
 
@@ -224,7 +227,7 @@ class InvestorProfileCollectionTest {
         val defaultCollection = InvestorProfileCollection.createDefaultCollection()
         val trendFromDefault = defaultCollection.getById(5)
         val expectedDistribution = 5.0
-        
+
         assertThat(trendFromDefault.distributionPercentage).isEqualTo(expectedDistribution)
     }
 }

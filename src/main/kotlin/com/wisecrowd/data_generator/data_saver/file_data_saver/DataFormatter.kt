@@ -20,14 +20,13 @@ import java.util.UUID
  * - LocalDateTime: ISO format YYYY-MM-DDTHH:mm:ssZ without quotes (e.g., 2025-05-20T14:30:00Z)
  */
 class DataFormatter {
-
     companion object {
         /** Formatter for Double values (always 2 decimal places) */
         private val DOUBLE_FORMATTER = DecimalFormat("0.00")
-        
+
         /** Formatter for LocalDateTime values (ISO format with seconds and UTC indicator) */
         private val DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
-        
+
         /** Formatter for LocalDate values (ISO format) */
         private val DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd")
     }
@@ -39,27 +38,26 @@ class DataFormatter {
      * @return formatted value as a string
      * @throws IllegalArgumentException if the data type is not supported
      */
-    fun formatValue(value: Any): String {
-        return when (value) {
+    fun formatValue(value: Any): String =
+        when (value) {
             // UUID type - standard string representation
             is UUID -> value.toString()
-            
+
             // Numeric types
             is Int -> value.toString()
             is Double -> DOUBLE_FORMATTER.format(value)
-            
+
             // Date/Time types
             is LocalDate -> value.format(DATE_FORMATTER)
             is LocalDateTime -> value.format(DATETIME_FORMATTER)
-            
+
             // String type - always wrapped with qualifiers
             is String -> "${FileFormatConstants.STRING_QUALIFIER}$value${FileFormatConstants.STRING_QUALIFIER}"
-            
+
             // Unsupported types - throw exception to catch programming errors
             else -> throw IllegalArgumentException(
                 "Unsupported data type: ${value::class.simpleName}. " +
-                "Supported types: UUID, Int, Double, String, LocalDate, LocalDateTime"
+                    "Supported types: UUID, Int, Double, String, LocalDate, LocalDateTime",
             )
         }
-    }
 }

@@ -8,5 +8,5 @@ package com.wisecrowd.data_generator.data_generators.user_data_generator
  */
 enum class CustomerStatus {
     ACTIVE,
-    DEPARTED
+    DEPARTED,
 }

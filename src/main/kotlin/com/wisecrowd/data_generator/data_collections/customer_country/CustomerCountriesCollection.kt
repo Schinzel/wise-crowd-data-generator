@@ -17,68 +17,80 @@ class CustomerCountriesCollection {
 
     fun getAll(): List<CustomerCountry> = countries.toList()
 
-    fun getById(id: Int): CustomerCountry {
-        return countries.find { it.id == id }
+    fun getById(id: Int): CustomerCountry =
+        countries.find { it.id == id }
             ?: throw IllegalArgumentException("Customer country with ID $id not found")
-    }
 
-    fun getByCountryCode(countryCode: String): CustomerCountry {
-        return countries.find { it.countryCode.equals(countryCode, ignoreCase = true) }
+    fun getByCountryCode(countryCode: String): CustomerCountry =
+        countries.find { it.countryCode.equals(countryCode, ignoreCase = true) }
             ?: throw IllegalArgumentException("Customer country with code '$countryCode' not found")
-    }
 
-    fun getByDistribution(minPercentage: Double, maxPercentage: Double): List<CustomerCountry> {
-        return DistributionUtils.filterByDistribution(
-            countries, minPercentage, maxPercentage
+    fun getByDistribution(
+        minPercentage: Double,
+        maxPercentage: Double,
+    ): List<CustomerCountry> =
+        DistributionUtils.filterByDistribution(
+            countries,
+            minPercentage,
+            maxPercentage,
         ) { it.distributionPercentage }
-    }
 
     fun size(): Int = countries.size
 
     companion object {
         fun createDefaultCollection(): CustomerCountriesCollection {
             val collection = CustomerCountriesCollection()
-            
-            collection.addCountry(CustomerCountry(
-                id = 1,
-                name = "Sweden",
-                countryCode = "SE",
-                description = "Home market with largest customer base",
-                distributionPercentage = 60.0
-            ))
-            
-            collection.addCountry(CustomerCountry(
-                id = 2,
-                name = "Norway",
-                countryCode = "NO",
-                description = "Oil wealth economy with active investors",
-                distributionPercentage = 15.0
-            ))
-            
-            collection.addCountry(CustomerCountry(
-                id = 3,
-                name = "Denmark",
-                countryCode = "DK",
-                description = "Strong financial sector and banking ties",
-                distributionPercentage = 12.0
-            ))
-            
-            collection.addCountry(CustomerCountry(
-                id = 4,
-                name = "Finland",
-                countryCode = "FI",
-                description = "Tech-savvy market with Nordic connections",
-                distributionPercentage = 8.0
-            ))
-            
-            collection.addCountry(CustomerCountry(
-                id = 5,
-                name = "Iceland",
-                countryCode = "IS",
-                description = "Small but wealthy per capita customer base",
-                distributionPercentage = 5.0
-            ))
-            
+
+            collection.addCountry(
+                CustomerCountry(
+                    id = 1,
+                    name = "Sweden",
+                    countryCode = "SE",
+                    description = "Home market with largest customer base",
+                    distributionPercentage = 60.0,
+                ),
+            )
+
+            collection.addCountry(
+                CustomerCountry(
+                    id = 2,
+                    name = "Norway",
+                    countryCode = "NO",
+                    description = "Oil wealth economy with active investors",
+                    distributionPercentage = 15.0,
+                ),
+            )
+
+            collection.addCountry(
+                CustomerCountry(
+                    id = 3,
+                    name = "Denmark",
+                    countryCode = "DK",
+                    description = "Strong financial sector and banking ties",
+                    distributionPercentage = 12.0,
+                ),
+            )
+
+            collection.addCountry(
+                CustomerCountry(
+                    id = 4,
+                    name = "Finland",
+                    countryCode = "FI",
+                    description = "Tech-savvy market with Nordic connections",
+                    distributionPercentage = 8.0,
+                ),
+            )
+
+            collection.addCountry(
+                CustomerCountry(
+                    id = 5,
+                    name = "Iceland",
+                    countryCode = "IS",
+                    description = "Small but wealthy per capita customer base",
+                    distributionPercentage = 5.0,
+                ),
+            )
+
             return collection
         }
     }
