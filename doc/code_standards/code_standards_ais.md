@@ -23,6 +23,8 @@ This is a code standard to be followed by AIs such as Claude, Gemini, ChatGPT an
 - Extensively use interfaces to define clear contracts and decouple components.
 - Since AI might implement functions differently than expected, well-defined interfaces with clear input/output requirements 
 ensure architectural boundaries remain intact regardless of implementation details.
+- **Clean imports**: Always remove unused imports before completing a task
+- **Verify imports**: Check that every import statement is actually used in the code
 
 ## Interface Design
 Every public interface or abstract class defining a significant unit of behavior must have a comprehensive contract 
