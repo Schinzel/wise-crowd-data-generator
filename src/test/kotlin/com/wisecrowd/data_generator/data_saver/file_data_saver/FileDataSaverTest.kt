@@ -1,5 +1,6 @@
 package com.wisecrowd.data_generator.data_saver.file_data_saver
 
+import com.wisecrowd.data_generator.data_saver.FileFormatConstants
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -19,10 +20,10 @@ class FileDataSaverTest {
     private lateinit var testFilePath: String
     private lateinit var fileDataSaver: FileDataSaver
     
-    // Constants from FileDataSaver for better readability
-    private val columnDelimiter = FileDataSaver.COLUMN_DELIMITER
-    private val rowDelimiter = FileDataSaver.ROW_DELIMITER
-    private val stringQualifier = DataFormatter.STRING_QUALIFIER
+    // Constants from FileFormatConstants for better readability
+    private val columnDelimiter = FileFormatConstants.COLUMN_DELIMITER
+    private val rowDelimiter = FileFormatConstants.ROW_DELIMITER
+    private val stringQualifier = FileFormatConstants.STRING_QUALIFIER
 
     @BeforeEach
     fun setUp() {

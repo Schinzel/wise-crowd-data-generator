@@ -1,5 +1,6 @@
 package com.wisecrowd.data_generator.data_saver.file_data_saver
 
+import com.wisecrowd.data_generator.data_saver.FileFormatConstants
 import java.text.DecimalFormat
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -21,9 +22,6 @@ import java.util.UUID
 class DataFormatter {
 
     companion object {
-        /** String qualifier used to wrap text data */
-        const val STRING_QUALIFIER = "###"
-        
         /** Formatter for Double values (always 2 decimal places) */
         private val DOUBLE_FORMATTER = DecimalFormat("0.00")
         
@@ -55,7 +53,7 @@ class DataFormatter {
             is LocalDateTime -> value.format(DATETIME_FORMATTER)
             
             // String type - always wrapped with qualifiers
-            is String -> "$STRING_QUALIFIER$value$STRING_QUALIFIER"
+            is String -> "${FileFormatConstants.STRING_QUALIFIER}$value${FileFormatConstants.STRING_QUALIFIER}"
             
             // Unsupported types - throw exception to catch programming errors
             else -> throw IllegalArgumentException(

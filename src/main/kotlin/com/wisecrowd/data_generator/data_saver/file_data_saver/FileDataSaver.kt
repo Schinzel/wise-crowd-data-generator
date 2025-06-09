@@ -1,5 +1,6 @@
 package com.wisecrowd.data_generator.data_saver.file_data_saver
 
+import com.wisecrowd.data_generator.data_saver.FileFormatConstants
 import com.wisecrowd.data_generator.data_saver.IDataSaver
 import com.wisecrowd.data_generator.data_saver.SaveError
 
@@ -13,13 +14,6 @@ class FileDataSaver(
     private val fileWriter: FileWriter = FileWriter(filePath)
 ) : IDataSaver {
 
-    companion object {
-        /** Delimiter used between rows */
-        const val ROW_DELIMITER = "\n"
-        
-        /** Delimiter used between columns */
-        const val COLUMN_DELIMITER = "\t"
-    }
 
     // Collection of errors that occurred during operations
     private val errors = mutableListOf<SaveError>()
@@ -147,13 +141,13 @@ class FileDataSaver(
     }
 
     private fun buildHeaderRow(): String {
-        return columnNames.joinToString(COLUMN_DELIMITER) + ROW_DELIMITER
+        return columnNames.joinToString(FileFormatConstants.COLUMN_DELIMITER) + FileFormatConstants.ROW_DELIMITER
     }
 
     private fun buildDataRow(data: List<Any>): String {
-        val formattedData = data.joinToString(COLUMN_DELIMITER) { value ->
+        val formattedData = data.joinToString(FileFormatConstants.COLUMN_DELIMITER) { value ->
             dataFormatter.formatValue(value)
         }
-        return formattedData + ROW_DELIMITER
+        return formattedData + FileFormatConstants.ROW_DELIMITER
     }
 }
