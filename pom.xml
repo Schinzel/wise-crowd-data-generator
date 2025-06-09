@@ -53,7 +53,7 @@
             <!-- Logging -->
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>2.0.6</version>
+            <version>2.0.16</version>
         </dependency>
 
         <!-- TEST -->
@@ -62,14 +62,14 @@
             http://joel-costigliola.github.io/assertj/-->
             <artifactId>assertj-core</artifactId>
             <groupId>org.assertj</groupId>
-            <version>3.24.2</version>
+            <version>3.26.3</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <!-- Unit tests-->
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.9.2</version>
+            <version>5.11.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -135,7 +135,7 @@
                 - Excludes unnecessary files -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.6.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -143,6 +143,8 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <!-- Prevent generation of dependency-reduced-pom.xml to keep project clean -->
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <filters>
                                 <filter>
                                     <!-- To remove a series of warnings -->
