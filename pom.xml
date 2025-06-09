@@ -232,8 +232,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
+                    <!-- Use release instead of source/target for better API compatibility checking.
+                    Release ensures we can't accidentally use APIs newer than Java 21, even if
+                    building with a newer JDK. More concise and safer than separate source/target. -->
+                    <release>${java.version}</release>
                     <excludes>
                         <exclude>**/*.java</exclude>
                     </excludes>
