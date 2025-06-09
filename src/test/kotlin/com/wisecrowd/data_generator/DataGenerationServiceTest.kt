@@ -2,7 +2,6 @@ package com.wisecrowd.data_generator
 
 import com.wisecrowd.data_generator.data_generators.IDataGenerator
 import com.wisecrowd.data_generator.data_saver.IDataSaver
-import com.wisecrowd.data_generator.data_saver.SaveError
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -117,6 +116,41 @@ class DataGenerationServiceTest {
         )
     }
     
+    @Test
+    fun `generateAndSave _ saver errors collected _ continues processing other rows`() {
+        // Given: generator with multiple rows and saver that throws on second row
+        mockGenerator.setRows(listOf(
+            listOf("good_row"),
+            listOf("bad_row"),
+            listOf("another_good_row")
+        ))
+        mockSaver.setThrowOnRow(1) // throw on second row (0-indexed)
+        
+        // When: generate and save
+        service.generateAndSave()
+        
+        // Then: error collected and processing continued
+        assertThat(service.hasErrors()).isTrue()
+        assertThat(service.getErrors()).hasSize(1)
+        assertThat(service.getErrors()[0].message).isEqualTo("Failed to save data row")
+        
+        // All rows were attempted to be saved
+        assertThat(mockSaver.savedItems).hasSize(2) // 2 successful saves
+    }
+    
+    @Test
+    fun `generateAndSave _ no errors _ hasErrors returns false`() {
+        // Given: generator with successful data
+        mockGenerator.setRows(listOf(listOf("test")))
+        
+        // When: generate and save
+        service.generateAndSave()
+        
+        // Then: no errors reported
+        assertThat(service.hasErrors()).isFalse()
+        assertThat(service.getErrors()).isEmpty()
+    }
+    
     /**
      * Mock implementation of IDataGenerator for testing
      */
@@ -162,6 +196,12 @@ class DataGenerationServiceTest {
         var prepareCallCount = 0
         var completeCallCount = 0
         val methodCallOrder = mutableListOf<String>()
+        private var throwOnRowIndex: Int? = null
+        private var currentRowIndex = 0
+        
+        fun setThrowOnRow(rowIndex: Int) {
+            this.throwOnRowIndex = rowIndex
+        }
         
         override fun prepare(columnNames: List<String>) {
             preparedColumnNames = columnNames
@@ -170,13 +210,15 @@ class DataGenerationServiceTest {
         }
         
         override fun saveItem(data: List<Any>) {
+            if (throwOnRowIndex == currentRowIndex) {
+                currentRowIndex++
+                methodCallOrder.add("saveItem")
+                throw RuntimeException("Mock saver error for row $currentRowIndex")
+            }
             savedItems.add(data.map { it.toString() })
+            currentRowIndex++
             methodCallOrder.add("saveItem")
         }
-        
-        override fun getErrors(): List<SaveError> = emptyList()
-        
-        override fun hasErrors(): Boolean = false
         
         override fun complete() {
             completeCallCount++

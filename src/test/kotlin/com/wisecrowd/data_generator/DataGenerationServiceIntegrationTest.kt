@@ -48,7 +48,7 @@ class DataGenerationServiceIntegrationTest {
         
         // Then: file exists and contains expected content
         assertThat(outputFile.exists()).isTrue()
-        assertThat(fileDataSaver.hasErrors()).isFalse()
+        assertThat(service.hasErrors()).isFalse()
         
         val content = outputFile.readText()
         val expectedContent = buildExpectedFileContent()
@@ -82,7 +82,7 @@ class DataGenerationServiceIntegrationTest {
         
         // Then: file created successfully without errors
         assertThat(outputFile.exists()).isTrue()
-        assertThat(fileDataSaver.hasErrors()).isFalse()
+        assertThat(largeService.hasErrors()).isFalse()
         
         // Verify file contains expected number of lines (header + 1000 rows)
         val lineCount = outputFile.readLines().size

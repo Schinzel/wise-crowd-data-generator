@@ -2,6 +2,7 @@ package com.wisecrowd.data_generator.data_saver.file_data_saver
 
 import com.wisecrowd.data_generator.data_saver.FileFormatConstants
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -53,9 +54,9 @@ class FileDataSaverTest {
         }
 
         @Test
-        fun `path is valid _ has no errors`() {
-            // Assert
-            assertThat(fileDataSaver.hasErrors()).isFalse()
+        fun `path is valid _ creates successfully`() {
+            // Assert - no exception thrown during construction
+            assertThat(fileDataSaver).isNotNull()
         }
     }
 
@@ -76,17 +77,14 @@ class FileDataSaverTest {
         }
 
         @Test
-        fun `empty column data _ adds error`() {
+        fun `empty column data _ throws exception`() {
             // Arrange
             val emptyColumns = emptyList<String>()
             
-            // Act
-            fileDataSaver.prepare(emptyColumns)
-            
-            // Assert
-            assertThat(fileDataSaver.hasErrors()).isTrue()
-            assertThat(fileDataSaver.getErrors()).hasSize(1)
-            assertThat(fileDataSaver.getErrors()[0].message).contains("Column names cannot be empty")
+            // Act & Assert
+            assertThatThrownBy { fileDataSaver.prepare(emptyColumns) }
+                .isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessageContaining("Column names cannot be empty")
         }
     }
 
@@ -179,49 +177,19 @@ class FileDataSaverTest {
         }
 
         @Test
-        fun `unsupported data type _ adds error with helpful message`() {
+        fun `unsupported data type _ throws exception with helpful message`() {
             // Arrange
             val columns = listOf("unsupported")
             fileDataSaver.prepare(columns)
             
             val unsupportedValue = listOf(java.math.BigDecimal("123.45")) // Unsupported type
             
-            // Act
-            fileDataSaver.saveItem(unsupportedValue)
-            
-            // Assert
-            assertThat(fileDataSaver.hasErrors()).isTrue()
-            assertThat(fileDataSaver.getErrors()).hasSize(1)
-            
-            val error = fileDataSaver.getErrors()[0]
-            assertThat(error.message).isEqualTo("Failed to write data row")
-            assertThat(error.exception).isInstanceOf(IllegalArgumentException::class.java)
-            assertThat(error.exception?.message).contains("Unsupported data type: BigDecimal")
-            assertThat(error.exception?.message).contains("Supported types: UUID, Int, Double, String, LocalDate, LocalDateTime")
+            // Act & Assert
+            assertThatThrownBy { fileDataSaver.saveItem(unsupportedValue) }
+                .isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessageContaining("Unsupported data type: BigDecimal")
+                .hasMessageContaining("Supported types: UUID, Int, Double, String, LocalDate, LocalDateTime")
         }
     }
 
-    @Nested
-    inner class ErrorHandling {
-        @Test
-        fun `no errors occurred _ returns empty list`() {
-            // Assert
-            assertThat(fileDataSaver.getErrors()).isEmpty()
-        }
-
-        @Test
-        fun `no errors occurred _ hasErrors returns false`() {
-            // Assert
-            assertThat(fileDataSaver.hasErrors()).isFalse()
-        }
-        
-        @Test
-        fun `errors occurred _ hasErrors returns true`() {
-            // Arrange - create an error condition by preparing with empty columns
-            fileDataSaver.prepare(emptyList())
-            
-            // Assert
-            assertThat(fileDataSaver.hasErrors()).isTrue()
-        }
-    }
 }

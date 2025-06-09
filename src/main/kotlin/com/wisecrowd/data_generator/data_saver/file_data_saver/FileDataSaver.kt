@@ -2,11 +2,12 @@ package com.wisecrowd.data_generator.data_saver.file_data_saver
 
 import com.wisecrowd.data_generator.data_saver.FileFormatConstants
 import com.wisecrowd.data_generator.data_saver.IDataSaver
-import com.wisecrowd.data_generator.data_saver.SaveError
 
 /**
  * The purpose of this class is to orchestrate data saving workflow
- * with validation, formatting, and error management.
+ * with validation and formatting.
+ *
+ * Written by Claude Sonnet 4
  */
 class FileDataSaver(
     filePath: String,
@@ -14,140 +15,67 @@ class FileDataSaver(
     private val fileWriter: FileWriter = FileWriter(filePath)
 ) : IDataSaver {
 
-
-    // Collection of errors that occurred during operations
-    private val errors = mutableListOf<SaveError>()
     // Names of the columns being saved
     private var columnNames: List<String> = emptyList()
 
     init {
-        createDirectoryStructure()
+        // Ensure parent directories exist before any file operations
+        fileWriter.createDirectoryStructure()
     }
 
     override fun prepare(columnNames: List<String>) {
-        validateColumnNames(columnNames)
-        if (hasErrors()) return
+        // Validate column names before proceeding
+        require(columnNames.isNotEmpty()) { 
+            "Column names cannot be empty" 
+        }
         
+        // Store column names for later validation
         this.columnNames = columnNames
-        openFile()
-        writeHeaderRow()
+        
+        // Open file for writing
+        fileWriter.open()
+        
+        // Write header row with column names
+        val headerRow = buildHeaderRow()
+        fileWriter.writeLine(headerRow)
     }
 
     override fun saveItem(data: List<Any>) {
-        if (!validateWriterState(data)) return
-        if (!validateDataSize(data)) return
-
-        writeDataRow(data)
+        // Ensure prepare() was called first
+        check(fileWriter.isOpen()) { 
+            "Cannot save item: prepare() must be called first" 
+        }
+        
+        // Validate data matches expected column count
+        require(data.size == columnNames.size) { 
+            "Data size (${data.size}) does not match column count " +
+            "(${columnNames.size})" 
+        }
+        
+        // Format and write data row
+        val rowData = buildDataRow(data)
+        fileWriter.writeLine(rowData)
     }
 
     override fun complete() {
-        closeFile()
-    }
-
-    override fun getErrors(): List<SaveError> = errors.toList()
-
-    override fun hasErrors(): Boolean = errors.isNotEmpty()
-
-    private fun createDirectoryStructure() {
-        try {
-            fileWriter.createDirectoryStructure()
-        } catch (e: Exception) {
-            errors.add(
-                SaveError(
-                    message = "Failed to create directory structure",
-                    exception = e
-                )
-            )
-        }
-    }
-
-    private fun validateColumnNames(columnNames: List<String>) {
-        if (columnNames.isEmpty()) {
-            errors.add(SaveError(message = "Column names cannot be empty"))
-        }
-    }
-
-    private fun openFile() {
-        try {
-            fileWriter.open()
-        } catch (e: Exception) {
-            errors.add(
-                SaveError(
-                    message = "Failed to open file for writing",
-                    exception = e
-                )
-            )
-        }
-    }
-
-    private fun writeHeaderRow() {
-        try {
-            val headerRow = buildHeaderRow()
-            fileWriter.writeLine(headerRow)
-        } catch (e: Exception) {
-            errors.add(
-                SaveError(
-                    message = "Failed to write header row",
-                    exception = e
-                )
-            )
-        }
-    }
-
-    private fun validateWriterState(data: List<Any>): Boolean {
-        if (!fileWriter.isOpen()) {
-            errors.add(SaveError(
-                message = "Cannot save item: prepare() must be called first",
-                rowData = data
-            ))
-            return false
-        }
-        return true
-    }
-
-    private fun validateDataSize(data: List<Any>): Boolean {
-        if (data.size != columnNames.size) {
-            errors.add(SaveError(
-                message = "Data size (${data.size}) does not match column count (${columnNames.size})",
-                rowData = data
-            ))
-            return false
-        }
-        return true
-    }
-
-    private fun writeDataRow(data: List<Any>) {
-        try {
-            val rowData = buildDataRow(data)
-            fileWriter.writeLine(rowData)
-        } catch (e: Exception) {
-            errors.add(SaveError(
-                message = "Failed to write data row",
-                rowData = data,
-                exception = e
-            ))
-        }
-    }
-
-    private fun closeFile() {
-        try {
-            fileWriter.close()
-        } catch (e: Exception) {
-            errors.add(SaveError(
-                message = "Failed to close file",
-                exception = e
-            ))
-        }
+        // Close file and release resources
+        fileWriter.close()
     }
 
     private fun buildHeaderRow(): String {
-        return columnNames.joinToString(FileFormatConstants.COLUMN_DELIMITER) + FileFormatConstants.ROW_DELIMITER
+        // Join column names with tab delimiter and add row delimiter
+        return columnNames.joinToString(FileFormatConstants.COLUMN_DELIMITER) + 
+               FileFormatConstants.ROW_DELIMITER
     }
 
     private fun buildDataRow(data: List<Any>): String {
-        val formattedData = data.joinToString(FileFormatConstants.COLUMN_DELIMITER) { value ->
+        // Format each value using dataFormatter
+        val formattedData = data.joinToString(
+            FileFormatConstants.COLUMN_DELIMITER
+        ) { value ->
             dataFormatter.formatValue(value)
         }
+        // Add row delimiter to complete the line
         return formattedData + FileFormatConstants.ROW_DELIMITER
     }
 }
