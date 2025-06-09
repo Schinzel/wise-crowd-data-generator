@@ -4,6 +4,7 @@
 - Task 1 done - Centralize File Format Specifications - 2025-06-09
 - Task 2 done - Refactor Error Handling to DataGenerationService - 2025-06-09
 - Task 3 done - File Parsing Utility - 2025-06-09
+- Task 4 done - Data Generation Configuration - 2025-06-09
 
 # Tasks
 
@@ -211,6 +212,31 @@ Implement a configuration class that holds all parameters needed for data genera
 9. Desktop path detection works across different operating systems
 
 ### Task Summary (to be completed by AI)
+**Completed:** 2025-06-09
+
+**Major Changes Made:**
+- Created DataGenerationConfig data class in main `data_generator` package with all required configuration parameters
+- Implemented automatic output directory generation with CET timezone timestamp formatting
+- Added comprehensive input validation for date ranges and positive number constraints
+- Created cross-platform desktop path detection for Windows, Mac, and Linux systems
+- Implemented timestamp format: wise_crowd_data_{month}_{day}_{hour}:{minute} with lowercase month names
+
+**Files Affected:**
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/DataGenerationConfig.kt`
+- NEW: `src/test/kotlin/com/wisecrowd/data_generator/DataGenerationConfigTest.kt`
+
+**Key Decisions:**
+- Placed DataGenerationConfig in main `data_generator` package for easy access by orchestrator classes
+- Used CET timezone for timestamp generation as specified in requirements
+- Implemented defensive programming with require() statements for all input validation
+- Created comprehensive test coverage with 17 test scenarios including edge cases and validation
+- Used companion object for static utility functions to generate default directory paths
+
+**Notes for Future Tasks:**
+- DataGenerationConfig is ready for use by WiseCrowdDataGenerator main orchestrator
+- All configuration parameters have sensible defaults matching project requirements (100 assets, 1,000 users, 2020-current date range)
+- Cross-platform desktop path detection works on Windows, Mac, and Linux systems
+- Output directory format matches exact specification with CET timezone and lowercase month names
 
 ## Phase 5 - Task 5 - Main Orchestrator Implementation
 Create WiseCrowdDataGenerator class that orchestrates the complete data generation pipeline.
