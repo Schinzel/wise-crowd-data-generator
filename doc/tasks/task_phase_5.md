@@ -3,6 +3,7 @@
 # Current Implementation Status (to be completed by AI)
 - Task 1 done - Centralize File Format Specifications - 2025-06-09
 - Task 2 done - Refactor Error Handling to DataGenerationService - 2025-06-09
+- Task 3 done - File Parsing Utility - 2025-06-09
 
 # Tasks
 
@@ -145,6 +146,32 @@ Implement a utility class that can read the generated tab-delimited files and co
 7. Performance optimized for large files (thousands of assets/users)
 
 ### Task Summary (to be completed by AI)
+**Completed:** 2025-06-09
+
+**Major Changes Made:**
+- Created FileDataParser utility class in `data_saver` package to parse tab-delimited files
+- Implemented robust parsing logic using FileFormatConstants for consistency with FileDataSaver
+- Added header row skipping based on FileFormatConstants.HAS_HEADER_ROW = true
+- Handled empty files, empty lines, and malformed data gracefully
+- Implemented string qualifier removal to match DataFormatter behavior
+- Optimized for performance with large files (tested with 1,000 rows)
+
+**Files Affected:**
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/data_saver/FileDataParser.kt`
+- NEW: `src/test/kotlin/com/wisecrowd/data_generator/data_saver/FileDataParserTest.kt`
+
+**Key Decisions:**
+- Placed FileDataParser in `data_saver` package for consistency with FileFormatConstants and FileDataSaver
+- Returns List<List<String>> format compatible with existing generator dependencies  
+- Uses manual parsing logic to handle edge cases like empty columns in middle of rows
+- Validates file existence and readability with defensive programming principles
+- Comprehensive test coverage with 15 test scenarios including performance testing
+
+**Notes for Future Tasks:**
+- FileDataParser is ready for use by dependent generators (TransactionDataGenerator, UserHoldingsDataGenerator)
+- Parsing logic correctly handles the exact format produced by FileDataSaver with joinToString
+- Performance tested and optimized for large datasets with thousands of rows
+- All existing tests continue to pass with new implementation
 
 ## Phase 5 - Task 4 - Data Generation Configuration
 Create DataGenerationConfig class to manage all configuration parameters for the data generation process.
