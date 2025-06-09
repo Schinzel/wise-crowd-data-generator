@@ -241,6 +241,30 @@
             </plugin>
 
             <plugin>
+                <!-- Enforces minimum Maven version to prevent build issues and ensure
+                team consistency. Fails early with clear error message if Maven is too old
+                instead of cryptic build failures later. Protects against version-specific
+                bugs and ensures plugin compatibility. -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <version>[3.8.0,)</version>
+                                </requireMavenVersion>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <!-- Kotlin code style and formatting -->
                 <groupId>com.github.gantsign.maven</groupId>
                 <artifactId>ktlint-maven-plugin</artifactId>
