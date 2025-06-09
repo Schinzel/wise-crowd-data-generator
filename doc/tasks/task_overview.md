@@ -15,6 +15,8 @@ unit tests unless explicitly stated otherwise.
 * run below commands to verify that things still work
   * mvn clean install \-DskipTests
   * mvn test
+  * mvn ktlint:check
+  * mvn ktlint:format (to auto-fix style issues)
 * Fill out the *Task Summary (to be completed by AI)* for the task you just completed
   * Be concise and to the point
   * Include major changes made and files affected

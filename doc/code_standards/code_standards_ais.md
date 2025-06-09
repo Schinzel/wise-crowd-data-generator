@@ -14,20 +14,20 @@ This is a code standard to be followed by AIs such as Claude, Gemini, ChatGPT an
 
 ## General Guidelines
 - Write elegant code
-- All functions should be Enterprise Production Ready for live deployment. 
+- All functions should be Enterprise Production Ready for live deployment.
 - Check all of the code for bugs and implement fixes, ensure all potential edge cases are handled.
-- Everything should be held to the highest standards for performance, it should be blazing fast. 
-- Ensure maximum robustness. 
+- Everything should be held to the highest standards for performance, it should be blazing fast.
+- Ensure maximum robustness.
 - Try catch and finally everywhere appropriate.
 - Break code into the smallest possible, independently testable units. This is usually true, but this is extra important for AIs.
 - Extensively use interfaces to define clear contracts and decouple components.
-- Since AI might implement functions differently than expected, well-defined interfaces with clear input/output requirements 
+- Since AI might implement functions differently than expected, well-defined interfaces with clear input/output requirements
 ensure architectural boundaries remain intact regardless of implementation details.
 - **Clean imports**: Always remove unused imports before completing a task
 - **Verify imports**: Check that every import statement is actually used in the code
 
 ## Interface Design
-Every public interface or abstract class defining a significant unit of behavior must have a comprehensive contract 
+Every public interface or abstract class defining a significant unit of behavior must have a comprehensive contract
 test suite that rigorously verifies adherence to its documented purpose and constraints, independent of any specific implementation.
 
 Example:

@@ -36,6 +36,8 @@ Most lines should be 80 chars or shorter.
 81-120 chars in rare circumstances. 
 One should have a very good reason to go above 120 chars.
 
+**Exception**: Test files can have longer lines (up to 200 chars) due to descriptive test names and test data setup.
+
 ## Naming and Casing Conventions
 
 | Type       | Convention                  | Example                                   |
