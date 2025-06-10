@@ -28,11 +28,14 @@ class UserHoldingsDataGenerator(
     private val calculatedHoldings: List<List<Any>>
 
     init {
-        // Validate input parameters using defensive programming principles
-        require(transactionData.isNotEmpty()) { "Transaction data cannot be empty" }
-
         // Calculate all holdings during initialization for consistent iteration
-        calculatedHoldings = calculateUserHoldings(transactionData)
+        // Handle empty transaction data gracefully by returning empty holdings
+        calculatedHoldings =
+            if (transactionData.isNotEmpty()) {
+                calculateUserHoldings(transactionData)
+            } else {
+                emptyList()
+            }
     }
 
     override fun getColumnNames(): List<String> =

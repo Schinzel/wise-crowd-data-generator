@@ -252,14 +252,18 @@ class UserHoldingsDataGeneratorTest {
     }
 
     @Test
-    fun constructor_emptyTransactionData_throwsIllegalArgumentException() {
+    fun constructor_emptyTransactionData_createsEmptyHoldingsGenerator() {
         // Arrange
         val emptyTransactionData = emptyList<List<Any>>()
 
-        // Act & Assert
-        assertThatThrownBy {
-            UserHoldingsDataGenerator(emptyTransactionData)
-        }.isInstanceOf(IllegalArgumentException::class.java)
+        // Act
+        val generator = UserHoldingsDataGenerator(emptyTransactionData)
+
+        // Assert
+        assertThat(generator.hasMoreRows()).isFalse()
+        assertThat(generator.getColumnNames()).isEqualTo(
+            listOf("user_id", "asset_id", "amount", "currency_id"),
+        )
     }
 
     @Test

@@ -24,6 +24,9 @@ class DataGenerationService(
     // Collection of errors that occurred during operations
     private val errors = mutableListOf<SaveError>()
 
+    // Counter for tracking the number of rows successfully generated and saved
+    private var rowCount = 0
+
     /**
      * Executes the complete generate-and-save workflow with centralized error handling
      *
@@ -68,6 +71,8 @@ class DataGenerationService(
         // Save individual row, continue processing on error
         try {
             saver.saveItem(dataRow)
+            // Increment row counter on successful save
+            rowCount++
         } catch (e: Exception) {
             recordError("Failed to save data row", dataRow, e)
         }
@@ -109,4 +114,10 @@ class DataGenerationService(
      * @return true if errors occurred, false otherwise
      */
     fun hasErrors(): Boolean = errors.isNotEmpty()
+
+    /**
+     * Get the number of rows that were successfully generated and saved
+     * @return count of successfully processed rows
+     */
+    fun getRowCount(): Int = rowCount
 }
