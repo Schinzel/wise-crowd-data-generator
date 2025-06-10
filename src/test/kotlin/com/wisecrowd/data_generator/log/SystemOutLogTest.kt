@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator
+package com.wisecrowd.data_generator.log
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

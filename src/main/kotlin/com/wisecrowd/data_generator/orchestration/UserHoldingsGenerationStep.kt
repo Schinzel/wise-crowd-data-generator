@@ -2,10 +2,10 @@ package com.wisecrowd.data_generator.orchestration
 
 import com.wisecrowd.data_generator.DataGenerationService
 import com.wisecrowd.data_generator.FileNameEnum
-import com.wisecrowd.data_generator.ILog
 import com.wisecrowd.data_generator.data_generators.UserHoldingsDataGenerator
 import com.wisecrowd.data_generator.data_saver.IDataSaver
 import com.wisecrowd.data_generator.data_saver.SaveError
+import com.wisecrowd.data_generator.log.ILog
 import kotlin.system.measureTimeMillis
 
 /**

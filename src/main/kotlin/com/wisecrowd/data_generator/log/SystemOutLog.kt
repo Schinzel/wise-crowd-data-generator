@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator
+package com.wisecrowd.data_generator.log
 
 /**
  * The purpose of this class is to provide a default ILog implementation

@@ -4,6 +4,8 @@ import com.wisecrowd.data_generator.data_saver.FileDataParser
 import com.wisecrowd.data_generator.data_saver.IDataSaver
 import com.wisecrowd.data_generator.data_saver.SaveError
 import com.wisecrowd.data_generator.data_saver.file_data_saver.FileDataSaver
+import com.wisecrowd.data_generator.log.ILog
+import com.wisecrowd.data_generator.log.SystemOutLog
 import com.wisecrowd.data_generator.orchestration.AssetDataGenerationStep
 import com.wisecrowd.data_generator.orchestration.PriceSeriesGenerationStep
 import com.wisecrowd.data_generator.orchestration.TransactionDataGenerationStep

@@ -1,5 +1,7 @@
 package com.wisecrowd.data_generator
 
+import com.wisecrowd.data_generator.log.ILog
+
 /**
  * The purpose of this class is to provide a test implementation of ILog
  * that captures log messages for verification in unit tests.

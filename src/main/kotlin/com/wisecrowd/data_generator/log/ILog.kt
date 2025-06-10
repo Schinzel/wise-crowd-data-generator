@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator
+package com.wisecrowd.data_generator.log
 
 /**
  * The purpose of this interface is to provide a flexible logging abstraction

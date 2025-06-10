@@ -318,8 +318,8 @@ Warnings encountered:
 - Enhanced all generation steps to log both timing and row count information
 
 **Files Affected:**
-- NEW: `src/main/kotlin/com/wisecrowd/data_generator/ILog.kt`
-- NEW: `src/main/kotlin/com/wisecrowd/data_generator/SystemOutLog.kt`
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/log/ILog.kt` (moved to log package 2025-06-10)
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/log/SystemOutLog.kt` (moved to log package 2025-06-10)
 - NEW: `src/main/kotlin/com/wisecrowd/data_generator/WiseCrowdDataOrchestrator.kt` (renamed from WiseCrowdDataGenerator)
 - NEW: `src/main/kotlin/com/wisecrowd/data_generator/orchestration/AssetDataGenerationStep.kt` (moved from generators package)
 - NEW: `src/main/kotlin/com/wisecrowd/data_generator/orchestration/PriceSeriesGenerationStep.kt` (moved from generators package)
@@ -327,7 +327,7 @@ Warnings encountered:
 - NEW: `src/main/kotlin/com/wisecrowd/data_generator/orchestration/TransactionDataGenerationStep.kt` (moved from generators package)
 - NEW: `src/main/kotlin/com/wisecrowd/data_generator/orchestration/UserHoldingsGenerationStep.kt` (moved from generators package)
 - MODIFIED: `src/main/kotlin/com/wisecrowd/data_generator/DataGenerationService.kt`
-- NEW: `src/test/kotlin/com/wisecrowd/data_generator/SystemOutLogTest.kt`
+- NEW: `src/test/kotlin/com/wisecrowd/data_generator/log/SystemOutLogTest.kt` (moved to log package 2025-06-10)
 - NEW: `src/test/kotlin/com/wisecrowd/data_generator/WiseCrowdDataOrchestratorTest.kt` (renamed from WiseCrowdDataGeneratorTest)
 - NEW: `src/test/kotlin/com/wisecrowd/data_generator/WiseCrowdDataOrchestratorIntegrationTest.kt` (renamed from WiseCrowdDataGeneratorIntegrationTest)
 - MODIFIED: `src/test/kotlin/com/wisecrowd/data_generator/DataGenerationServiceTest.kt`
