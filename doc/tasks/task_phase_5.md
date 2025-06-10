@@ -240,7 +240,7 @@ Implement a configuration class that holds all parameters needed for data genera
 - Output directory format matches exact specification with CET timezone and lowercase month names
 
 ## Phase 5 - Task 5 - Main Orchestrator Implementation
-Create WiseCrowdDataGenerator class that orchestrates the complete data generation pipeline.
+Create WiseCrowdDataOrchestrator class that orchestrates the complete data generation pipeline.
 
 ### Description
 Implement the main orchestrator that coordinates all data generators in the correct sequence, handles file dependencies, and provides detailed progress feedback with timing information.
@@ -275,7 +275,7 @@ Warnings encountered:
 - Show detailed error summary at the end if any warnings occurred
 
 ### Deliverables
-- WiseCrowdDataGenerator main orchestrator class
+- WiseCrowdDataOrchestrator main orchestrator class
 - ILog interface for output handling
 - SystemOutLog default implementation
 - Integration with all existing generators
@@ -285,7 +285,7 @@ Warnings encountered:
 ### Acceptance Criteria
 1. Create ILog interface with writeToLog(message: String) method
 2. Create SystemOutLog class implementing ILog that writes to System.out
-3. WiseCrowdDataGenerator takes DataGenerationConfig and ILog as constructor parameters
+3. WiseCrowdDataOrchestrator takes DataGenerationConfig and ILog as constructor parameters
 4. ILog defaults to SystemOutLog() for backward compatibility
 5. Single generate() method orchestrates complete pipeline
 6. Generates all 5 files in correct dependency order
@@ -305,10 +305,12 @@ Warnings encountered:
 **Completed:** 2025-06-10
 
 **Major Changes Made:**
+- **REFACTORED NAMING**: Renamed `WiseCrowdDataGenerator` to `WiseCrowdDataOrchestrator` for better semantic clarity
+- **PACKAGE RESTRUCTURE**: Moved orchestration step classes from `generators` package to new `orchestration` package
 - Created ILog interface and SystemOutLog implementation for flexible logging
-- Created WiseCrowdDataGenerator main orchestrator class with complete pipeline management
-- Extracted generation steps into separate classes (AssetDataGenerationStep, PriceSeriesGenerationStep, UserDataGenerationStep, TransactionDataGenerationStep, UserHoldingsGenerationStep) per user request for smaller files
-- Added comprehensive function comments to all WiseCrowdDataGenerator methods
+- Created WiseCrowdDataOrchestrator main orchestrator class with complete pipeline management
+- Extracted generation steps into separate classes in orchestration package for clean separation of concerns
+- Added comprehensive function comments to all WiseCrowdDataOrchestrator methods
 - Enhanced DataGenerationService with row counting functionality and getRowCount() method
 - Implemented progress feedback with step numbers, timing, and row counts
 - Added file dependency handling with proper type conversion between file I/O and generators
@@ -318,33 +320,39 @@ Warnings encountered:
 **Files Affected:**
 - NEW: `src/main/kotlin/com/wisecrowd/data_generator/ILog.kt`
 - NEW: `src/main/kotlin/com/wisecrowd/data_generator/SystemOutLog.kt`
-- NEW: `src/main/kotlin/com/wisecrowd/data_generator/WiseCrowdDataGenerator.kt`
-- NEW: `src/main/kotlin/com/wisecrowd/data_generator/generators/AssetDataGenerationStep.kt`
-- NEW: `src/main/kotlin/com/wisecrowd/data_generator/generators/PriceSeriesGenerationStep.kt`
-- NEW: `src/main/kotlin/com/wisecrowd/data_generator/generators/UserDataGenerationStep.kt`
-- NEW: `src/main/kotlin/com/wisecrowd/data_generator/generators/TransactionDataGenerationStep.kt`
-- NEW: `src/main/kotlin/com/wisecrowd/data_generator/generators/UserHoldingsGenerationStep.kt`
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/WiseCrowdDataOrchestrator.kt` (renamed from WiseCrowdDataGenerator)
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/orchestration/AssetDataGenerationStep.kt` (moved from generators package)
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/orchestration/PriceSeriesGenerationStep.kt` (moved from generators package)
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/orchestration/UserDataGenerationStep.kt` (moved from generators package)
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/orchestration/TransactionDataGenerationStep.kt` (moved from generators package)
+- NEW: `src/main/kotlin/com/wisecrowd/data_generator/orchestration/UserHoldingsGenerationStep.kt` (moved from generators package)
 - MODIFIED: `src/main/kotlin/com/wisecrowd/data_generator/DataGenerationService.kt`
 - NEW: `src/test/kotlin/com/wisecrowd/data_generator/SystemOutLogTest.kt`
-- NEW: `src/test/kotlin/com/wisecrowd/data_generator/WiseCrowdDataGeneratorTest.kt`
-- NEW: `src/test/kotlin/com/wisecrowd/data_generator/WiseCrowdDataGeneratorIntegrationTest.kt`
+- NEW: `src/test/kotlin/com/wisecrowd/data_generator/WiseCrowdDataOrchestratorTest.kt` (renamed from WiseCrowdDataGeneratorTest)
+- NEW: `src/test/kotlin/com/wisecrowd/data_generator/WiseCrowdDataOrchestratorIntegrationTest.kt` (renamed from WiseCrowdDataGeneratorIntegrationTest)
 - MODIFIED: `src/test/kotlin/com/wisecrowd/data_generator/DataGenerationServiceTest.kt`
+- REMOVED: `src/main/kotlin/com/wisecrowd/data_generator/generators/` (entire package removed)
 
 **Key Decisions:**
+- **NAMING CLARITY**: Changed `WiseCrowdDataGenerator` to `WiseCrowdDataOrchestrator` to clearly distinguish orchestration from data generation
+- **PACKAGE ORGANIZATION**: Created `orchestration` package for step classes, maintaining clear separation from `data_generators` package
+- **SEMANTIC STRUCTURE**: Main orchestrator in base package, step implementations in sub-package
 - Extracted generation steps into separate classes per user feedback to maintain smaller, focused files
 - Added row counting functionality to DataGenerationService that increments on successful saves
 - Enhanced all generation steps to log format: "Step X completed in Yms - Z rows generated (W warnings)"
-- Implemented comprehensive function comments for all WiseCrowdDataGenerator methods
+- Implemented comprehensive function comments for all WiseCrowdDataOrchestrator methods
 - Maintained fail-fast strategy with partial file cleanup on errors
 - Used factory pattern for IDataSaver creation to enable flexible testing
 - Created comprehensive unit and integration tests with both mocked and real file I/O scenarios
 
 **Notes for Future Tasks:**
-- Main orchestrator provides complete pipeline management with detailed progress feedback
+- **IMPROVED NAMING**: Main orchestrator provides complete pipeline management with clear semantic distinction from data generators
+- **CLEAN ARCHITECTURE**: Orchestration steps separated from data generation logic with clear package boundaries
 - Row counting functionality gives users visibility into data generation volume
 - File dependency handling correctly converts between string file format and typed generator inputs
 - All generation steps follow consistent logging pattern with timing and row count information
 - Integration tests verify end-to-end pipeline functionality with actual file generation
+- Package structure now clearly separates concerns: `data_generators` (generation logic) vs `orchestration` (workflow coordination)
 
 ## Phase 5 - Task 6 - Update README with Usage Examples
 Update the main README.md file to include basic usage documentation for the completed data generation system.

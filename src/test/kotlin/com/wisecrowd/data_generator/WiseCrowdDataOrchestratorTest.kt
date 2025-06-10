@@ -9,12 +9,12 @@ import java.nio.file.Path
 import java.time.LocalDate
 
 /**
- * The purpose of this class is to test the WiseCrowdDataGenerator orchestrator
+ * The purpose of this class is to test the WiseCrowdDataOrchestrator
  * with various configuration scenarios and error conditions.
  *
  * Written by Claude Sonnet 4
  */
-class WiseCrowdDataGeneratorTest {
+class WiseCrowdDataOrchestratorTest {
     @TempDir
     lateinit var tempDir: Path
 
@@ -29,7 +29,7 @@ class WiseCrowdDataGeneratorTest {
                 outputDirectory = tempDir.toString(),
             )
         val testLog = TestLog()
-        val generator = WiseCrowdDataGenerator(config, testLog)
+        val generator = WiseCrowdDataOrchestrator(config, testLog)
 
         generator.generate()
 
@@ -58,7 +58,7 @@ class WiseCrowdDataGeneratorTest {
                 outputDirectory = tempDir.toString(),
             )
         val testLog = TestLog()
-        val generator = WiseCrowdDataGenerator(config, testLog)
+        val generator = WiseCrowdDataOrchestrator(config, testLog)
 
         generator.generate()
 
@@ -82,7 +82,7 @@ class WiseCrowdDataGeneratorTest {
                 outputDirectory = tempDir.toString(),
             )
         val testLog = TestLog()
-        val generator = WiseCrowdDataGenerator(config, testLog)
+        val generator = WiseCrowdDataOrchestrator(config, testLog)
 
         generator.generate()
 
@@ -105,7 +105,7 @@ class WiseCrowdDataGeneratorTest {
                 numberOfUsers = 2,
                 outputDirectory = nonExistentDir.absolutePath,
             )
-        val generator = WiseCrowdDataGenerator(config)
+        val generator = WiseCrowdDataOrchestrator(config)
 
         generator.generate()
 
@@ -123,7 +123,7 @@ class WiseCrowdDataGeneratorTest {
                 numberOfUsers = 1,
                 outputDirectory = invalidPath,
             )
-        val generator = WiseCrowdDataGenerator(config)
+        val generator = WiseCrowdDataOrchestrator(config)
 
         assertThatThrownBy {
             generator.generate()
@@ -143,7 +143,7 @@ class WiseCrowdDataGeneratorTest {
             )
 
         // Test that constructor works with default log (no exception thrown)
-        val generator = WiseCrowdDataGenerator(config)
+        val generator = WiseCrowdDataOrchestrator(config)
 
         // Should complete without error
         generator.generate()

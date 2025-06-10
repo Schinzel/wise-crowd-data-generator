@@ -13,7 +13,7 @@ import java.time.LocalDate
  *
  * Written by Claude Sonnet 4
  */
-class WiseCrowdDataGeneratorIntegrationTest {
+class WiseCrowdDataOrchestratorIntegrationTest {
     @TempDir
     lateinit var tempDir: Path
 
@@ -27,7 +27,7 @@ class WiseCrowdDataGeneratorIntegrationTest {
                 numberOfUsers = 10,
                 outputDirectory = tempDir.toString(),
             )
-        val generator = WiseCrowdDataGenerator(config)
+        val generator = WiseCrowdDataOrchestrator(config)
 
         generator.generate()
 
@@ -58,7 +58,7 @@ class WiseCrowdDataGeneratorIntegrationTest {
                 numberOfUsers = 5,
                 outputDirectory = tempDir.toString(),
             )
-        val generator = WiseCrowdDataGenerator(config)
+        val generator = WiseCrowdDataOrchestrator(config)
 
         generator.generate()
 

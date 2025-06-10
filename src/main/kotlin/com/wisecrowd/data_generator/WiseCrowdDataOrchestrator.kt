@@ -4,11 +4,11 @@ import com.wisecrowd.data_generator.data_saver.FileDataParser
 import com.wisecrowd.data_generator.data_saver.IDataSaver
 import com.wisecrowd.data_generator.data_saver.SaveError
 import com.wisecrowd.data_generator.data_saver.file_data_saver.FileDataSaver
-import com.wisecrowd.data_generator.generators.AssetDataGenerationStep
-import com.wisecrowd.data_generator.generators.PriceSeriesGenerationStep
-import com.wisecrowd.data_generator.generators.TransactionDataGenerationStep
-import com.wisecrowd.data_generator.generators.UserDataGenerationStep
-import com.wisecrowd.data_generator.generators.UserHoldingsGenerationStep
+import com.wisecrowd.data_generator.orchestration.AssetDataGenerationStep
+import com.wisecrowd.data_generator.orchestration.PriceSeriesGenerationStep
+import com.wisecrowd.data_generator.orchestration.TransactionDataGenerationStep
+import com.wisecrowd.data_generator.orchestration.UserDataGenerationStep
+import com.wisecrowd.data_generator.orchestration.UserHoldingsGenerationStep
 import java.io.File
 import java.time.LocalDate
 import java.util.UUID
@@ -31,7 +31,7 @@ import kotlin.system.measureTimeMillis
  *
  * Written by Claude Sonnet 4
  */
-class WiseCrowdDataGenerator(
+class WiseCrowdDataOrchestrator(
     private val config: DataGenerationConfig,
     private val log: ILog = SystemOutLog(),
 ) {

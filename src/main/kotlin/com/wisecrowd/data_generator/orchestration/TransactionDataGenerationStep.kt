@@ -1,4 +1,4 @@
-package com.wisecrowd.data_generator.generators
+package com.wisecrowd.data_generator.orchestration
 
 import com.wisecrowd.data_generator.DataGenerationService
 import com.wisecrowd.data_generator.FileNameEnum
