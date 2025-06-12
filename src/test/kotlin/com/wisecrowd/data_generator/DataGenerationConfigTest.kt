@@ -1,5 +1,7 @@
 package com.wisecrowd.data_generator
 
+import com.wisecrowd.data_generator.output_directory.CustomOutputDirectory
+import com.wisecrowd.data_generator.output_directory.DesktopOutputDirectory
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
@@ -21,7 +23,7 @@ class DataGenerationConfigTest {
 
             assertThat(config.numberOfAssets).isEqualTo(100)
             assertThat(config.numberOfUsers).isEqualTo(1_000)
-            assertThat(config.outputDirectory).isNotEmpty()
+            assertThat(config.outputDirectory).isInstanceOf(DesktopOutputDirectory::class.java)
         }
 
         @Test
@@ -30,7 +32,7 @@ class DataGenerationConfigTest {
             val endDate = LocalDate.of(2022, 12, 31)
             val numberOfAssets = 50
             val numberOfUsers = 500
-            val outputDirectory = "/custom/path"
+            val customOutputDirectory = CustomOutputDirectory("/custom/path")
 
             val config =
                 DataGenerationConfig(
@@ -38,14 +40,14 @@ class DataGenerationConfigTest {
                     endDate = endDate,
                     numberOfAssets = numberOfAssets,
                     numberOfUsers = numberOfUsers,
-                    outputDirectory = outputDirectory,
+                    outputDirectory = customOutputDirectory,
                 )
 
             assertThat(config.startDate).isEqualTo(startDate)
             assertThat(config.endDate).isEqualTo(endDate)
             assertThat(config.numberOfAssets).isEqualTo(numberOfAssets)
             assertThat(config.numberOfUsers).isEqualTo(numberOfUsers)
-            assertThat(config.outputDirectory).isEqualTo(outputDirectory)
+            assertThat(config.outputDirectory).isEqualTo(customOutputDirectory)
         }
 
         @Test
@@ -120,48 +122,56 @@ class DataGenerationConfigTest {
     @Nested
     inner class OutputDirectory {
         @Test
-        fun `outputDirectory _ default generation _ contains wise_crowd_data prefix`() {
+        fun `outputDirectory _ default desktop directory _ returns valid path`() {
             val config = DataGenerationConfig()
 
-            assertThat(config.outputDirectory).contains("wise_crowd_data_")
+            val path = config.outputDirectory.getPath()
+
+            assertThat(path).contains("wise_crowd_data_")
         }
 
         @Test
-        fun `outputDirectory _ default generation _ contains month abbreviation`() {
+        fun `outputDirectory _ custom directory _ returns specified path`() {
+            val customPath = "/custom/test/path"
+            val customOutputDirectory = CustomOutputDirectory(customPath)
+            val config = DataGenerationConfig(outputDirectory = customOutputDirectory)
+
+            val path = config.outputDirectory.getPath()
+
+            assertThat(path).isEqualTo(customPath)
+        }
+
+        @Test
+        fun `outputDirectory _ desktop directory contains month _ returns path with month`() {
             val config = DataGenerationConfig()
+
+            val path = config.outputDirectory.getPath()
 
             // Should contain a lowercase 3-letter month abbreviation
             val monthPattern = "_(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)_"
-            assertThat(config.outputDirectory).containsPattern(monthPattern)
+            assertThat(path).containsPattern(monthPattern)
         }
 
         @Test
-        fun `outputDirectory _ default generation _ contains day and time format`() {
+        fun `outputDirectory _ desktop directory contains time _ returns path with time format`() {
             val config = DataGenerationConfig()
+
+            val path = config.outputDirectory.getPath()
 
             // Should contain day (01-31) and time in format HH:MM
             val dayTimePattern = "_\\d{2}_\\d{2}:\\d{2}$"
-            assertThat(config.outputDirectory).containsPattern(dayTimePattern)
+            assertThat(path).containsPattern(dayTimePattern)
         }
 
         @Test
-        fun `outputDirectory _ default generation _ points to desktop`() {
+        fun `outputDirectory _ desktop directory points to desktop _ returns desktop path`() {
             val config = DataGenerationConfig()
+
+            val path = config.outputDirectory.getPath()
             val userHome = System.getProperty("user.home")
 
-            assertThat(config.outputDirectory).startsWith(userHome)
-            assertThat(config.outputDirectory).contains("Desktop")
-        }
-
-        @Test
-        fun `outputDirectory _ multiple instances _ generate different timestamps`() {
-            val config1 = DataGenerationConfig()
-            Thread.sleep(1) // Ensure different minute if near boundary
-            val config2 = DataGenerationConfig()
-
-            // Should have same format structure even if timestamps are identical
-            assertThat(config1.outputDirectory).contains("wise_crowd_data_")
-            assertThat(config2.outputDirectory).contains("wise_crowd_data_")
+            assertThat(path).startsWith(userHome)
+            assertThat(path).contains("Desktop")
         }
     }
 

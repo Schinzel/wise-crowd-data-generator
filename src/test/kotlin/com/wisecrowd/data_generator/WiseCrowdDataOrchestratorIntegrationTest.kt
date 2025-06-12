@@ -1,5 +1,6 @@
 package com.wisecrowd.data_generator
 
+import com.wisecrowd.data_generator.output_directory.CustomOutputDirectory
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.TempDir
@@ -25,7 +26,7 @@ class WiseCrowdDataOrchestratorIntegrationTest {
                 endDate = LocalDate.of(2024, 1, 2),
                 numberOfAssets = 5,
                 numberOfUsers = 10,
-                outputDirectory = tempDir.toString(),
+                outputDirectory = CustomOutputDirectory(tempDir.toString()),
             )
         val generator = WiseCrowdDataOrchestrator(config)
 
@@ -56,7 +57,7 @@ class WiseCrowdDataOrchestratorIntegrationTest {
                 endDate = endDate,
                 numberOfAssets = 3,
                 numberOfUsers = 5,
-                outputDirectory = tempDir.toString(),
+                outputDirectory = CustomOutputDirectory(tempDir.toString()),
             )
         val generator = WiseCrowdDataOrchestrator(config)
 

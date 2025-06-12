@@ -1,5 +1,6 @@
 package com.wisecrowd.data_generator
 
+import com.wisecrowd.data_generator.output_directory.CustomOutputDirectory
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -26,7 +27,7 @@ class WiseCrowdDataOrchestratorTest {
                 endDate = LocalDate.of(2024, 1, 3),
                 numberOfAssets = 5,
                 numberOfUsers = 10,
-                outputDirectory = tempDir.toString(),
+                outputDirectory = CustomOutputDirectory(tempDir.toString()),
             )
         val testLog = TestLog()
         val generator = WiseCrowdDataOrchestrator(config, testLog)
@@ -55,7 +56,7 @@ class WiseCrowdDataOrchestratorTest {
                 endDate = LocalDate.of(2024, 1, 2),
                 numberOfAssets = 3,
                 numberOfUsers = 5,
-                outputDirectory = tempDir.toString(),
+                outputDirectory = CustomOutputDirectory(tempDir.toString()),
             )
         val testLog = TestLog()
         val generator = WiseCrowdDataOrchestrator(config, testLog)
@@ -79,7 +80,7 @@ class WiseCrowdDataOrchestratorTest {
                 endDate = LocalDate.of(2024, 1, 1),
                 numberOfAssets = 2,
                 numberOfUsers = 3,
-                outputDirectory = tempDir.toString(),
+                outputDirectory = CustomOutputDirectory(tempDir.toString()),
             )
         val testLog = TestLog()
         val generator = WiseCrowdDataOrchestrator(config, testLog)
@@ -103,7 +104,7 @@ class WiseCrowdDataOrchestratorTest {
                 endDate = LocalDate.of(2024, 1, 1),
                 numberOfAssets = 2,
                 numberOfUsers = 2,
-                outputDirectory = nonExistentDir.absolutePath,
+                outputDirectory = CustomOutputDirectory(nonExistentDir.absolutePath),
             )
         val generator = WiseCrowdDataOrchestrator(config)
 
@@ -116,7 +117,7 @@ class WiseCrowdDataOrchestratorTest {
     @Test
     fun `generate _ invalid output directory path _ throws exception`() {
         // Use an invalid path that cannot be created (root permission required)
-        val invalidPath = "/root/cannot_create_this_directory"
+        val invalidPath = CustomOutputDirectory("/root/cannot_create_this_directory")
         val config =
             DataGenerationConfig(
                 numberOfAssets = 1,
@@ -139,7 +140,7 @@ class WiseCrowdDataOrchestratorTest {
                 endDate = LocalDate.of(2024, 1, 1),
                 numberOfAssets = 1,
                 numberOfUsers = 1,
-                outputDirectory = tempDir.toString(),
+                outputDirectory = CustomOutputDirectory(tempDir.toString()),
             )
 
         // Test that constructor works with default log (no exception thrown)

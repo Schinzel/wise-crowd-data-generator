@@ -93,10 +93,10 @@ class WiseCrowdDataOrchestrator(
      * @throws IllegalArgumentException if directory creation fails
      */
     private fun createOutputDirectory() {
-        val outputDir = File(config.outputDirectory)
+        val outputDir = File(config.outputDirectory.getPath())
         if (!outputDir.exists()) {
             val created = outputDir.mkdirs()
-            require(created) { "Failed to create output directory: ${config.outputDirectory}" }
+            require(created) { "Failed to create output directory: ${config.outputDirectory.getPath()}" }
         }
     }
 
@@ -195,7 +195,7 @@ class WiseCrowdDataOrchestrator(
      * @return Configured IDataSaver instance ready for use
      */
     private fun createFileDataSaver(fileName: String): IDataSaver {
-        val filePath = File(config.outputDirectory, fileName).absolutePath
+        val filePath = File(config.outputDirectory.getPath(), fileName).absolutePath
         return FileDataSaver(filePath)
     }
 
@@ -210,7 +210,7 @@ class WiseCrowdDataOrchestrator(
      * @return List of data rows with properly typed values for generator consumption
      */
     private fun readGeneratedFile(fileName: String): List<List<Any>> {
-        val filePath = File(config.outputDirectory, fileName).absolutePath
+        val filePath = File(config.outputDirectory.getPath(), fileName).absolutePath
         val stringData = fileDataParser.parseFile(filePath)
 
         // Convert List<List<String>> to List<List<Any>> with proper type conversion
@@ -351,7 +351,7 @@ class WiseCrowdDataOrchestrator(
      */
     private fun cleanupPartialFiles() {
         // Remove any partially created files on failure
-        val outputDir = File(config.outputDirectory)
+        val outputDir = File(config.outputDirectory.getPath())
         if (outputDir.exists()) {
             FileNameEnum.entries.forEach { fileEnum ->
                 val file = File(outputDir, fileEnum.fileName)
