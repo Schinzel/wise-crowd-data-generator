@@ -16,16 +16,4 @@ data class DataGenerationConfig(
     val numberOfAssets: Int = 100,
     val numberOfUsers: Int = 1_000,
     val outputDirectory: IOutputDirectory = DesktopOutputDirectory(),
-) {
-    init {
-        require(endDate >= startDate) {
-            "End date ($endDate) must be greater than or equal to start date ($startDate)"
-        }
-        require(numberOfAssets > 0) {
-            "Number of assets ($numberOfAssets) must be greater than 0"
-        }
-        require(numberOfUsers > 0) {
-            "Number of users ($numberOfUsers) must be greater than 0"
-        }
-    }
-}
+)

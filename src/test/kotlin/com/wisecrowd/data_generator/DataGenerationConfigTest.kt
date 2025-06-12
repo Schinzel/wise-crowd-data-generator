@@ -3,7 +3,6 @@ package com.wisecrowd.data_generator
 import com.wisecrowd.data_generator.output_directory.CustomOutputDirectory
 import com.wisecrowd.data_generator.output_directory.DesktopOutputDirectory
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -62,60 +61,6 @@ class DataGenerationConfigTest {
 
             assertThat(config.startDate).isEqualTo(date)
             assertThat(config.endDate).isEqualTo(date)
-        }
-    }
-
-    @Nested
-    inner class Validation {
-        @Test
-        fun `constructor _ end date before start date _ throws IllegalArgumentException`() {
-            val startDate = LocalDate.of(2023, 6, 15)
-            val endDate = LocalDate.of(2023, 6, 14)
-
-            assertThatThrownBy {
-                DataGenerationConfig(
-                    startDate = startDate,
-                    endDate = endDate,
-                )
-            }.isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessageContaining("End date")
-                .hasMessageContaining("must be greater than or equal to start date")
-        }
-
-        @Test
-        fun `constructor _ zero assets _ throws IllegalArgumentException`() {
-            assertThatThrownBy {
-                DataGenerationConfig(numberOfAssets = 0)
-            }.isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessageContaining("Number of assets")
-                .hasMessageContaining("must be greater than 0")
-        }
-
-        @Test
-        fun `constructor _ negative assets _ throws IllegalArgumentException`() {
-            assertThatThrownBy {
-                DataGenerationConfig(numberOfAssets = -5)
-            }.isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessageContaining("Number of assets")
-                .hasMessageContaining("must be greater than 0")
-        }
-
-        @Test
-        fun `constructor _ zero users _ throws IllegalArgumentException`() {
-            assertThatThrownBy {
-                DataGenerationConfig(numberOfUsers = 0)
-            }.isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessageContaining("Number of users")
-                .hasMessageContaining("must be greater than 0")
-        }
-
-        @Test
-        fun `constructor _ negative users _ throws IllegalArgumentException`() {
-            assertThatThrownBy {
-                DataGenerationConfig(numberOfUsers = -10)
-            }.isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessageContaining("Number of users")
-                .hasMessageContaining("must be greater than 0")
         }
     }
 
@@ -229,6 +174,33 @@ class DataGenerationConfigTest {
 
             assertThat(config.startDate).isEqualTo(startDate)
             assertThat(config.endDate).isEqualTo(endDate)
+        }
+
+        @Test
+        fun `constructor _ end date before start date _ creates config without validation`() {
+            val startDate = LocalDate.of(2023, 6, 15)
+            val endDate = LocalDate.of(2023, 6, 14)
+
+            val config =
+                DataGenerationConfig(
+                    startDate = startDate,
+                    endDate = endDate,
+                )
+
+            assertThat(config.startDate).isEqualTo(startDate)
+            assertThat(config.endDate).isEqualTo(endDate)
+        }
+
+        @Test
+        fun `constructor _ zero and negative values _ creates config without validation`() {
+            val config =
+                DataGenerationConfig(
+                    numberOfAssets = 0,
+                    numberOfUsers = -10,
+                )
+
+            assertThat(config.numberOfAssets).isEqualTo(0)
+            assertThat(config.numberOfUsers).isEqualTo(-10)
         }
     }
 }
