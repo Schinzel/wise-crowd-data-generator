@@ -354,7 +354,85 @@ Warnings encountered:
 - Integration tests verify end-to-end pipeline functionality with actual file generation
 - Package structure now clearly separates concerns: `data_generators` (generation logic) vs `orchestration` (workflow coordination)
 
-## Phase 5 - Task 6 - Update README with Usage Examples
+## Phase 5 - Task 6 - Refactor Generation Steps into Enhanced DataGenerationService
+Replace all individual generation step classes with a single enhanced DataGenerationService that handles orchestration, timing, logging, and step management.
+
+### Description
+Replace all individual generation step classes (AssetDataGenerationStep, PriceSeriesGenerationStep, etc.) with a single enhanced DataGenerationService that handles orchestration, timing, logging, and step management.
+
+### Current State
+- 5 separate step classes in `orchestration` package with similar structure
+- Each class has constructor with `config`, `log`, `dataGenerationService`
+- Each class has `execute()` method that does timing, logging, and generation
+- DataGenerationService exists but only handles basic generator/saver orchestration
+
+### Target State
+- Single enhanced DataGenerationService that replaces all step classes
+- One class handles everything: orchestration + timing + logging + step management
+- WiseCrowdDataOrchestrator calls DataGenerationService directly
+
+### Required Variables
+
+**Implementation Pattern:**
+- Use object declaration (singleton) with one function
+- Example: `object DataGenerationStepExecutor { fun execute(...) }`
+
+**Execute Method Parameters:**
+- `generator: IDataGenerator`
+- `dataSaver: IDataSaver`
+- `log: ILog`
+- `stepNumber: Int`
+- `initialLogMessage: String`
+
+**Execute Method Return:**
+- `Unit` (void - no return value)
+
+### Implementation Requirements
+
+1. **Enhance existing DataGenerationService class** with new parameters and functionality
+2. **Keep existing generateAndSave() method** for backward compatibility
+3. **Add new execute() method** with step management, timing, and logging
+4. **Maintain error handling** and row counting capabilities
+5. **Update WiseCrowdDataOrchestrator** to use enhanced DataGenerationService directly
+6. **Remove all step classes** from orchestration package
+7. **Update imports** in WiseCrowdDataOrchestrator
+8. **Update all tests** to reflect new structure
+
+### Log Message Format
+- Start: "Step {stepNumber}/5: {initialLogMessage}"
+- End: "Step {stepNumber} completed in {time}ms - {rowCount} rows generated{warningText}"
+  - `warningText` = "" if no errors, or " (X warnings)" where X is error count
+- After completion message: Log all errors, one line per error
+- Example with errors:
+  ```
+  Step 2/5: Generating price series for 100 assets over 1,826 days...
+  Step 2 completed in 1423ms - 500 rows generated (3 warnings)
+  Warning: Invalid price data for asset ABC123, using fallback value
+  Warning: Price volatility exceeded threshold for asset DEF456
+  Warning: Missing trend data for date 2023-01-15, using previous value
+  ```
+
+### Error Handling
+- Collect non-fatal errors during generation
+- Log any errors using ILog after generation completes
+- Let fatal errors bubble up (fail fast)
+- Include warning count in completion message if any errors occurred
+
+### Files to Modify
+- `DataGenerationService.kt` (enhance)
+- `WiseCrowdDataOrchestrator.kt` (update to use enhanced service)
+- Remove: All files in `orchestration` package
+- Update: All related test files
+
+### Acceptance Criteria
+- All existing tests pass
+- Code compiles successfully
+- No functionality changes (same behavior, different structure)
+- Cleaner, more maintainable code with fewer classes
+
+### Task Summary (to be completed by AI)
+
+## Phase 5 - Task 7 - Update README with Usage Examples
 Update the main README.md file to include basic usage documentation for the completed data generation system.
 
 ### Description
@@ -378,7 +456,7 @@ Add a simple usage section to the README explaining the purpose, generated files
 
 ### Task Summary (to be completed by AI)
 
-## Phase 5 - Task 7 - Integration Testing & Final Verification
+## Phase 5 - Task 8 - Integration Testing & Final Verification
 Create comprehensive integration tests and verify the complete data generation pipeline works end-to-end.
 
 ### Description
