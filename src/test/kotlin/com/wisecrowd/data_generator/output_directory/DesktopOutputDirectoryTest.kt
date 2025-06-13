@@ -33,8 +33,8 @@ class DesktopOutputDirectoryTest {
 
             val path = outputDirectory.getPath()
 
-            // Should contain day (01-31) and time in format HH:MM
-            val dayTimePattern = "_\\d{2}_\\d{2}:\\d{2}$"
+            // Should contain day (01-31) and time in format HH_MM
+            val dayTimePattern = "_\\d{2}_\\d{2}_\\d{2}$"
             assertThat(path).containsPattern(dayTimePattern)
         }
 

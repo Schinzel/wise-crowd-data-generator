@@ -77,16 +77,23 @@ class WiseCrowdDataOrchestrator(
      * Creates the output directory if it doesn't already exist
      *
      * Uses the output directory path from configuration and creates all parent
-     * directories as needed. Fails fast if directory creation is unsuccessful.
+     * directories as needed. Fails fast if directory already exists to prevent
+     * data overwriting and ensure clean generation runs.
      *
-     * @throws IllegalArgumentException if directory creation fails
+     * @throws IllegalArgumentException if directory creation fails or directory already exists
      */
     private fun createOutputDirectory() {
         val outputDir = File(config.outputDirectory.getPath())
-        if (!outputDir.exists()) {
-            val created = outputDir.mkdirs()
-            require(created) { "Failed to create output directory: ${config.outputDirectory.getPath()}" }
+        
+        // Fail fast if directory already exists to prevent overwriting
+        require(!outputDir.exists()) { 
+            "Output directory already exists: ${outputDir.path}\n" +
+            "Directory format: wise_crowd_data_{month}_{day}_{hour}_{minute}\n" +
+            "Please wait a minute and try again to generate a new timestamped directory."
         }
+        
+        val created = outputDir.mkdirs()
+        require(created) { "Failed to create output directory: ${config.outputDirectory.getPath()}" }
     }
 
     /**

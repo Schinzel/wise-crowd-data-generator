@@ -8,7 +8,8 @@
       "Bash(find:*)",
       "Bash(grep:*)",
       "Bash(mvn ktlint:*)",
-      "Bash(mvn:*)"
+      "Bash(mvn:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   },

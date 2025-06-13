@@ -8,7 +8,7 @@ import java.util.Locale
 
 /**
  * The purpose of this class is to generate desktop output directory paths
- * with timestamp format: wise_crowd_data_{month}_{day}_{hour}:{minute}
+ * with timestamp format: wise_crowd_data_{month}_{day}_{hour}_{minute}
  * using CET timezone and lowercase month names.
  *
  * Written by Claude Sonnet 4
@@ -32,8 +32,8 @@ class DesktopOutputDirectory : IOutputDirectory {
         val hour = String.format("%02d", now.hour)
         val minute = String.format("%02d", now.minute)
 
-        // Create directory name
-        val directoryName = "wise_crowd_data_${month}_${day}_$hour:$minute"
+        // Create directory name with underscores to avoid path separators
+        val directoryName = "wise_crowd_data_${month}_${day}_${hour}_$minute"
 
         // Get desktop path
         val desktopPath = getDesktopPath()
