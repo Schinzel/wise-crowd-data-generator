@@ -1,6 +1,7 @@
 # Phase 6 - Project Finalization
 
 # Current Implementation Status (to be completed by AI)
+- Task 1 done - Update README with Usage Examples - 2025-06-13
 
 # Tasks
 
@@ -31,6 +32,29 @@ Add a simple usage section to the README explaining the purpose, generated files
 8. Simple and concise - no advanced scenarios or troubleshooting
 
 ### Task Summary (to be completed by AI)
+**Completed 2025-06-13**
+
+Updated README.md with comprehensive usage section including:
+- Project purpose and description
+- All 5 generated files with descriptions  
+- Basic usage code example using DataGenerationConfig and WiseCrowdDataOrchestrator
+- Running instructions for Maven, IDE, and Kotlin
+
+Created Main.kt in com.wisecrowd.data_generator package with main function for command-line execution:
+- Simple entry point with default configuration (100 assets, 1,000 users, 2020-2022)
+- Error handling and success messaging
+- Progress output and file listing for user feedback
+
+Files affected:
+- MODIFIED: README.md - Added usage section with examples and running instructions
+- NEW: src/main/kotlin/com/wisecrowd/data_generator/Main.kt - Created main entry point
+
+Key decisions:
+- Placed Main.kt in same package as WiseCrowdDataOrchestrator for domain cohesion
+- Used shorter 2-year date range (2020-2022) for faster execution in demo scenarios
+- Added error handling with stack trace for debugging failed generations
+
+Post-task fix: Corrected README.md bugs including wrong method name (generateAllData() → generate()) and incorrect main class references (MainKt → com.wisecrowd.data_generator.MainKt).
 
 ## Phase 6 - Task 2 - Archive Task Documentation and Create Streamlined AI Documentation
 Archive verbose task documentation and create concise documentation optimized for AI assistant interactions.
