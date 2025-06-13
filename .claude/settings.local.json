@@ -6,7 +6,9 @@
       "Bash(mvn clean:*)",
       "Bash(rm:*)",
       "Bash(find:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(mvn ktlint:*)",
+      "Bash(mvn:*)"
     ],
     "deny": []
   },

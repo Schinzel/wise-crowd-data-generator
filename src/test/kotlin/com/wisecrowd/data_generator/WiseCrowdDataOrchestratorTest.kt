@@ -64,11 +64,11 @@ class WiseCrowdDataOrchestratorTest {
         generator.generate()
 
         val messages = testLog.getMessages()
-        assertThat(messages).anyMatch { it.contains("Step 1/5: Generating 3 assets") }
-        assertThat(messages).anyMatch { it.contains("Step 2/5: Generating price series for 3 assets") }
-        assertThat(messages).anyMatch { it.contains("Step 3/5: Generating 5 users") }
-        assertThat(messages).anyMatch { it.contains("Step 4/5: Generating transactions") }
-        assertThat(messages).anyMatch { it.contains("Step 5/5: Generating user holdings") }
+        assertThat(messages).anyMatch { it.contains("Step 1 of 5: Generating 3 assets") }
+        assertThat(messages).anyMatch { it.contains("Step 2 of 5: Generating price series for 3 assets") }
+        assertThat(messages).anyMatch { it.contains("Step 3 of 5: Generating 5 users") }
+        assertThat(messages).anyMatch { it.contains("Step 4 of 5: Generating transactions") }
+        assertThat(messages).anyMatch { it.contains("Step 5 of 5: Generating user holdings") }
         assertThat(messages).anyMatch { it.contains("All steps completed in") }
     }
 

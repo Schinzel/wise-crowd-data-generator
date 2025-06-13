@@ -213,7 +213,7 @@ class DataGenerationServiceTest {
         // Then: proper logging sequence with timing and row count
         val logMessages = testLog.getMessages()
         assertThat(logMessages).hasSize(2)
-        assertThat(logMessages[0]).isEqualTo("Step 2/5: Generating test data...")
+        assertThat(logMessages[0]).isEqualTo("Step 2 of 5: Generating test data...")
         assertThat(logMessages[1]).matches("Step 2 completed in \\d+ms - 2 rows generated")
     }
 
@@ -238,7 +238,7 @@ class DataGenerationServiceTest {
         // Then: completion message includes warning count and individual warnings logged
         val logMessages = testLog.getMessages()
         assertThat(logMessages).hasSize(3)
-        assertThat(logMessages[0]).isEqualTo("Step 3/5: Generating test data...")
+        assertThat(logMessages[0]).isEqualTo("Step 3 of 5: Generating test data...")
         assertThat(logMessages[1]).matches("Step 3 completed in \\d+ms - 2 rows generated \\(1 warnings\\)")
         assertThat(logMessages[2]).isEqualTo("Warning: Failed to save data row")
     }

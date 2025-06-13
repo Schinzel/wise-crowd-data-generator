@@ -12,19 +12,24 @@ project, the stack, code standard and how testing is to be done.
 unit tests unless explicitly stated otherwise.
 
 ## When you are done with a task
-* Run below commands to verify that things work
-  * mvn ktlint:format
-  * mvn ktlint:check
-  * mvn compile
-  * mvn test
-* Fill out the *Task Summary (to be completed by AI)* for the task you just completed
-  * Be concise and to the point
-  * Include major changes made and files affected
-  * Document key decisions and their rationale
-  * Highlight any items that might affect future tasks
-* Fill out *Current Implementation Status (to be completed by AI)* and add which tasks have been completed.
-  * Simply add a row with *Task X done - Name of task - YYYY-MM-DD*.
-* Let me know when you've completed a task so I can verify it before moving to the next one
+
+### Verification commands
+Run verification commands (mvn ktlint:format, ktlint:check, compile, test)
+
+### Log
+In the file task_phase_[current phase].md, fill out the *Task Summary (to be completed by AI)*
+for the task you just completed
+* Be concise and to the point
+* Include major changes made and files affected
+* Document key decisions and their rationale
+* Highlight any items that might affect future tasks
+
+In the file task_phase_[current phase].md, fill out *Current Implementation Status
+(to be completed by AI)* and add which task has been completed.
+* Simply add a row with *Task X done - Name of task - YYYY-MM-DD*.
+
+### Notify
+Let me know when you've completed a task so I can verify it before moving to the next one
 
 ## When you are done with a phase
 * Fill out *Current Phase Status (to be completed by AI)*
