@@ -31,9 +31,9 @@ In the file task_phase_[current phase].md, fill out *Current Implementation Stat
 ### Notify
 Let me know when you've completed a task so I can verify it before moving to the next one
 
-## When you are done with a phase
+## When you are done with or starting a new phase
 In this file, fill out *Current Phase Status (to be completed by AI)*
-  * Add a date (format YYYY-MM-DD) when the phase was done
+  * Add a date (format YYYY-MM-DD) when the phase was done or started
 
 # Current Phase Status (to be completed by AI)
 - [Phase 1](task_phase_1.md) Complete ✅ - Data Collections & Data Saver - Completed 2025-05-28
