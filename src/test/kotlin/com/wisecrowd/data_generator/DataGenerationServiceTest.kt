@@ -156,6 +156,93 @@ class DataGenerationServiceTest {
         assertThat(service.getErrors()).isEmpty()
     }
 
+    @Test
+    fun `getRowCount _ after successful generation _ returns correct count`() {
+        // Given: generator with multiple rows
+        mockGenerator.setRows(
+            listOf(
+                listOf("first", 1),
+                listOf("second", 2),
+                listOf("third", 3),
+            ),
+        )
+
+        // When: generate and save
+        service.generateAndSave()
+
+        // Then: row count matches successful saves
+        assertThat(service.getRowCount()).isEqualTo(3)
+    }
+
+    @Test
+    fun `getRowCount _ with saver errors _ counts only successful saves`() {
+        // Given: generator with multiple rows and saver that throws on second row
+        mockGenerator.setRows(
+            listOf(
+                listOf("good_row"),
+                listOf("bad_row"),
+                listOf("another_good_row"),
+            ),
+        )
+        mockSaver.setThrowOnRow(1) // throw on second row (0-indexed)
+
+        // When: generate and save
+        service.generateAndSave()
+
+        // Then: row count reflects only successful saves
+        assertThat(service.getRowCount()).isEqualTo(2)
+    }
+
+    @Test
+    fun `execute _ successful generation _ logs steps with timing and row count`() {
+        // Given: generator with test data and mock log
+        val testGenerator = MockDataGenerator()
+        val testSaver = MockDataSaver()
+        val testLog = TestLog()
+        testGenerator.setRows(listOf(listOf("test1"), listOf("test2")))
+
+        // When: execute step
+        DataGenerationService.execute(
+            testGenerator,
+            testSaver,
+            testLog,
+            2,
+            "Generating test data...",
+        )
+
+        // Then: proper logging sequence with timing and row count
+        val logMessages = testLog.getMessages()
+        assertThat(logMessages).hasSize(2)
+        assertThat(logMessages[0]).isEqualTo("Step 2/5: Generating test data...")
+        assertThat(logMessages[1]).matches("Step 2 completed in \\d+ms - 2 rows generated")
+    }
+
+    @Test
+    fun `execute _ generation with errors _ logs warnings after completion`() {
+        // Given: generator and saver that produces errors, plus mock log
+        val testGenerator = MockDataGenerator()
+        val testSaver = MockDataSaver()
+        val testLog = TestLog()
+        testGenerator.setRows(listOf(listOf("good"), listOf("bad"), listOf("good")))
+        testSaver.setThrowOnRow(1) // throw on second row
+
+        // When: execute step
+        DataGenerationService.execute(
+            testGenerator,
+            testSaver,
+            testLog,
+            3,
+            "Generating test data...",
+        )
+
+        // Then: completion message includes warning count and individual warnings logged
+        val logMessages = testLog.getMessages()
+        assertThat(logMessages).hasSize(3)
+        assertThat(logMessages[0]).isEqualTo("Step 3/5: Generating test data...")
+        assertThat(logMessages[1]).matches("Step 3 completed in \\d+ms - 2 rows generated \\(1 warnings\\)")
+        assertThat(logMessages[2]).isEqualTo("Warning: Failed to save data row")
+    }
+
     /**
      * Mock implementation of IDataGenerator for testing
      */

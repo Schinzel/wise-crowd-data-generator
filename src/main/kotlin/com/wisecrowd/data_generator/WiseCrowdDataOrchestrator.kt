@@ -1,16 +1,15 @@
 package com.wisecrowd.data_generator
 
+import com.wisecrowd.data_generator.data_generators.AssetDataGenerator
+import com.wisecrowd.data_generator.data_generators.PriceSeriesDataGenerator
+import com.wisecrowd.data_generator.data_generators.TransactionDataGenerator
+import com.wisecrowd.data_generator.data_generators.UserDataGenerator
+import com.wisecrowd.data_generator.data_generators.UserHoldingsDataGenerator
 import com.wisecrowd.data_generator.data_saver.FileDataParser
 import com.wisecrowd.data_generator.data_saver.IDataSaver
-import com.wisecrowd.data_generator.data_saver.SaveError
 import com.wisecrowd.data_generator.data_saver.file_data_saver.FileDataSaver
 import com.wisecrowd.data_generator.log.ILog
 import com.wisecrowd.data_generator.log.SystemOutLog
-import com.wisecrowd.data_generator.orchestration.AssetDataGenerationStep
-import com.wisecrowd.data_generator.orchestration.PriceSeriesGenerationStep
-import com.wisecrowd.data_generator.orchestration.TransactionDataGenerationStep
-import com.wisecrowd.data_generator.orchestration.UserDataGenerationStep
-import com.wisecrowd.data_generator.orchestration.UserHoldingsGenerationStep
 import java.io.File
 import java.time.LocalDate
 import java.util.UUID
@@ -39,16 +38,6 @@ class WiseCrowdDataOrchestrator(
 ) {
     // File parser for reading intermediate generated files
     private val fileDataParser = FileDataParser()
-
-    // Collection of all warnings from generation process
-    private val allWarnings = mutableListOf<String>()
-
-    // Generation steps
-    private val assetStep = AssetDataGenerationStep(log, ::createFileDataSaver)
-    private val priceStep = PriceSeriesGenerationStep(log, ::createFileDataSaver)
-    private val userStep = UserDataGenerationStep(log, ::createFileDataSaver)
-    private val transactionStep = TransactionDataGenerationStep(log, ::createFileDataSaver)
-    private val holdingsStep = UserHoldingsGenerationStep(log, ::createFileDataSaver)
 
     /**
      * Executes the complete data generation pipeline with progress feedback and timing
@@ -109,12 +98,14 @@ class WiseCrowdDataOrchestrator(
      * @return List of UUID asset IDs for use by price series generator
      */
     private fun generateAssetData(): List<UUID> {
-        val errors = assetStep.execute(config.numberOfAssets)
+        val generator = AssetDataGenerator(config.numberOfAssets)
+        val dataSaver = createFileDataSaver(FileNameEnum.ASSET_DATA.fileName)
+        val initialMessage = "Generating ${config.numberOfAssets} assets..."
+
+        DataGenerationService.execute(generator, dataSaver, log, 1, initialMessage)
 
         // Extract asset IDs from generated file
-        val assetIds = extractAssetIds()
-        collectWarnings(errors, 1)
-        return assetIds
+        return extractAssetIds()
     }
 
     /**
@@ -127,14 +118,15 @@ class WiseCrowdDataOrchestrator(
      * @param assetIds List of asset UUIDs to generate price data for
      */
     private fun generatePriceSeriesData(assetIds: List<UUID>) {
-        val errors =
-            priceStep.execute(
-                assetIds,
-                config.startDate,
-                config.endDate,
-                config.numberOfAssets,
-            )
-        collectWarnings(errors, 2)
+        val dayCount =
+            java.time.temporal.ChronoUnit.DAYS
+                .between(config.startDate, config.endDate)
+                .toInt() + 1
+        val generator = PriceSeriesDataGenerator(assetIds, config.startDate, config.endDate)
+        val dataSaver = createFileDataSaver(FileNameEnum.PRICE_SERIES.fileName)
+        val initialMessage = "Generating price series for ${config.numberOfAssets} assets over $dayCount days..."
+
+        DataGenerationService.execute(generator, dataSaver, log, 2, initialMessage)
     }
 
     /**
@@ -145,13 +137,11 @@ class WiseCrowdDataOrchestrator(
      * join dates, departure dates, and status changes.
      */
     private fun generateUserData() {
-        val errors =
-            userStep.execute(
-                config.numberOfUsers,
-                config.startDate,
-                config.endDate,
-            )
-        collectWarnings(errors, 3)
+        val generator = UserDataGenerator(config.numberOfUsers, config.startDate, config.endDate)
+        val dataSaver = createFileDataSaver(FileNameEnum.USERS.fileName)
+        val initialMessage = "Generating ${config.numberOfUsers} users..."
+
+        DataGenerationService.execute(generator, dataSaver, log, 3, initialMessage)
     }
 
     /**
@@ -166,8 +156,11 @@ class WiseCrowdDataOrchestrator(
         val priceSeriesData = readGeneratedFile(FileNameEnum.PRICE_SERIES.fileName)
         val userData = readGeneratedFile(FileNameEnum.USERS.fileName)
 
-        val errors = transactionStep.execute(priceSeriesData, userData)
-        collectWarnings(errors, 4)
+        val generator = TransactionDataGenerator(priceSeriesData, userData)
+        val dataSaver = createFileDataSaver(FileNameEnum.TRANSACTIONS.fileName)
+        val initialMessage = "Generating transactions..."
+
+        DataGenerationService.execute(generator, dataSaver, log, 4, initialMessage)
     }
 
     /**
@@ -181,8 +174,11 @@ class WiseCrowdDataOrchestrator(
         // Read transaction data
         val transactionData = readGeneratedFile(FileNameEnum.TRANSACTIONS.fileName)
 
-        val errors = holdingsStep.execute(transactionData)
-        collectWarnings(errors, 5)
+        val generator = UserHoldingsDataGenerator(transactionData)
+        val dataSaver = createFileDataSaver(FileNameEnum.USER_HOLDINGS.fileName)
+        val initialMessage = "Generating user holdings..."
+
+        DataGenerationService.execute(generator, dataSaver, log, 5, initialMessage)
     }
 
     /**
@@ -324,25 +320,6 @@ class WiseCrowdDataOrchestrator(
     }
 
     /**
-     * Collects and categorizes warnings from generation step errors
-     *
-     * Processes errors from a generation step and adds them to the global warning
-     * collection with step identification. Allows tracking which generation step
-     * produced which warnings for comprehensive error reporting.
-     *
-     * @param errors List of SaveError instances from a generation step
-     * @param stepNumber The step number (1-5) that produced these errors
-     */
-    private fun collectWarnings(
-        errors: List<SaveError>,
-        stepNumber: Int,
-    ) {
-        errors.forEach { error ->
-            allWarnings.add("Step $stepNumber: ${error.message}")
-        }
-    }
-
-    /**
      * Cleans up partially created files when generation fails
      *
      * Removes any files that were created during the generation process before
@@ -363,24 +340,14 @@ class WiseCrowdDataOrchestrator(
     }
 
     /**
-     * Reports the final completion summary with timing and warning information
+     * Reports the final completion summary with timing information
      *
-     * Outputs the total generation time and displays a comprehensive summary of
-     * any warnings that occurred during the generation process. Provides detailed
-     * feedback to help users understand the generation results and any issues.
+     * Outputs the total generation time for the complete generation process.
+     * Individual step warnings are already displayed by DataGenerationService.execute().
      *
      * @param totalTime Total time in milliseconds for the complete generation process
      */
     private fun reportCompletionSummary(totalTime: Long) {
         log.writeToLog("All steps completed in ${totalTime}ms")
-
-        // Display warning summary if any warnings occurred
-        if (allWarnings.isNotEmpty()) {
-            log.writeToLog("")
-            log.writeToLog("Warnings encountered:")
-            allWarnings.forEach { warning ->
-                log.writeToLog("- $warning")
-            }
-        }
     }
 }

@@ -3,6 +3,8 @@ package com.wisecrowd.data_generator
 import com.wisecrowd.data_generator.data_generators.IDataGenerator
 import com.wisecrowd.data_generator.data_saver.IDataSaver
 import com.wisecrowd.data_generator.data_saver.SaveError
+import com.wisecrowd.data_generator.log.ILog
+import kotlin.system.measureTimeMillis
 
 /**
  * The purpose of this class is to orchestrate the complete data generation
@@ -120,4 +122,55 @@ class DataGenerationService(
      * @return count of successfully processed rows
      */
     fun getRowCount(): Int = rowCount
+
+    companion object {
+        /**
+         * Executes a complete data generation step with timing, logging, and error handling
+         *
+         * This function provides orchestration for individual generation steps by:
+         * - Logging the initial step message
+         * - Measuring execution time
+         * - Running the generation and save process
+         * - Collecting and logging any errors
+         * - Displaying completion summary with timing and row count
+         *
+         * @param dataGenerator The data generator to use for this step
+         * @param dataSaver The data saver to use for this step
+         * @param log The logging interface for progress messages
+         * @param stepNumber The current step number in the overall process
+         * @param initialLogMessage The initial message to log when starting the step
+         */
+        fun execute(
+            dataGenerator: IDataGenerator,
+            dataSaver: IDataSaver,
+            log: ILog,
+            stepNumber: Int,
+            initialLogMessage: String,
+        ) {
+            // Log the initial step message
+            log.writeToLog("Step $stepNumber of 5: $initialLogMessage")
+
+            // Create service and execute generation with timing
+            val service = DataGenerationService(dataGenerator, dataSaver)
+            val stepTime =
+                measureTimeMillis {
+                    service.generateAndSave()
+                }
+
+            // Get results and prepare completion message
+            val errors = service.getErrors()
+            val rowCount = service.getRowCount()
+            val warningText = if (errors.isEmpty()) "" else " (${errors.size} warnings)"
+
+            // Log completion summary
+            log.writeToLog("Step $stepNumber completed in ${stepTime}ms - $rowCount rows generated$warningText")
+
+            // Log individual error messages if any errors occurred
+            if (errors.isNotEmpty()) {
+                errors.forEach { error ->
+                    log.writeToLog("Warning: ${error.message}")
+                }
+            }
+        }
+    }
 }
