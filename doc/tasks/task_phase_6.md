@@ -14,17 +14,21 @@ Add a simple usage section to the README explaining the purpose, generated files
 - Brief purpose statement
 - List of 5 generated files with descriptions
 - Basic usage example showing how to generate data
+- Simple main method for command-line execution
 
 ### Deliverables
 - Updated README.md with usage section
+- Create Main.kt with main method for easy data generation execution
 
 ### Acceptance Criteria
 1. Add "Usage" section to README.md
 2. Explain purpose: generates mock data for WiseCrowd platform
 3. List all 5 generated files (asset_data.txt, price_series.txt, users.txt, transactions.txt, user_holdings.txt) with brief descriptions
 4. Show basic code example of how to generate data
-5. Keep existing content (code standards links, project description links)
-6. Simple and concise - no advanced scenarios or troubleshooting
+5. Create Main.kt with main method for command-line execution
+6. Include instructions for running via Maven, Kotlin, or IDE
+7. Keep existing content (code standards links, project description links)
+8. Simple and concise - no advanced scenarios or troubleshooting
 
 ### Task Summary (to be completed by AI)
 
