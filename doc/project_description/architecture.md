@@ -30,7 +30,42 @@ Feature-based modular monolith with domain-driven design principles.
 5. **Transactions** → TransactionGenerator simulates trading
 6. **Holdings** → UserHoldingsGenerator calculates final portfolios
 
-## System Architecture Diagram
+## Generated File Schemas
+
+### asset_data.txt
+- `asset_id` (UUID) - Unique asset identifier
+- `asset_class_id` (Int) - Reference to asset class type
+- `name` (String) - Realistic Swedish/Nordic asset name
+
+### price_series.txt  
+- `asset_id` (UUID) - Asset identifier matching asset_data.txt
+- `date` (LocalDate) - Trading date
+- `price` (Double) - Asset price using geometric Brownian motion
+
+### users.txt
+- `user_id` (UUID) - Unique user identifier
+- `investor_profile_id` (Int) - Risk tolerance profile
+- `activity_level_id` (Int) - Trading frequency level
+- `country_id` (Int) - Nordic customer country
+- `join_date` (LocalDate) - Customer activation date
+- `departure_date` (LocalDate) - Customer departure date (9999-12-31 for active)
+- `customer_status` (String) - ACTIVE or DEPARTED
+
+### transactions.txt
+- `transaction_id` (UUID) - Unique transaction identifier  
+- `user_id` (UUID) - User identifier matching users.txt
+- `asset_id` (UUID) - Asset identifier matching asset_data.txt
+- `transaction_type` (String) - "buy" or "sell"
+- `amount` (Double) - Transaction amount in specified currency
+- `currency_id` (Int) - Transaction currency
+
+### user_holdings.txt
+- `user_id` (UUID) - User identifier matching users.txt
+- `asset_id` (UUID) - Asset identifier matching asset_data.txt  
+- `amount` (Double) - Net positive holding amount
+- `currency_id` (Int) - Holding currency
+
+## Data Generation Flow Diagram
 
 ```mermaid
 flowchart TD
