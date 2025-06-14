@@ -1,14 +1,14 @@
 # Main steps
 
 ## Part 1: Segmentation Strategy
-The customers can be segmented on for example age, nationality or more.
+The retail investors can be segmented on for example age, nationality or more.
 Each segment is sent to the Analysis Pipeline.
 
 ## Part 2: Analysis Pipeline
-1. Qualify the customers. Ensure they meet minimum requirements.
-2. Rank the qualified customers.
-3. Find the top-ranked customers. Select top X% of ranked customers.
-4. Find asset classes the top-ranked customers hold.
+1. Qualify the retail investors. Ensure they meet minimum requirements.
+2. Rank the qualified retail investors.
+3. Find the top-ranked retail investors. Select top X% of ranked retail investors.
+4. Find asset classes the top-ranked retail investors hold.
 5. Find the assets in each asset class.
 
 
@@ -17,27 +17,27 @@ Each segment is sent to the Analysis Pipeline.
 # Top level interfaces
 ```Kotlin
 typealias Description = String
-interface ICustomerSegmenter {
-    fun segment(customers: List<Customer>): Map<Description, List<Customer>>
+interface IRetailInvestorSegmenter {
+    fun segment(retailInvestors: List<RetailInvestor>): Map<Description, List<RetailInvestor>>
 }
 ```
 
 
 ```Kotlin
-interface ICustomerQualifier {
-  fun qualifyCustomers(customers: List<Customer>): List<Customer>
+interface IRetailInvestorQualifier {
+  fun qualifyRetailInvestors(retailInvestors: List<RetailInvestor>): List<RetailInvestor>
 }
 ```
 
 ```Kotlin
-interface ICustomerRanker {
-  fun rankCustomers(customers: List<Customer>): List<Customer>
+interface IRetailInvestorRanker {
+  fun rankRetailInvestors(retailInvestors: List<RetailInvestor>): List<RetailInvestor>
 }
 ```
 
 ```Kotlin
-interface ICustomerSelector {
-  fun selectTopCustomers(rankedCustomers: List<Customer>, percentage: Double): List<Customer>
+interface IRetailInvestorSelector {
+  fun selectTopRetailInvestors(rankedRetailInvestors: List<RetailInvestor>, percentage: Double): List<RetailInvestor>
 }
 ```
 
@@ -49,7 +49,7 @@ class Percentage(val value: Int) {
 }
 
 interface IAssetClassAnalyzer {
-  fun findAssetClasses(topCustomers: List<Customer>): Map<AssetClass, Percentage>
+  fun findAssetClasses(topRetailInvestors: List<RetailInvestor>): Map<AssetClass, Percentage>
 }
 ```
 
